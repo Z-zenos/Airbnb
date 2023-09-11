@@ -3,13 +3,11 @@ import "./Input.css";
 
 export default function Input(props) {
   const { 
-    label = 'Input', type = 'text', className = "", name,
-    onChange, value, disabled, readOnly,
-    wrapperStyle, inputStyle, error, beforeText,
-    register
+    label = 'Input', className = "", name, value,
+    wrapperStyle, error, beforeText, register,
+    ...rest
   } = props;
 
-  
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   
@@ -27,15 +25,12 @@ export default function Input(props) {
       <input 
         {...register(name)}
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
-        type={type} 
         value={value} 
-        onChange={onChange}
-        style={inputStyle}
-        disabled={disabled}
-        readOnly={readOnly}
         name={name}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        
+        {...rest}
       >
       </input>
       {label && <label className={value && 'filled'} htmlFor={name}>{label}</label> }
