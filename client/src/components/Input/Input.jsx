@@ -3,14 +3,17 @@ import "./Input.css";
 
 function CostomInput(props, ref) {
   const { 
-    label, className = "", name, value,
+    label, className, name, value,
     wrapperStyle, errors, beforeText,
     ...rest
   } = props;
+
   const [isFocused, setIsFocused] = useState(false);
-  
-  function handleClick() {
-    // if(inputRef && inputRef.current) inputRef.current.focus();
+
+  function handleClick(ev) {
+    const wrapper = ev.target;
+    const inputEl = wrapper.querySelector("input");
+    inputEl && inputEl.focus();
   }
 
   return (
@@ -20,12 +23,17 @@ function CostomInput(props, ref) {
       onClick={handleClick}
     >
       { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
+      
+      {/* 
+        This is the correct answer given @Joris's solution would override the change handler spread from {...register('name')} which returns {onChange, onBlur, name, ref}, and this could lead to bugs. 
+        sgarcia.dev - Dec 3, 2021 at 18:16
+      */}
       <input 
-        ref={ref}
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
         name={name}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {console.log("blur");setIsFocused(false)}}
+        ref={ref}
         {...rest}
       >
       </input>

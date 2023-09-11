@@ -50,25 +50,25 @@ const authFormSchema = yup.object({
   
   name: yup
     .string()
-    .required("Please enter name.")
     .max(50, "Name must be less than 50 characters.")
-    .min(4, "Name must be greater than 4 characters"),
+    .min(4, "Name must be greater than 4 characters")
+    .required("Please enter name."),
 
   phone: yup
     .string()
-    .required("Please enter your phone.")
-    .matches(phoneRegex, "Phone invalid."),
+    .matches(phoneRegex, "Phone invalid.")
+    .required("Please enter your phone."),
 
   password: yup
     .string()
-    .required("Please enter password.")
     .max(255, "Password must be less than 50 characters.")
-    .min(4, "Password must be greater than 4 characters"),
+    .min(4, "Password must be greater than 4 characters")
+    .required("Please enter password."),
     
   passwordConfirm: yup
     .string()
-    .required("Please re-enter password to confirm.")
     .oneOf([yup.ref('password'), null], "Passwords must match.")
+    .required("Please re-enter password to confirm.")
   
 });
 
