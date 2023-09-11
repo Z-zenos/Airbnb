@@ -21,6 +21,7 @@ function CostomInput(props, ref) {
       className={"input-container relative border border-gray-400 pt-6 pb-2 px-5 focus-within:rounded-md focus-within:outline focus-within:outline-black focus-within:outline-2 focus-within:outline-offset-1 focus-within:border-y-gray-400 flex flex-row justify-start items-center " + className} 
       style={wrapperStyle}
       onClick={handleClick}
+      onBlur={() => setIsFocused(false)}
     >
       { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       
@@ -32,13 +33,12 @@ function CostomInput(props, ref) {
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
         name={name}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => {console.log("blur");setIsFocused(false)}}
         ref={ref}
         {...rest}
       >
       </input>
       {label && <label className={value && 'filled'} htmlFor={name}>{label}</label> }
-      { errors?.[name] && <p className="absolute top-2 right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
+      { (errors?.[name] && value) && <p className="absolute top-2 right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
     </div>
   );
 }
