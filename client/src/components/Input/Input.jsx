@@ -1,11 +1,15 @@
 import { useRef, useState } from "react";
 import "./Input.css";
 
-export default function Input({ 
-  label = 'Input', type = 'text', className = "", name,
-  onChange, value, disabled, required, readOnly,
-  wrapperStyle, inputStyle, error, beforeText
-}) {
+export default function Input(props) {
+  const { 
+    label = 'Input', type = 'text', className = "", name,
+    onChange, value, disabled, readOnly,
+    wrapperStyle, inputStyle, error, beforeText,
+    register
+  } = props;
+
+  
   const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   
@@ -21,7 +25,7 @@ export default function Input({
     >
       { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       <input 
-        ref={inputRef}
+        {...register(name)}
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
         type={type} 
         value={value} 
