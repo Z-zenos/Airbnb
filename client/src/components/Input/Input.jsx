@@ -19,7 +19,7 @@ export default function Input({
       style={wrapperStyle}
       onClick={handleClick}
     >
-      { (isFocused || value) && <span className={"text-gray-500 text-sm " + (value ? "" : "w-7 mr-2 -translate-x-[3px]")}>{beforeText}</span> }
+      { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       <input 
         ref={inputRef}
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
