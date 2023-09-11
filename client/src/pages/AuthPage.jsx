@@ -84,7 +84,7 @@ export default function AuthPage() {
     country: ""
   });
 
-  const { register, handleSubmit, formState: {errors} } = useForm({ mode: 'onChange', resolver });
+  const { register, handleSubmit, formState: {errors} } = useForm({ mode: "all", resolver });
 
   const [countries, setCountries] = useState([]);
   const { email, name, password, passwordConfirm, phone, country } = formData;
@@ -110,6 +110,7 @@ export default function AuthPage() {
 
 
   function handleFormDataChange(ev) {
+    console.log(ev);
     const { name, value } = ev.target;
     setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
   }
@@ -156,16 +157,13 @@ export default function AuthPage() {
           <form className="w-2/3" onSubmit={handleSubmit(handleSubmitForm)}>
             <div className="relative">
               {/* FOR LOGIN */}
-              <Input label="Email" name="email" type="email" className="rounded-t-[8px]" value={email} onChange={handleFormDataChange} register={register} />
+              <Input label="Email" name="email" type="email" className="rounded-t-[8px]" value={email} onChange={handleFormDataChange} {...register("email")} errors={errors} />
 
-              {errors.email && (
-                <p>{errors.email.message}</p>
-              )}
-              <Input label="Password" name="password" type="password" className="border-t-transparent" value={password} onChange={handleFormDataChange} register={register} />
+              <Input label="Password" name="password" type="password" className="border-t-transparent" value={password} onChange={handleFormDataChange} {...register("password")} errors={errors}  />
 
               {/* FOR REGISTER */}
-              <Input label="Confirm password" name="passwordConfirm" type="password" className="border-t-transparent" value={passwordConfirm} onChange={handleFormDataChange} register={register} />
-              <Input label="Name" type="text" name="name" className="border-t-transparent" value={name} onChange={handleFormDataChange} register={register} />
+              <Input label="Confirm password" name="passwordConfirm" type="password" className="border-t-transparent" value={passwordConfirm} onChange={handleFormDataChange} {...register("passwordConfirm")} errors={errors}  />
+              <Input label="Name" type="text" name="name" className="border-t-transparent" value={name} onChange={handleFormDataChange} {...register("name")} errors={errors}  />
 
               <div className="relative border border-gray-400 border-t-transparent pt-6 pb-2 focus-within:rounded-md focus-within:outline focus-within:outline-black focus-within:outline-2 focus-within:outline-offset-1 focus-within:border-y-gray-400">
                 <select 
@@ -181,7 +179,7 @@ export default function AuthPage() {
 
               </div>
 
-              <Input label="Phone number" beforeText={countries.length && countries?.find(c => c.name === country).dialling_code} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} onChange={handleFormDataChange} register={register} />
+              <Input label="Phone number" beforeText={countries.length && countries?.find(c => c.name === country).dialling_code} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} onChange={handleFormDataChange} {...register("phone")} errors={errors}  />
               
               <button 
                 className="absolute top-[96px] -right-44 w-1/3 rounded-md text-center p-2 cursor-pointer bg-primary text-white font-bold border border-primary after:w-[40px] after:h-1 after:bg-primary after:top-1/2 after:absolute after:block after:-left-[30px] after:-translate-y-1/2 after:rounded-full hover:bg-white hover:text-primary"

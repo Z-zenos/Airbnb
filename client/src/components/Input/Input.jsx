@@ -1,18 +1,16 @@
-import { useRef, useState } from "react";
+import { forwardRef, useState } from "react";
 import "./Input.css";
 
-export default function Input(props) {
+function CostomInput(props, ref) {
   const { 
-    label = 'Input', className = "", name, value,
-    wrapperStyle, error, beforeText, register,
+    label, className = "", name, value,
+    wrapperStyle, errors, beforeText,
     ...rest
   } = props;
-
-  const inputRef = useRef(null);
   const [isFocused, setIsFocused] = useState(false);
   
   function handleClick() {
-    if(inputRef && inputRef.current) inputRef.current.focus();
+    // if(inputRef && inputRef.current) inputRef.current.focus();
   }
 
   return (
@@ -23,18 +21,19 @@ export default function Input(props) {
     >
       { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       <input 
-        {...register(name)}
+        ref={ref}
         className="w-full inline h-full focus:border-none focus:outline-none text-[16px] "
-        value={value} 
         name={name}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        
         {...rest}
       >
       </input>
       {label && <label className={value && 'filled'} htmlFor={name}>{label}</label> }
-      { error && <p className="absolute top-2 right-3 text-primary text-xs">{error}</p> }
+      { errors?.[name] && <p className="absolute top-2 right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
     </div>
   );
 }
+
+const Input = forwardRef(CostomInput);
+export default Input;
