@@ -8,6 +8,7 @@ import * as yup from "yup";
 import Input from "../components/Input/Input";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
+import { Navigate } from "react-router-dom";
 
 const useYupValidationResolver = validationSchema =>
   useCallback(
@@ -84,6 +85,8 @@ export default function AuthPage() {
     country: ""
   });
 
+  const [redirect, setRedirect] = useState(false);
+
   const { register, trigger, getFieldState, handleSubmit, formState: {errors, isDirty} } = useForm({ mode: "all", resolver });
 
   const [countries, setCountries] = useState([]);
@@ -137,11 +140,14 @@ export default function AuthPage() {
         const entry = typeSubmit === 'Login' ? 'login' : 'signup';
         
         await axios.post(`/auth/${entry}`, body, config);
+        setRedirect(true);
       } catch (err) {
         console.error(err.response.data);
       }
     }
   }
+
+  if(redirect) return <Navigate to='/' />
 
   return (
     <div className="bg-[url('src/assets/images/background-1.webp')] grow flex items-center justify-around h-[85vh]">
