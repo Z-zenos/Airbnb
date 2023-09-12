@@ -1,11 +1,13 @@
 const express = require("express");
-const fs = require("fs");
 
 const cors = require("cors");
 const morgan = require("morgan");
 
 const logger = require('./utils/logger');
+const userRouter = require('./routes/user.route');
+const resourceRouter = require('./routes/resource.route');
 const AppError = require('./utils/appError');
+const globalErrorHandler = require('./controllers/error.controller');
 
 const app = express();
 
@@ -36,34 +38,12 @@ const corsOptions = {
 }
 
 app.use(cors(corsOptions));
+app.disable('x-powered-by');
 
 app.use(express.json());
 
-const countries = JSON.parse(fs.readFileSync(`${__dirname}/data/countries.json`, 'utf-8'));
-
-app.post('/api/v1/auth/signup', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: "Register account successfully"
-  });
-});
-
-app.post('/api/v1/auth/login', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    message: "Login successfully", 
-    data: req.body.data
-  });
-});
-
-app.get('/api/v1/resources/countries', (req, res) => {
-  res.status(200).json({
-    status: 'success',
-    data: {
-      countries
-    }
-  });
-});
+app.use('/api/v1/auth', userRouter);
+app.use('/api/v1/resources', resourceRouter);
 
 app.get('/_health', (req, res) => {
   res.status(200).json({
@@ -76,5 +56,7 @@ app.get('/_health', (req, res) => {
 app.all('*', (req, res, next) => {
 	next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
+
+app.use(globalErrorHandler);
 
 module.exports = app;
