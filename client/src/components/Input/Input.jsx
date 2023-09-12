@@ -18,7 +18,7 @@ function CostomInput(props, ref) {
 
   return (
     <div 
-      className={"input-container relative border border-gray-400 pt-6 pb-2 px-5 focus-within:rounded-md focus-within:outline focus-within:outline-black focus-within:outline-2 focus-within:outline-offset-1 focus-within:border-y-gray-400 flex flex-row justify-start items-center " + className} 
+      className={"input-container relative border border-gray-400 pt-6 pb-2 px-5 focus-within:rounded-md focus-within:outline focus-within:outline-black focus-within:outline-2 focus-within:outline-offset-1 focus-within:border-y-gray-400 flex flex-row justify-start items-center gap-1 " + className} 
       style={wrapperStyle}
       onClick={handleClick}
       onBlur={() => setIsFocused(false)}
@@ -38,7 +38,7 @@ function CostomInput(props, ref) {
       >
       </input>
       {label && <label className={value && 'filled'} htmlFor={name}>{label}</label> }
-      { (errors?.[name] && value) && <p className="absolute top-2 right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
+      { (errors?.[name] && value) && <p className="absolute top-[7px] right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
     </div>
   );
 }

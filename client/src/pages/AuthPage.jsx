@@ -84,14 +84,14 @@ export default function AuthPage() {
     country: ""
   });
 
-  const { register, handleSubmit, formState: {errors} } = useForm({ mode: "all", resolver });
+  const { register, trigger, getFieldState, handleSubmit, formState: {errors, isDirty} } = useForm({ mode: "all", resolver });
 
   const [countries, setCountries] = useState([]);
   const { email, name, password, passwordConfirm, phone, country } = formData;
 
   async function getCountriesData () {
     try {
-      const res = await axios.get('http://localhost:3000/api/v1/resources/countries');
+      const res = await axios.get('/resources/countries');
       const countries = res.data.data.countries;
 
       setCountries(countries);
@@ -113,20 +113,18 @@ export default function AuthPage() {
     const { name, value } = ev.target;
     setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
   }
-
+  
   async function handleSubmitForm(ev) {
-    console.log(formData);
+    trigger();
     ev.preventDefault();
 
-    // const typeSubmit = ev.target.textContent; // login / register
-
-    if(formData.password !== formData.passwordConfirm) {
-      console.error("Password does not match !");
-    }
-    else {
-      const newUser = {
-        ...formData
-      };
+    console.log(getFieldState("email"), getFieldState("password"));
+    
+    if(Object.keys(errors).length === 0 && errors.constructor === Object) {
+      const typeSubmit = ev.target.textContent; // login / register
+      const newUser = typeSubmit === 'Login' 
+        ? { email: formData.email, password: formData.password } 
+        : { ...formData };
 
       try {
         const config = {
@@ -136,7 +134,9 @@ export default function AuthPage() {
         };
 
         const body = JSON.stringify(newUser);
-        await axios.post('http://localhost:3000/api/v1/auth/signup', body, config);
+        const entry = typeSubmit === 'Login' ? 'login' : 'signup';
+        
+        await axios.post(`/auth/${entry}`, body, config);
       } catch (err) {
         console.error(err.response.data);
       }
@@ -156,13 +156,13 @@ export default function AuthPage() {
           <form className="w-2/3" onSubmit={handleSubmit(handleSubmitForm)}>
             <div className="relative">
               {/* FOR LOGIN */}
-              <Input label="Email" name="email" type="email" className="rounded-t-[8px]" value={email} {...register("email", { onChange: handleFormDataChange })} errors={errors} />
+              <Input label="Email" name="email" type="email" className="rounded-t-[8px]" value={email} {...register("email", { required: true, onChange: handleFormDataChange })} errors={errors} />
 
-              <Input label="Password" name="password" type="password" className="border-t-transparent" value={password} {...register("password", { onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Password" name="password" type="password" className="border-t-transparent" value={password} {...register("password", { required: true, onChange: handleFormDataChange })} errors={errors}  />
 
               {/* FOR REGISTER */}
-              <Input label="Confirm password" name="passwordConfirm" type="password" className="border-t-transparent" value={passwordConfirm} {...register("passwordConfirm", { onChange: handleFormDataChange })} errors={errors}  />
-              <Input label="Name" type="text" name="name" className="border-t-transparent" value={name} {...register("name", { onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Confirm password" name="passwordConfirm" type="password" className="border-t-transparent" value={passwordConfirm} {...register("passwordConfirm", { required: true, onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Name" type="text" name="name" className="border-t-transparent" value={name} {...register("name", { required: true, onChange: handleFormDataChange })} errors={errors}  />
 
               <div className="relative border border-gray-400 border-t-transparent pt-6 pb-2 focus-within:rounded-md focus-within:outline focus-within:outline-black focus-within:outline-2 focus-within:outline-offset-1 focus-within:border-y-gray-400">
                 <select 
@@ -178,12 +178,13 @@ export default function AuthPage() {
 
               </div>
 
-              <Input label="Phone number" beforeText={countries.length && countries?.find(c => c.name === country).dialling_code} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} {...register("phone", { onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Phone number" beforeText={countries.length && countries?.find(c => c.name === country).dialling_code} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} {...register("phone", { required: true, onChange: handleFormDataChange })} errors={errors}  />
               
               <button 
                 className="absolute top-[96px] -right-44 w-1/3 rounded-md text-center p-2 cursor-pointer bg-primary text-white font-bold border border-primary after:w-[40px] after:h-1 after:bg-primary after:top-1/2 after:absolute after:block after:-left-[30px] after:-translate-y-1/2 after:rounded-full hover:bg-white hover:text-primary"
                 onClick={handleSubmitForm}
                 type="submit"
+                disabled={!isDirty}
               >
                 Login
               </button>
@@ -192,6 +193,7 @@ export default function AuthPage() {
                 className="absolute bottom-[2px] -right-44 w-1/3 rounded-md text-center p-2 cursor-pointer bg-primary border border-primary text-white font-bold translate-y-[16px] after:w-[40px] after:h-1 after:bg-primary after:top-1/2 after:absolute after:block after:-left-[30px] after:-translate-y-1/2 after:rounded-full hover:bg-white hover:text-primary"
                 onClick={handleSubmitForm}
                 type="submit"
+                disabled={!isDirty}
               >
                 Register
               </button>

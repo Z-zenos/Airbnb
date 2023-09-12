@@ -4,6 +4,9 @@ import {Route, Routes} from "react-router-dom";
 import IndexPage from './pages/IndexPage';
 import AuthPage from './pages/AuthPage';
 import MainLayout from './layouts/MainLayout';
+import axios from 'axios';
+
+axios.defaults.baseURL = "http://localhost:3000/api/v1";
 
 function App() {
 

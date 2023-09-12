@@ -10,7 +10,7 @@
   transform: translateY(-50%) scale(1);
   transition: 200ms cubic-bezier(0, 0, 0.2, 1) 0ms;
   color: rgb(113, 113, 113);
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1;
   left: 16px;
   top: 50%;
