@@ -90,7 +90,7 @@ export default function AuthPage() {
 
   const {setUser} = useContext(UserContext);
 
-  const { register, trigger, getFieldState, handleSubmit, formState: {errors, isDirty} } = useForm({ mode: "all", resolver });
+  const { register, trigger, handleSubmit, formState: {errors, isDirty} } = useForm({ mode: "all", resolver });
 
   const [countries, setCountries] = useState([]);
   const { email, name, password, passwordConfirm, phone, country } = formData;
@@ -135,7 +135,6 @@ export default function AuthPage() {
           headers: {
             "Content-Type": "application/json"
           },
-          credentials: "same-origin"
         };
 
         const body = JSON.stringify(newUser);

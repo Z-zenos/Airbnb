@@ -16,11 +16,16 @@ const filterObj = (obj, ...allowedFields) => {
 };
 
 exports.profile = (req, res, next) => {
-  console.log(req.user);
+  const user = req.user;
   res.status(200).json({
     status: 'success',
     data: {
-      user: req.user
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar
+      }
     }
   });
 };

@@ -58,8 +58,14 @@ export default function Header() {
 
         { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm'>
           <ul>
-            <Link to={'/login'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Login</Link>
-            <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>Register</li>
+            {user.email ? (
+              <Link to={'/profile'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Account</Link>
+            ) : (
+              <>
+                <Link to={'/login'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Login</Link>
+                <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>Register</li>
+              </>
+            )}
           </ul>
         </div>
         } 
