@@ -15,9 +15,14 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.getMe = (req, res, next) => {
-  req.params.id = req.user.id;
-  next();
+exports.profile = (req, res, next) => {
+  console.log(req.user);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user: req.user
+    }
+  });
 };
 
 exports.getAllUsers = factory.getAll(User);

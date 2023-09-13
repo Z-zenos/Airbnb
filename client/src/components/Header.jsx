@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from '../contexts/user.context';
 
 
 export default function Header() {
   const [userBox, setUserBox] = useState(false);
+  const {user} = useContext(UserContext);
   
   return (
     <header className="px-6 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px]">
@@ -47,6 +49,10 @@ export default function Header() {
             </svg>
 
           </div>
+
+          {!!user && (
+            <div>{user.name}</div>
+          )}
 
         </div>
 

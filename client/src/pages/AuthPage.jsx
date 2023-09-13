@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -9,6 +9,7 @@ import Input from "../components/Input/Input";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { Navigate } from "react-router-dom";
+import { UserContext } from "../contexts/user.context";
 
 const useYupValidationResolver = validationSchema =>
   useCallback(
@@ -87,6 +88,8 @@ export default function AuthPage() {
 
   const [redirect, setRedirect] = useState(false);
 
+  const {setUser} = useContext(UserContext);
+
   const { register, trigger, getFieldState, handleSubmit, formState: {errors, isDirty} } = useForm({ mode: "all", resolver });
 
   const [countries, setCountries] = useState([]);
@@ -120,8 +123,6 @@ export default function AuthPage() {
   async function handleSubmitForm(ev) {
     trigger();
     ev.preventDefault();
-
-    console.log(getFieldState("email"), getFieldState("password"));
     
     if(Object.keys(errors).length === 0 && errors.constructor === Object) {
       const typeSubmit = ev.target.textContent; // login / register
@@ -134,15 +135,19 @@ export default function AuthPage() {
           headers: {
             "Content-Type": "application/json"
           },
+          credentials: "same-origin"
         };
 
         const body = JSON.stringify(newUser);
         const entry = typeSubmit === 'Login' ? 'login' : 'signup';
         
-        await axios.post(`/auth/${entry}`, body, config);
+        const res = await axios.post(`/auth/${entry}`, body, config);
+        const loggedUser = res.data.data.user;
+        setUser(loggedUser);
+        // console.log(loggedUser);
         setRedirect(true);
       } catch (err) {
-        console.error(err.response.data);
+        console.error(err);
       }
     }
   }
