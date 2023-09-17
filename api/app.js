@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 
 const logger = require('./utils/logger');
 const userRouter = require('./routes/user.route');
+const amenityRouter = require('./routes/amenity.route');
 const authRouter = require('./routes/auth.route');
 const resourceRouter = require('./routes/resource.route');
 
@@ -65,6 +66,7 @@ app.use(cookieParser());
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/amenities', amenityRouter);
 app.use('/api/v1/resources', resourceRouter);
 
 app.get('/_health', (req, res) => {

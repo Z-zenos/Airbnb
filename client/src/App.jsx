@@ -6,6 +6,7 @@ import AuthPage from './pages/AuthPage';
 import MainLayout from './layouts/MainLayout';
 import axios from 'axios';
 import { UserContextProvider } from './contexts/user.context';
+import PlacePage from './pages/PlacePage';
 
 // Apply for all requests
 axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1";
@@ -32,6 +33,7 @@ function App() {
         <Route path='/' element={ <MainLayout /> } >
           <Route index element={<IndexPage />} />
           <Route path='/login' element={ <AuthPage /> } />
+          <Route path='/places' element={ <PlacePage /> } />
         </Route>
       </Routes>
     </UserContextProvider>

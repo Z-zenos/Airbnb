@@ -1,0 +1,530 @@
+[
+  {
+    "name": "popular",
+    "shortenDesc": "These are amenities that guests typically look for in a stay."
+  },
+  {
+    "name": "essentials",
+    "shortenDesc": "Towels, bed sheets, soap, toilet paper, and pillows"
+  },
+  {
+    "name": "air conditioning",
+    "shortenDesc": "Window AC unit."
+  },
+  {
+    "name": "cleaning products",
+    "shortenDesc": ""
+  },
+  {
+    "name": "cooking basics",
+    "shortenDesc": "Pots and pans, oil, salt and pepper"
+  },
+  {
+    "name": "dedicated workspace",
+    "shortenDesc": "Guests have a desk or table that’s used just for working, along with a comfortable chair."
+  },
+  {
+    "name": "dishes and silverware",
+    "shortenDesc": "Bowls, chopsticks, plates, cups, etc."
+  },
+  {
+    "name": "dryer",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hair dryer",
+    "shortenDesc": ""
+  },
+  {
+    "name": "heating",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hot tub",
+    "shortenDesc": ""
+  },
+  {
+    "name": "kitchen",
+    "shortenDesc": "Space where guests can cook their own meals"
+  },
+  {
+    "name": "pool",
+    "shortenDesc": ""
+  },
+  {
+    "name": "tv",
+    "shortenDesc": ""
+  },
+  {
+    "name": "washer",
+    "shortenDesc": ""
+  },
+  {
+    "name": "wifi",
+    "shortenDesc": "Available throughout the listing"
+  },
+  {
+    "name": "bathroom",
+    "shortenDesc": ""
+  },
+  {
+    "name": "bathtub",
+    "shortenDesc": ""
+  },
+  {
+    "name": "bidet",
+    "shortenDesc": ""
+  },
+  {
+    "name": "body soap",
+    "shortenDesc": ""
+  },
+  {
+    "name": "cleaning products",
+    "shortenDesc": ""
+  },
+  {
+    "name": "conditioner",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hot water",
+    "shortenDesc": ""
+  },
+  {
+    "name": "outdoor shower",
+    "shortenDesc": ""
+  },
+  {
+    "name": "shampoo",
+    "shortenDesc": ""
+  },
+  {
+    "name": "shower gel",
+    "shortenDesc": ""
+  },
+  {
+    "name": "bedroom and laundry",
+    "shortenDesc": ""
+  },
+  {
+    "name": "essentials",
+    "shortenDesc": "Towels, bed sheets, soap, toilet paper, and pillows"
+  },
+  {
+    "name": "bed linens",
+    "shortenDesc": ""
+  },
+  {
+    "name": "clothing storage",
+    "shortenDesc": ""
+  },
+  {
+    "name": "drying rack",
+    "shortenDesc": ""
+  },
+  {
+    "name": "extra pillows and blankets",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hangers",
+    "shortenDesc": ""
+  },
+  {
+    "name": "iron",
+    "shortenDesc": ""
+  },
+  {
+    "name": "mosquito net",
+    "shortenDesc": ""
+  },
+  {
+    "name": "room-darkening shades",
+    "shortenDesc": ""
+  },
+  {
+    "name": "safe",
+    "shortenDesc": ""
+  },
+  {
+    "name": "entertainment",
+    "shortenDesc": ""
+  },
+  {
+    "name": "arcade games",
+    "shortenDesc": ""
+  },
+  {
+    "name": "batting cage",
+    "shortenDesc": ""
+  },
+  {
+    "name": "books and reading material",
+    "shortenDesc": ""
+  },
+  {
+    "name": "bowling alley",
+    "shortenDesc": ""
+  },
+  {
+    "name": "climbing wall",
+    "shortenDesc": ""
+  },
+  {
+    "name": "ethernet connection",
+    "shortenDesc": ""
+  },
+  {
+    "name": "exercise equipment",
+    "shortenDesc": ""
+  },
+  {
+    "name": "game console",
+    "shortenDesc": ""
+  },
+  {
+    "name": "laser tag",
+    "shortenDesc": ""
+  },
+  {
+    "name": "life size games",
+    "shortenDesc": ""
+  },
+  {
+    "name": "mini golf",
+    "shortenDesc": ""
+  },
+  {
+    "name": "movie theater",
+    "shortenDesc": ""
+  },
+  {
+    "name": "piano",
+    "shortenDesc": ""
+  },
+  {
+    "name": "ping pong table",
+    "shortenDesc": ""
+  },
+  {
+    "name": "pool table",
+    "shortenDesc": ""
+  },
+  {
+    "name": "record player",
+    "shortenDesc": ""
+  },
+  {
+    "name": "skate ramp",
+    "shortenDesc": ""
+  },
+  {
+    "name": "sound system",
+    "shortenDesc": ""
+  },
+  {
+    "name": "theme room",
+    "shortenDesc": "A room or multiple spaces that are designed to follow the same theme"
+  },
+  {
+    "name": "family",
+    "shortenDesc": ""
+  },
+  {
+    "name": "baby bath",
+    "shortenDesc": ""
+  },
+  {
+    "name": "baby monitor",
+    "shortenDesc": ""
+  },
+  {
+    "name": "children bikes",
+    "shortenDesc": ""
+  },
+  {
+    "name": "children playroom",
+    "shortenDesc": "An indoor room with toys, books, and games for children"
+  },
+  {
+    "name": "baby safety gates",
+    "shortenDesc": ""
+  },
+  {
+    "name": "babysitter recommendations",
+    "shortenDesc": ""
+  },
+  {
+    "name": "board games",
+    "shortenDesc": ""
+  },
+  {
+    "name": "changing table",
+    "shortenDesc": ""
+  },
+  {
+    "name": "children books and toys",
+    "shortenDesc": ""
+  },
+  {
+    "name": "crib",
+    "shortenDesc": ""
+  },
+  {
+    "name": "fireplace guards",
+    "shortenDesc": ""
+  },
+  {
+    "name": "high chair",
+    "shortenDesc": ""
+  },
+  {
+    "name": "outdoor playground",
+    "shortenDesc": "An outdoor area equipped with play structures for children"
+  },
+  {
+    "name": "heating and cooling",
+    "shortenDesc": ""
+  },
+  {
+    "name": "ceiling fan",
+    "shortenDesc": ""
+  },
+  {
+    "name": "indoor fireplace",
+    "shortenDesc": ""
+  },
+  {
+    "name": "portable fans",
+    "shortenDesc": ""
+  },
+  {
+    "name": "home safety",
+    "shortenDesc": ""
+  },
+  {
+    "name": "carbon monoxide alarm",
+    "shortenDesc": "Check your local laws, which may require a working carbon monoxide detector in every room"
+  },
+  {
+    "name": "fire extinguisher",
+    "shortenDesc": ""
+  },
+  {
+    "name": "first aid kit",
+    "shortenDesc": ""
+  },
+  {
+    "name": "smoke alarm",
+    "shortenDesc": "Check your local laws, which may require a working smoke detector in every room"
+  },
+  {
+    "name": "internet and office",
+    "shortenDesc": ""
+  },
+  {
+    "name": "pocket wifi",
+    "shortenDesc": ""
+  },
+  {
+    "name": "kitchen and dining",
+    "shortenDesc": ""
+  },
+  {
+    "name": "baking sheet",
+    "shortenDesc": ""
+  },
+  {
+    "name": "barbecue utensils",
+    "shortenDesc": "Grill, charcoal, bamboo skewers/iron skewers, etc."
+  },
+  {
+    "name": "bread maker",
+    "shortenDesc": ""
+  },
+  {
+    "name": "blender",
+    "shortenDesc": ""
+  },
+  {
+    "name": "coffee",
+    "shortenDesc": ""
+  },
+  {
+    "name": "coffee maker",
+    "shortenDesc": ""
+  },
+  {
+    "name": "dining table",
+    "shortenDesc": ""
+  },
+  {
+    "name": "freezer",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hot water kettle",
+    "shortenDesc": ""
+  },
+  {
+    "name": "microwave",
+    "shortenDesc": ""
+  },
+  {
+    "name": "mini fridge",
+    "shortenDesc": ""
+  },
+  {
+    "name": "oven",
+    "shortenDesc": ""
+  },
+  {
+    "name": "refrigerator",
+    "shortenDesc": ""
+  },
+  {
+    "name": "rice maker",
+    "shortenDesc": ""
+  },
+  {
+    "name": "stove",
+    "shortenDesc": ""
+  },
+  {
+    "name": "toaster",
+    "shortenDesc": ""
+  },
+  {
+    "name": "trash compactor",
+    "shortenDesc": ""
+  },
+  {
+    "name": "wine glasses",
+    "shortenDesc": ""
+  },
+  {
+    "name": "location features",
+    "shortenDesc": ""
+  },
+  {
+    "name": "beach access",
+    "shortenDesc": "Guests can enjoy a nearby beach"
+  },
+  {
+    "name": "lake access",
+    "shortenDesc": "Guests can get to a lake using a path or dock"
+  },
+  {
+    "name": "laundromat nearby",
+    "shortenDesc": ""
+  },
+  {
+    "name": "private entrance",
+    "shortenDesc": "Separate street or building entrance"
+  },
+  {
+    "name": "resort access",
+    "shortenDesc": "Guests can use nearby resort facilities"
+  },
+  {
+    "name": "ski",
+    "shortenDesc": "Guests can access ski lifts without driving or taking paid transportation"
+  },
+  {
+    "name": "waterfront",
+    "shortenDesc": "Right next to a body of water"
+  },
+  {
+    "name": "outdoor",
+    "shortenDesc": ""
+  },
+  {
+    "name": "backyard",
+    "shortenDesc": "An open space on the property usually covered in grass"
+  },
+  {
+    "name": "bbq grill",
+    "shortenDesc": ""
+  },
+  {
+    "name": "bikes",
+    "shortenDesc": ""
+  },
+  {
+    "name": "boat slip",
+    "shortenDesc": ""
+  },
+  {
+    "name": "fire pit",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hammock",
+    "shortenDesc": ""
+  },
+  {
+    "name": "kayak",
+    "shortenDesc": ""
+  },
+  {
+    "name": "patio",
+    "shortenDesc": ""
+  },
+  {
+    "name": "balcony",
+    "shortenDesc": ""
+  },
+  {
+    "name": "sun loungers",
+    "shortenDesc": ""
+  },
+  {
+    "name": "parking and facilities",
+    "shortenDesc": ""
+  },
+  {
+    "name": "elevator",
+    "shortenDesc": "The home or building has an elevator that’s at least 52 inches deep and a doorway at least 32 inches wide."
+  },
+  {
+    "name": "ev charger",
+    "shortenDesc": "Guests can charge their electric vehicles on the property."
+  },
+  {
+    "name": "free parking on premises",
+    "shortenDesc": ""
+  },
+  {
+    "name": "hockey rink",
+    "shortenDesc": ""
+  },
+  {
+    "name": "gym",
+    "shortenDesc": ""
+  },
+  {
+    "name": "sauna",
+    "shortenDesc": ""
+  },
+  {
+    "name": "single level home",
+    "shortenDesc": "No stairs in home"
+  },
+  {
+    "name": "services",
+    "shortenDesc": ""
+  },
+  {
+    "name": "breakfast",
+    "shortenDesc": "Breakfast is provided"
+  },
+  {
+    "name": "long term stays allowed",
+    "shortenDesc": "Allow stay for 28 days or more"
+  },
+  {
+    "name": "luggage dropoff allowed",
+    "shortenDesc": "For guests' convenience when they have early arrival or late departure"
+  }
+]
