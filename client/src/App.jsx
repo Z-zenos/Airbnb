@@ -8,6 +8,7 @@ import axios from 'axios';
 import { UserContextProvider } from './contexts/user.context';
 import PlacePage from './pages/PlacePage';
 
+
 // Apply for all requests
 axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1";
 /*
