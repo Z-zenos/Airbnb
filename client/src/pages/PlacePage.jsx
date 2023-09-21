@@ -31,7 +31,6 @@ export default function PlacePage() {
   });
   
   function handleScrollTo(ev) {
-    console.log(ev.target);
     scrollToSection({
       Photos: photosRef,
       Amenities: amenitiesRef,
@@ -55,11 +54,11 @@ export default function PlacePage() {
   return (
     <div className=" lg:w-3/5 mx-auto">
       <Navbar className="flex justify-between items-center w-full">
-        <div className="flex gap-10 text-sm font-medium cursor-pointer" onClick={handleScrollTo}>
-          <span>Photos</span>
-          <span>Amenities</span>
-          <span>Reviews</span>
-          <span>Location</span>
+        <div className="flex gap-10 text-sm font-medium cursor-pointer h-full" onClick={handleScrollTo}>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Photos</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Amenities</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Reviews</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Location</span>
         </div>
 
         <div className="flex justify-start items-center">
@@ -267,7 +266,7 @@ export default function PlacePage() {
 
           </div>
 
-          <div className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-10">
+          <div className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
             <div className="flex justify-between items-center">
               <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span> night</p>
               <div>
