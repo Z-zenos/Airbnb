@@ -7,6 +7,7 @@ import MainLayout from './layouts/MainLayout';
 import axios from 'axios';
 import { UserContextProvider } from './contexts/user.context';
 import PlacePage from './pages/PlacePage';
+import { PlaceContextProvider } from './contexts/place.context';
 
 
 // Apply for all requests
@@ -29,15 +30,17 @@ axios.defaults.withCredentials = true; // every requests will be sent to server 
 function App() {
 
   return (
-    <UserContextProvider>
-      <Routes>
-        <Route path='/' element={ <MainLayout /> } >
-          <Route index element={<IndexPage />} />
-          <Route path='/login' element={ <AuthPage /> } />
-          <Route path='/places' element={ <PlacePage /> } />
-        </Route>
-      </Routes>
-    </UserContextProvider>
+    <PlaceContextProvider>
+      <UserContextProvider>
+        <Routes>
+          <Route path='/' element={ <MainLayout /> } >
+            <Route index element={<IndexPage />} />
+            <Route path='/login' element={ <AuthPage /> } />
+            <Route path='/places' element={ <PlacePage /> } />
+          </Route>
+        </Routes>
+      </UserContextProvider>
+    </PlaceContextProvider>
   );
 }
 

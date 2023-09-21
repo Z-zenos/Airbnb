@@ -11,14 +11,13 @@ import { LuRefrigerator } from "react-icons/lu";
 import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
 import { DateRange as SimpleDateRange } from 'react-date-range';
-import { useRef, useState } from "react";
+import { useRef, useContext } from "react";
 import useWindowDimensions from "../hooks/useWindowDementions";
 import Navbar from "../components/Navbar/Navbar";
 import useOnScreen from "../hooks/useOnScreen";
+import { PlaceContext } from "../contexts/place.context";
 
 export default function PlacePage() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
   const { width } = useWindowDimensions();
 
   const purchaseCardRef = useRef(null);
@@ -28,6 +27,10 @@ export default function PlacePage() {
   const amenitiesRef = useRef(null);
   const reviewsRef = useRef(null);
   const locationRef = useRef(null);
+
+  const {
+    selectionRange, handleSelectDateRange
+  } = useContext(PlaceContext);
 
   const scrollToSection = ref => ref.current.scrollIntoView({
     behavior: 'smooth',
@@ -42,18 +45,6 @@ export default function PlacePage() {
       Location: locationRef
     }[ev.target.textContent]);
   }
-
-  const selectionRange = {
-    startDate: startDate,
-    endDate: endDate,
-    key: "selection"
-  };
-
-  function handleSelectDateRange(ranges) {
-    setStartDate(() => ranges.selection.startDate);
-    setEndDate(() => ranges.selection.endDate);
-  }
-
 
   return (
     <div className=" lg:w-3/5 mx-auto">

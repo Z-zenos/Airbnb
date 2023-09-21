@@ -9,6 +9,8 @@ export default function useOnScreen(ref) {
 
   useEffect(() => {
     observer.observe(ref.current);
+
+    // Clean up 
     return () => observer.disconnect();
   }, []);
 

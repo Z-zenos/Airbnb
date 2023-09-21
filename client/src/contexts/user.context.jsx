@@ -15,7 +15,7 @@ export function UserContextProvider({ children }) {
         const user = res.data.data.user;
         setUser(user);
       } catch(err) {
-        console.log(err);
+        console.error(err);
       }
     })();
   }, []);
