@@ -14,11 +14,15 @@ import { DateRange as SimpleDateRange } from 'react-date-range';
 import { useRef, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDementions";
 import Navbar from "../components/Navbar/Navbar";
+import useOnScreen from "../hooks/useOnScreen";
 
 export default function PlacePage() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const { width } = useWindowDimensions();
+
+  const purchaseCardRef = useRef(null);
+  const isPurchaseCardVisible = useOnScreen(purchaseCardRef);
 
   const photosRef = useRef(null);
   const amenitiesRef = useRef(null);
@@ -61,7 +65,8 @@ export default function PlacePage() {
           <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Location</span>
         </div>
 
-        <div className="flex justify-start items-center">
+        {!isPurchaseCardVisible && (
+          <div className="flex justify-start items-center">
           <div className="w-[140px]">
           <span className="-translate-y-1 font-light text-sm line-through text-gray-400"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span></span>
             <span className="-translate-y-1 font-light text-sm"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span> night</span>
@@ -78,7 +83,8 @@ export default function PlacePage() {
           >
             Reverse
           </button>
-        </div>
+          </div>
+        )}
       </Navbar>
 
       <div className="p-6">
@@ -266,7 +272,7 @@ export default function PlacePage() {
 
           </div>
 
-          <div className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
+          <div ref={purchaseCardRef} className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
             <div className="flex justify-between items-center">
               <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span> night</p>
               <div>
