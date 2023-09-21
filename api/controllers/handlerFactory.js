@@ -52,9 +52,8 @@ exports.createOne = Model => catchErrorAsync(async (req, res, next) => {
   });
 });
 
-exports.getOne = (Model, popOptions) => catchErrorAsync(async (req, res, next) => {
+exports.getOne = (Model) => catchErrorAsync(async (req, res, next) => {
   let query = Model.findById(req.params.id);
-  if (popOptions) query = query.populate(popOptions);
 
   const doc = await query;
 
@@ -65,7 +64,7 @@ exports.getOne = (Model, popOptions) => catchErrorAsync(async (req, res, next) =
   res.status(200).json({
     status: 'success',
     data: {
-      doc
+      [Model.modelName.toLowerCase()]: doc
     }
   });
 });

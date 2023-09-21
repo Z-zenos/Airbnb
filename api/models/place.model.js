@@ -159,21 +159,21 @@ const placeSchema = new mongoose.Schema(
   }
 );
 
-// placeSchema.index({ price: 1 });
-placeSchema.index({ price: 1, ratingsAverage: -1 });
-placeSchema.index({ slug: 1 });
-placeSchema.index({ startLocation: '2dsphere' });
+// // placeSchema.index({ price: 1 });
+// placeSchema.index({ price: 1, ratingsAverage: -1 });
+// placeSchema.index({ slug: 1 });
+// placeSchema.index({ startLocation: '2dsphere' });
 
-placeSchema.virtual('durationWeeks').get(function() {
-  return this.duration / 7;
-});
+// placeSchema.virtual('durationWeeks').get(function() {
+//   return this.duration / 7;
+// });
 
-// Virtual populate
-placeSchema.virtual('reviews', {
-  ref: 'Review',
-  foreignField: 'place',
-  localField: '_id'
-});
+// // Virtual populate
+// placeSchema.virtual('reviews', {
+//   ref: 'Review',
+//   foreignField: 'place',
+//   localField: '_id'
+// });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 placeSchema.pre('save', function(next) {
@@ -206,14 +206,14 @@ placeSchema.pre(/^find/, function(next) {
   next();
 });
 
-placeSchema.pre(/^find/, function(next) {
-  this.populate({
-    path: 'guides',
-    select: '-__v -passwordChangedAt'
-  });
+// placeSchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'guides',
+//     select: '-__v -passwordChangedAt'
+//   });
 
-  next();
-});
+//   next();
+// });
 
 // placeSchema.post(/^find/, function(docs, next) {
 //   console.log(`Query took ${Date.now() - this.start} milliseconds!`);

@@ -11,11 +11,13 @@ import { LuRefrigerator } from "react-icons/lu";
 import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
 import { DateRange as SimpleDateRange } from 'react-date-range';
-import { useRef, useContext } from "react";
+import { useRef, useContext, useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDementions";
 import Navbar from "../components/Navbar/Navbar";
 import useOnScreen from "../hooks/useOnScreen";
 import { PlaceContext } from "../contexts/place.context";
+
+import axios from "axios";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
@@ -31,6 +33,20 @@ export default function PlacePage() {
   const {
     selectionRange, handleSelectDateRange
   } = useContext(PlaceContext);
+
+  const [place, setPlace] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get('/places/65058538d31130157a5a2a2a');
+        setPlace(() => res.data.data.place);
+        
+      } catch(err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   const scrollToSection = ref => ref.current.scrollIntoView({
     behavior: 'smooth',
@@ -59,8 +75,8 @@ export default function PlacePage() {
         {!isPurchaseCardVisible && (
           <div className="flex justify-start items-center">
           <div className="w-[140px]">
-          <span className="-translate-y-1 font-light text-sm line-through text-gray-400"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span></span>
-            <span className="-translate-y-1 font-light text-sm"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span> night</span>
+          <span className="-translate-y-1 font-light text-sm line-through text-gray-400"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span></span>
+            <span className="-translate-y-1 font-light text-sm"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span> night</span>
             <div className="text-[12px]">
               <span className=""><AiFillStar className="inline font-medium text-yellow-400" /> 4.88</span>
               <span className="mx-1 font-medium">·</span>
@@ -80,7 +96,7 @@ export default function PlacePage() {
 
       <div className="p-6">
 
-        <h2 className="font-bold text-2xl mb-1">Whispering Pines Cottages| Cabin | Tandi</h2>
+        <h2 className="font-bold text-2xl mb-1">{place.name}</h2>
         <div className="flex justify-between items-center">
           <div className="text-sm">
             <span className="font-medium"><AiFillStar className="inline" /> 4.88</span>
@@ -146,13 +162,13 @@ export default function PlacePage() {
           <div className="w-3/5 mt-8">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <span>4 guests</span>
+                <span>{place.guests} guests</span>
                 <span className="mx-2 font-medium">·</span>
-                <span>2 bedrooms</span>
+                <span>{place.bedrooms} bedrooms</span>
                 <span className="mx-2 font-medium">·</span>
-                <span>3 beds</span>
+                <span>{place.beds} beds</span>
                 <span className="mx-2 font-medium">·</span>
-                <span>1 bath</span>
+                <span>{place.bathrooms} bath</span>
               </div>
 
               <div className="rounded w-14 h-14">
@@ -202,15 +218,7 @@ export default function PlacePage() {
                 '-moz-box-orient': 'vertical'
               }}>
                 <p>
-                  ★ You’ll be taken care of by one of the most successful Airbnb hosts in the country.
-                </p>
-                <br></br>
-                <p>
-                  ★ The treehouse is nestled in the Himalayan subtropical pine forests. It is made keeping in mind to provide a comfortable and memorable stay to travelers seeking a break from the hustle of city life. The house is cozy both in winter and summer. It has a 360-degree view of the greater Himalayas.
-                </p>
-
-                <p>
-                  ★ We have the best food in the Jibhi and the best view in the town.
+                  { place.description }
                 </p>
               </div>
 
@@ -265,7 +273,7 @@ export default function PlacePage() {
 
           <div ref={purchaseCardRef} className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
             <div className="flex justify-between items-center">
-              <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />76</span> night</p>
+              <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span> night</p>
               <div>
                 <span className="font-medium"><AiFillStar className="inline text-yellow-400" /> 4.88</span>
                 <span className="mx-2 font-medium">·</span>
@@ -291,7 +299,7 @@ export default function PlacePage() {
               <div className="flex justify-between items-center mb-4">
                 <span className="underline">
                   <BsCurrencyDollar className="inline -translate-y-[2px]" />
-                  76 x <span>2 nights</span>
+                  {place.price} x <span>2 nights</span>
                 </span>
                 <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />144</span>
               </div>
@@ -348,11 +356,11 @@ export default function PlacePage() {
 
           {/* 
             Two options for q=
-            + q=lat,long -> q=25.3076008,51.4803216
+            + q=lat,long -> q=25.30{place.price}008,51.4803216
             + q=name_address -> q=morklake or q=Google, 8th Avenue, New York, NY, USA
           */}
-          <iframe className="mt-6 mx-auto" width="800" height="500" id="gmap_canvas" src="https://maps.google.com/maps?q=mortlake&t=&z=13&ie=UTF8&iwloc=&output=embed&hl=en" >
-          </iframe>
+          { place.location && <iframe className="mt-6 mx-auto" width="800" height="500" id="gmap_canvas" src={`https://maps.google.com/maps?q=${place.location.coordinates[1]},${place.location.coordinates[0]}&t=&z=13&ie=UTF8&iwloc=&output=embed&hl=en`} >
+          </iframe>}
         </div>
       </div>
     </div>
