@@ -41,22 +41,7 @@ export default function PlacePage() {
       try {
         const res = await axios.get('/places/65058538d31130157a5a2a2a');
         setPlace(() => res.data.data.place);
-
-        const amenityList = res.data.data.place.amenities;
-
-        amenityList.forEach(async (amenity) => {
-          const resIcon = await axios.get(`/amenities/${amenity.id}`, { responseType: 'arraybuffer' });
-          const base64 = btoa(new Uint8Array(resIcon.data).reduce(
-            (data, byte) => data + String.fromCharCode(byte),
-            '',
-          ));
-
-          setAmenities(prevAmenities => [ ...prevAmenities, {
-            name: amenity.name,
-            shortDesc: amenity.shortDesc,
-            src: `data:;base64,${base64}`
-          } ]);
-        });
+        setAmenities(res.data.data.place.amenities);
 
       } catch(err) {
         console.error(err);
@@ -256,9 +241,9 @@ export default function PlacePage() {
               <h3 className="font-medium text-2xl">What this place offers</h3>
               <div className="mt-4">
                 { amenities.length && amenities.slice(0, 6).map(amenity => (
-                  <div className="flex gap-4 items-center mb-4" key={amenity.id}>
+                  <div className="flex gap-4 items-center mb-4" key={amenity.name}>
                     <span>
-                      <img className="inline text-[24px] font-light w-[25px] h-[25px]" src={amenity.src} />
+                      <img className="inline text-[24px] font-light w-[25px] h-[25px]" src={`http://localhost:3000/images/amenities/${amenity.iconImage}`} />
                     </span>
                     <span className="">{capitalizeFirstLowercaseRest(amenity.name)}</span>
                   </div>
