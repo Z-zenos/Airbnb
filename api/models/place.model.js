@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const PlaceType = require('./place_type.model');
+const Amenity = require('./amenity.model');
 
 const placeSchema = new mongoose.Schema(
   {
@@ -15,7 +17,7 @@ const placeSchema = new mongoose.Schema(
 
     placeType: {
       type: mongoose.Schema.ObjectId,
-      ref: 'Place_type',
+      ref: PlaceType,
       required: [true, 'A place must have type']
     },
 
@@ -62,7 +64,7 @@ const placeSchema = new mongoose.Schema(
 
     amenities: [{
       type: mongoose.Schema.ObjectId,
-      ref: 'Amenity',
+      ref: Amenity,
     }],
 
     averageRatings: {
@@ -206,14 +208,14 @@ placeSchema.pre(/^find/, function(next) {
   next();
 });
 
-// placeSchema.pre(/^find/, function(next) {
-//   this.populate({
-//     path: 'guides',
-//     select: '-__v -passwordChangedAt'
-//   });
+placeSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'placeType',
+    select: '-__v -_id -created -modified'
+  });
 
-//   next();
-// });
+  next();
+});
 
 // placeSchema.post(/^find/, function(docs, next) {
 //   console.log(`Query took ${Date.now() - this.start} milliseconds!`);

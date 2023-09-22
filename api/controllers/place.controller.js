@@ -1,4 +1,4 @@
-
+const catchErrorAsync = require('../utils/catchErrorAsync');
 const Place = require('./../models/place.model');
 const factory = require('./handlerFactory');
 
