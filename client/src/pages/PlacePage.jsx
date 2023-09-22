@@ -17,9 +17,11 @@ import useOnScreen from "../hooks/useOnScreen";
 import { PlaceContext } from "../contexts/place.context";
 
 import axios from "axios";
+import Modal from "../components/Modal/Modal";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
+  const [open, setOpen] = useState(false);
 
   const purchaseCardRef = useRef(null);
   const isPurchaseCardVisible = useOnScreen(purchaseCardRef);
@@ -30,8 +32,11 @@ export default function PlacePage() {
   const locationRef = useRef(null);
 
   const {
+    checkInDate, checkOutDate,
     selectionRange, handleSelectDateRange
   } = useContext(PlaceContext);
+
+  const datediff = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
 
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
@@ -258,7 +263,7 @@ export default function PlacePage() {
                 </div> */}
               </div>
 
-              <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100" title="Show all 10 amenities" />
+              <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100" title="Show all 10 amenities" onClick={() => setOpen(true)} />
             </div>
 
             <div className="h-[1px] bg-gray-300"></div>
@@ -309,9 +314,9 @@ export default function PlacePage() {
               <div className="flex justify-between items-center mb-4">
                 <span className="underline">
                   <BsCurrencyDollar className="inline -translate-y-[2px]" />
-                  {place.price} x <span>2 nights</span>
+                  {place.price} x <span>{datediff} nights</span>
                 </span>
-                <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />144</span>
+                <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />{place.price * datediff}</span>
               </div>
               <div className="flex justify-between items-center mb-4">
                 <span className="underline">
@@ -325,7 +330,7 @@ export default function PlacePage() {
 
             <div className="flex justify-between items-center mt-4 font-medium">
               <p>Total before taxes</p>
-              <p><BsCurrencyDollar className="inline -translate-y-[2px]" />164</p>
+              <p><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price * datediff + 144}</p>
             </div>
           </div>
         </div>
@@ -373,6 +378,10 @@ export default function PlacePage() {
           </iframe>}
         </div>
       </div>
+
+      <Modal open={open} onClose={() => setOpen(false)} >
+        abc
+      </Modal>
     </div>
   );
 }
