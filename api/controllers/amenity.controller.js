@@ -12,8 +12,6 @@ exports.getAmenity = catchErrorAsync(async (req, res, next) => {
     return next(new AppError('No document found with that ID', 404));
   }
 
-  console.log(amenity, `${__dirname}/../resources/images/amenities/${amenity.iconImage}`);
-
   res.status(200).sendFile(path.resolve(`${__dirname}/../resources/images/amenities/${amenity.iconImage}`));
 });
 

@@ -212,6 +212,9 @@ placeSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'placeType',
     select: '-__v -_id -created -modified'
+  }).populate({
+    path: 'amenities',
+    select: '-__v -created -modified'
   });
 
   next();

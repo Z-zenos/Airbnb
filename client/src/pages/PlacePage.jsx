@@ -5,8 +5,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { CiShare1 } from "react-icons/ci";
 import { CgMenuGridO } from "react-icons/cg";
 import { GiDesk } from "react-icons/gi";
-import { BsCurrencyDollar, BsMicrosoftTeams } from "react-icons/bs";
-import { LuRefrigerator } from "react-icons/lu";
+import { BsCurrencyDollar } from "react-icons/bs";
 
 import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
@@ -35,13 +34,30 @@ export default function PlacePage() {
   } = useContext(PlaceContext);
 
   const [place, setPlace] = useState({});
+  const [amenities, setAmenities] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get('/places/65058538d31130157a5a2a2a');
         setPlace(() => res.data.data.place);
-        
+
+        const amenityList = res.data.data.place.amenities;
+
+        amenityList.forEach(async (amenity) => {
+          const resIcon = await axios.get(`/amenities/${amenity.id}`, { responseType: 'arraybuffer' });
+          const base64 = btoa(new Uint8Array(resIcon.data).reduce(
+            (data, byte) => data + String.fromCharCode(byte),
+            '',
+          ));
+
+          setAmenities(prevAmenities => [ ...prevAmenities, {
+            name: amenity.name,
+            shortDesc: amenity.shortDesc,
+            src: `data:;base64,${base64}`
+          } ]);
+        });
+
       } catch(err) {
         console.error(err);
       }
@@ -60,6 +76,12 @@ export default function PlacePage() {
       Reviews: reviewsRef,
       Location: locationRef
     }[ev.target.textContent]);
+  }
+
+  function capitalizeFirstLowercaseRest(str) {
+    return (
+      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+    );
   }
 
   return (
@@ -233,19 +255,22 @@ export default function PlacePage() {
             <div className="py-8 px-2" ref={amenitiesRef}>
               <h3 className="font-medium text-2xl">What this place offers</h3>
               <div className="mt-4">
-                <div className="flex gap-4 items-center mb-4">
-                  <span>
-                    <LuRefrigerator className="inline text-[24px] font-light" />
-                  </span>
-                  <span className="font-light">Refrigerator</span>
-                </div>
+                { amenities.length && amenities.slice(0, 6).map(amenity => (
+                  <div className="flex gap-4 items-center mb-4" key={amenity.id}>
+                    <span>
+                      <img className="inline text-[24px] font-light w-[25px] h-[25px]" src={amenity.src} />
+                    </span>
+                    <span className="">{capitalizeFirstLowercaseRest(amenity.name)}</span>
+                  </div>
+                ))}
+                
 
-                <div className="flex gap-4 items-center">
+                {/* <div className="flex gap-4 items-center">
                   <span className="relative before:absolute before:w-[2px] before:h-[140%] before:bg-black before:block before:-rotate-45 before:left-1/2 before:-top-1">
                     <BsMicrosoftTeams className="inline text-[24px] font-light" />
                   </span>
                   <span className="font-light line-through">Ms.Team</span>
-                </div>
+                </div> */}
               </div>
 
               <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100" title="Show all 10 amenities" />
