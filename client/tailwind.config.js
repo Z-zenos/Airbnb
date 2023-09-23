@@ -12,6 +12,9 @@ export default {
       },
       borderWidth: {
         1: "1px"
+      },
+      boxShadow: {
+        'gray-primary': "rgba(0, 0, 0, 0.24) 0 3px 8px"
       }
     },
   },
