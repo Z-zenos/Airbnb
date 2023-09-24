@@ -4,6 +4,7 @@ import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 import {BsCaretLeft, BsCaretRight} from "react-icons/bs";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
+import PlaceCard from "../components/PlaceCard/PlaceCard";
 
 export default function IndexPage() {
   const [placeTypeList, setPlaceTypeList] = useState([]);
@@ -36,10 +37,10 @@ export default function IndexPage() {
 
   
   return (
-    <div className="px-20 mb-10">
+    <div className="lg:px-20 md:px-10 mb-10">
       <div className="mt-4 flex justify-start items-center">
         <BsCaretLeft 
-          className="h-full md:w-[120px] xl:w-[80px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500" 
+          className="h-full md:w-[120px] xl:w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500" 
           onClick={() => scrollHorizontal(-400)} 
         />
         
@@ -64,11 +65,19 @@ export default function IndexPage() {
 
 
         <BsCaretRight 
-          className="h-full md:w-[120px] xl:w-[80px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none" 
+          className="h-full md:w-[120px] xl:w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none" 
           onClick={() => scrollHorizontal(400)}  
         />
       </div>
       
+      <div className="flex flex-wrap items-center justify-between">
+        <PlaceCard />
+        <PlaceCard />
+        <PlaceCard />
+        <PlaceCard />
+        <PlaceCard />
+        <PlaceCard />
+      </div>
     </div>
   );
 }
