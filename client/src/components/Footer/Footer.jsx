@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 
 export default function Footer() {
   const location = useLocation();
-  console.log(location);
   return (
     <footer className={`border border-t-1 border-gray-primary ${location.pathname === '/' ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
       <div className="flex justify-center items-center">

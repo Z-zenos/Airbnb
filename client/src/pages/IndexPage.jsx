@@ -78,6 +78,8 @@ export default function IndexPage() {
         <PlaceCard />
         <PlaceCard />
       </div>
+
+      
     </div>
   );
 }
