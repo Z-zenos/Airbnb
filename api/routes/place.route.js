@@ -12,6 +12,11 @@ router
   //   tourController.createTour
   // );
 
+
+router
+  .route('/place-types')
+  .get(placeController.getAllPlaceTypes);
+
 router
   .route('/:id')
   .get(placeController.getPlace);
@@ -26,5 +31,6 @@ router
   //   authController.protect,
   //   tourController.deleteTour
   // );
+
 
 module.exports = router;

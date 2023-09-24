@@ -18,6 +18,7 @@ import { PlaceContext } from "../contexts/place.context";
 
 import axios from "axios";
 import Modal from "../components/Modal/Modal";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
@@ -47,7 +48,7 @@ export default function PlacePage() {
         const res = await axios.get('/places/65058538d31130157a5a2a2a');
         setPlace(() => res.data.data.place);
         setAmenities(() => res.data.data.place.amenities.map(a => ({
-          name: capitalizeFirstLowercaseRest(a.name),
+          name: capitalizeFirstLetter(a.name),
           src: `http://localhost:3000/images/amenities/${a.iconImage}`,
           shortenDesc: a.shortenDesc
         })));
@@ -70,12 +71,6 @@ export default function PlacePage() {
       Reviews: reviewsRef,
       Location: locationRef
     }[ev.target.textContent]);
-  }
-
-  function capitalizeFirstLowercaseRest(str) {
-    return (
-      str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
-    );
   }
 
   return (
