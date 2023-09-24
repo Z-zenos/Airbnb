@@ -3,7 +3,7 @@ import {AiFillStar} from "react-icons/ai";
 
 export default function PlaceCard() {
   return (
-    <div className="w-[270px] my-6">
+    <div className="w-[270px] my-6 cursor-pointer">
       <div>
         <img className="rounded-lg w-[270px] h-[260px]" src="https://a0.muscache.com/im/pictures/miso/Hosting-721540609203378406/original/9dfaf7d6-40f2-4673-b468-7c5ab3147f86.jpeg?im_w=720" />
       </div>

@@ -2,10 +2,13 @@
 import { BiWorld, BiDollar } from "react-icons/bi";
 import { AiFillFacebook, AiOutlineTwitter, AiOutlineInstagram, AiOutlineCopyrightCircle } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
+import { useLocation } from "react-router-dom";
 
 export default function Footer() {
+  const location = useLocation();
+  console.log(location);
   return (
-    <footer className="py-4 text-center border border-t-1 border-gray-primary">
+    <footer className={`border border-t-1 border-gray-primary ${location.pathname === '/' ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
       <div className="flex justify-center items-center">
         <span className="flex items-center">
           <BiWorld className="inline mr-1" />
