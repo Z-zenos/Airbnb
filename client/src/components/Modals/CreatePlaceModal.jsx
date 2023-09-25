@@ -83,13 +83,13 @@ export default function CreatePlaceModal() {
 
   return (
     <Modal 
-      open={open} 
+      isOpen={open} 
       onClose={() => setOpen(false)} 
-      title="Create New Place"
+      title="Airbnb your home!"
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS['CATEGORY'] ? undefined : onBack}
-      bodyContent={bodyContent}
+      body={bodyContent}
     />
   );
 }

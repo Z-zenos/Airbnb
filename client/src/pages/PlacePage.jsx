@@ -386,7 +386,7 @@ export default function PlacePage() {
           </div>
         </div>
 
-        <Modal open={open} onClose={() => setOpen(false)} >
+        <Modal isOpen={open} onClose={() => setOpen(false)} >
           <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
             <h3 className="font-medium text-2xl my-8">What this place offers?</h3>
             { amenities.length && amenities.map((amenity, i) => (

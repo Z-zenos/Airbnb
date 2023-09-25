@@ -8,7 +8,7 @@ export default function Heading({
       <div className="text-2xl font-bold">
         {title}
       </div>
-      <div className="font-light text-neutral-500 mt-2">
+      <div className="font-light text-sm text-neutral-500 mt-1">
         {subtitle}
       </div>
     </div>
