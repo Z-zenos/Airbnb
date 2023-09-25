@@ -5,6 +5,7 @@ import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import {BsCaretLeft, BsCaretRight} from "react-icons/bs";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import PlaceCard from "../components/PlaceCard/PlaceCard";
+import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
 
 export default function IndexPage() {
   const [placeTypeList, setPlaceTypeList] = useState([]);
@@ -79,7 +80,7 @@ export default function IndexPage() {
         <PlaceCard />
       </div>
 
-      
+      <CreatePlaceModal />
     </div>
   );
 }

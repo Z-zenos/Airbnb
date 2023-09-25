@@ -17,7 +17,7 @@ import useOnScreen from "../hooks/useOnScreen";
 import { PlaceContext } from "../contexts/place.context";
 
 import axios from "axios";
-import Modal from "../components/Modal/Modal";
+import Modal from "../components/Modals/Modal";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 export default function PlacePage() {
