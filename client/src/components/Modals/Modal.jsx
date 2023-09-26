@@ -46,7 +46,7 @@ export default function Modal({
     // backdrop
     <div
       onClick={onClose}
-      className={`z-20 fixed inset-0 flex justify-center items-center transition-colors ${isOpen ? 'visible bg-black/20' : 'invisible'}`}
+      className={`z-20 fixed inset-0 flex justify-center items-center transition-colors ${isOpen ? 'visible bg-black/40' : 'invisible'}`}
     >
       {/* modal */}
       <div
