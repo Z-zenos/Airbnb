@@ -8,9 +8,11 @@ import capitalizeFirstLetter from "../../utils/capitalizeFirstLetter";
 import PlaceTypeInput from "../Input/PlaceTypeInput";
 import LocationInput from "../Input/LocationInput";
 import Map from "../Map";
+import Counter from "../Input/Counter";
+import ImageUpload from "../Input/ImageUpload";
 
 const STEPS = {
-  CATEGORY: 0,
+  PLACE_TYPES: 0,
   LOCATION: 1,
   INFO: 2,
   IMAGES: 3,
@@ -21,7 +23,7 @@ const STEPS = {
 
 export default function CreatePlaceModal() {
   const [open, setOpen] = useState(true);
-  const [step, setStep] = useState(STEPS['CATEGORY']);
+  const [step, setStep] = useState(STEPS['PLACE_TYPES']);
 
   const {
     register,
@@ -49,6 +51,9 @@ export default function CreatePlaceModal() {
 
   const placeType = watch('placeType');
   const location = watch('location');
+  const guests = watch('guests');
+  const bedrooms = watch('bedrooms');
+  const bathrooms = watch('bathrooms');
   
   const setCustomValue = (id, value) => {
     setValue(id, value, {
@@ -75,7 +80,7 @@ export default function CreatePlaceModal() {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if(step === STEPS['CATEGORY'])
+    if(step === STEPS['PLACE_TYPES'])
       return undefined;
 
     return 'Back';
@@ -142,6 +147,66 @@ export default function CreatePlaceModal() {
     );
   }
 
+  if(step === STEPS['INFO']) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Share some basics about your place"
+          subtitle="What amenitis do you have?"
+        />
+        <Counter
+          onChange={(value) => setCustomValue('guests', value)}
+          value={guests}
+          title="Guests" 
+          subtitle="How many guests do you allow?"
+        />
+        <hr />
+        <Counter 
+          onChange={(value) => setCustomValue('bedrooms', value)}
+          value={bedrooms}
+          title="Bedrooms" 
+          subtitle="How many bedrooms do you have?"
+        />
+        <hr />
+        <Counter 
+          onChange={(value) => setCustomValue('bathrooms', value)}
+          value={bathrooms}
+          title="Bathrooms" 
+          subtitle="How many bathrooms do you have?"
+        />
+      </div>
+    );
+  }
+
+  if(step === STEPS['IMAGES']) {
+    bodyContent = (
+      <div>
+        <Heading
+          title="Upload at least 5 images of your place"
+          subtitle="Show guests what your place looks like!"
+        />
+
+        <ImageUpload />
+      </div>
+    );
+  }
+
+  if(step === STEPS['DESCRIPTION']) {
+    bodyContent = (
+      <div>
+
+      </div>
+    );
+  }
+
+  if(step === STEPS['PRICE']) {
+    bodyContent = (
+      <div>
+
+      </div>
+    );
+  }
+
   return (
     <Modal 
       isOpen={open} 
@@ -150,7 +215,7 @@ export default function CreatePlaceModal() {
       title="Airbnb your home!"
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS['CATEGORY'] ? undefined : onBack}
+      secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
       body={bodyContent}
     />
   );
