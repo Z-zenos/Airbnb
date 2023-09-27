@@ -182,8 +182,8 @@ export default function CreatePlaceModal() {
     bodyContent = (
       <div>
         <Heading
-          title="Upload at least 5 images of your place"
-          subtitle="Show guests what your place looks like!"
+          title="Add some photos for your place"
+          subtitle="You'll need 5 photos to get started. You can add more or make changes later."
         />
 
         <ImageUpload />
