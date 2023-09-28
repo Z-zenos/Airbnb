@@ -112,14 +112,19 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have description']
     },
 
-    photos: {
+    imageCover: {
+      type: String,
+      required: [true, 'A place must have a cover image']
+    },
+
+    images: {
       type: [String],
-      required: [true, 'A place must have photos'],
-      validdate: {
+      required: [true, 'A place must have images'],
+      validate: {
         validator: function (val) {
-          return val.length < 5;
+          return val.length <= 5;
         },
-        message: "Place's photos must more than 5 images"
+        message: "Place's images must more than 5 images"
       }
     },
 

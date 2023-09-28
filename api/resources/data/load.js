@@ -34,7 +34,7 @@ const importData = async () => {
 // DELETE ALL DATA IN DB
 const deleteData = async () => {
   try {
-    await Amenity.deleteMany();
+    await Place.deleteMany();
     console.log('Data successfully deleted!');
   }
   catch (err) {

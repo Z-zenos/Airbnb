@@ -24,6 +24,8 @@ const handleJWTError = () => new AppError('Invalid token. Please log in again!',
 
 const handleJWTExpiredError = () => new AppError('Your token has expired! Please log in again.', 401);
 
+const handleLimitImageSize = () => new AppError('Image size cannot be larger than 5MB.', 500);
+
 const sendErrorDev = (err, res) => {
 	res.status(err.statusCode).json({
 		status: err.status,
@@ -73,6 +75,7 @@ module.exports = (err, req, res, next) => {
 		if (error.name === 'ValidationError') error = handleValidationErrorDB(error);
 		if (error.name === 'JsonWebTokenError') error = handleJWTError();
 		if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
+		if (error.code === 'LIMIT_FILE_SIZE') error = handleLimitImageSize();
 
 		sendErrorProd(error, res);
 	}

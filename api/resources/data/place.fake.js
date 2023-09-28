@@ -44,7 +44,8 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
         priceType: faker.helpers.arrayElement(['night', 'week', 'month']),
         priceDiscount: faker.number.int(60),
         description: faker.commerce.productDescription(),
-        photos: ['1', '2', '3', '4', '5'],
+        imageCover: '0',
+        images: ['1', '2', '3', '4', '5'],
         location: {
           type: "Point",
           address: `${faker.location.secondaryAddress()} - ${faker.location.streetAddress()}, ${faker.location.city()}`,

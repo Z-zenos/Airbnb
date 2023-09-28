@@ -10,9 +10,9 @@ const logger = require('./utils/logger');
 const userRouter = require('./routes/user.route');
 const amenityRouter = require('./routes/amenity.route');
 const authRouter = require('./routes/auth.route');
-const placeRouter = require('./routes/place.route');
-
+const imageRouter = require('./routes/image.route');
 const resourceRouter = require('./routes/resource.route');
+const placeRouter = require('./routes/place.route');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/error.controller');
@@ -76,6 +76,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/amenities', amenityRouter);
 app.use('/api/v1/resources', resourceRouter);
+app.use('/api/v1/images', imageRouter);
 
 app.get('/_health', (req, res) => {
   res.status(200).json({
