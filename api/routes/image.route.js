@@ -9,9 +9,9 @@ const router = express.Router();
 //   .route('/')
 //   .get();
 
-// router
-//   .route('/:place')
-//   .get(imageController.getAllImagesOfPlace)
+router
+  .route('/:placeId')
+  .get(imageController.getAllImagesOfPlace)
   // .delete();
 
 router

@@ -27,9 +27,6 @@ exports.uploadPlaceImages = upload.fields([
 ]);
 
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
-
-  console.log(req.files);
-
   const imageCover = req.files.imageCover[0];
   const images = req.files.images;
 
@@ -64,16 +61,18 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
-  const id = req.params.id;
+  const id = req.params.placeId;
   const place = await Place.findById(id);
 
   if(!place) {
     return next(new AppError('No place found with that ID', 404));
   }
 
-  const imageList = place.images;
-
   res.status(200).json({
     status: 'success',
+    data: {
+      imageCover: place.imageCover,
+      images: place.images
+    }
   });
 });
