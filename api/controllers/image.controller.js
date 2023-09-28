@@ -34,11 +34,8 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 
   if(!imageCover || !images) return next();
 
-  console.log(imageCover.buffer);
-
-
   // 1) Cover image
-  req.body.imageCover = `place-${req.params.placeId}-${Date.now()}-cover.jpeg`;
+  req.body.imageCover = `place-${req.params.id}-${Date.now()}-cover.jpeg`;
   await sharp(imageCover.buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
@@ -50,7 +47,7 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 
   await Promise.all(
     images.map(async (file, i) => {
-      const filename = `place-${req.params.placeId}-${Date.now()}-${i + 1}.jpeg`;
+      const filename = `place-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
 
       await sharp(file.buffer)
         .resize(2000, 1333)
@@ -62,14 +59,12 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
     })
   );
 
-  res.status(200).json({
-    status: 'success'
-  });
+  next();
 });
 
 exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
-  const placeId = req.params.id;
-  const place = await Place.findById(placeId);
+  const id = req.params.id;
+  const place = await Place.findById(id);
 
   if(!place) {
     return next(new AppError('No place found with that ID', 404));

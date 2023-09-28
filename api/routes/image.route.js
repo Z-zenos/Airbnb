@@ -1,6 +1,7 @@
 const express = require('express');
 
 const imageController = require('../controllers/image.controller');
+const placeController = require('../controllers/place.controller');
 
 const router = express.Router();
 
@@ -14,8 +15,12 @@ const router = express.Router();
   // .delete();
 
 router
-  .route('/:placeId/upload')
-  .post(imageController.uploadPlaceImages, imageController.resizePlaceImages);
+  .route('/:id/upload') // id -> placeId
+  .patch(
+    imageController.uploadPlaceImages, 
+    imageController.resizePlaceImages,
+    placeController.updatePlace
+  );
 
 
 
