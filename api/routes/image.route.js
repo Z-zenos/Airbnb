@@ -22,6 +22,4 @@ router
     placeController.updatePlace
   );
 
-
-
 module.exports = router;

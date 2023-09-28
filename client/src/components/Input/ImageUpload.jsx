@@ -6,53 +6,85 @@ import axios from "axios";
 export default function ImageUpload({
   value, onChange
 }) {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [description, setDescription] = useState("");
-  const [isCover, setIsCover] = useState(false);
+  const [images, setImages] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
 
-  async function handleSubmit(ev) {
-    ev.preventDefault();
+  function handleImages(files) {
+    setImages([...images, ...files]);
+  }
 
-    // send the file and description to the server
-    const formData = new FormData();
-    formData.append("image", selectedImage);
-    formData.append("description", description);
+  useEffect(() => {
+    (async () => {
+      try {
+        if(!images.length) return;
 
-    const res = await axios.post(
-      '/images/65150230db6c8bcce87227ec/upload',
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+        // send the file and description to the server
+        const formData = new FormData();
+        images.forEach((image, i) => {
+          if(!i) formData.append("imageCover", images[0]);
+          else formData.append("images", image);
+        });
+
+        console.log(images[0]);
+
+        const res = await axios.patch(
+          '/images/65150230db6c8bcce87227ec/upload',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+
+        const place = res.data.data.place;
+        const urls = [place.imageCover, ...place.images];
+
+        setPreviewUrls(urls.map(u => `http://localhost:3000/images/places/${u}`));
+      } catch (err) {
+        console.error(err);
       }
-    );
+    })();
+  }, [images]);
 
-    console.log(res.data);
+  function handleDrop (ev) {
+    // prevent the browser from opening the image
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    // Info about all images that dragged
+    const { files } = ev.dataTransfer;
+
+    if(files.length > 0) {
+      handleImages(files);
+    }
+  }
+
+  function handleDragOver (ev) {
+    ev.preventDefault();
   }
 
   const fileInputRef = useRef(null);
 
-  function handleSelectImage() {
-    fileInputRef.current.click();
-  }
+  const preview = images.map((image, i) => (
+    <div className="relative w-40 h-40" key={image.name + i}>
+      <img alt="not found" className="w-full h-full rounded-lg object-cover" src={previewUrls[i]} />
+
+      <button>
+        <BsTrash3 className="absolute right-4 top-4 p-2 bg-white shadow-sm rounded-full w-8 h-8" />
+      </button>
+    </div>
+  ));
 
   return (
     <div className="mt-8">
       <form 
         className="h-[40vh] rounded-lg border-dashed border-neutral-600 border-[1px] flex flex-col items-center justify-center"
-        onSubmit={handleSubmit}  
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
       >
-        { selectedImage 
-          ? (
-              <div className="relative w-full h-full">
-                <img alt="not found" className="w-full h-full rounded-lg object-cover" src={URL.createObjectURL(selectedImage)} />
-
-                <button onClick={() => setSelectedImage(null)}>
-                  <BsTrash3 className="absolute right-4 top-4 p-2 bg-white shadow-sm rounded-full w-8 h-8" />
-                </button>
-              </div>
-            ) 
+        { images.length 
+          ? preview
           : (
               <>
                 <div className="text-center">
@@ -64,13 +96,17 @@ export default function ImageUpload({
 
                 <p 
                   className="underline font-medium text-sm mt-10 cursor-pointer"
-                  onClick={handleSelectImage}
+                  onClick={() => fileInputRef.current.click()}
                 >
                   Upload from your device
-                  <input ref={fileInputRef} type="file" accept="image/*" hidden onChange={ev => {
-                    setSelectedImage(ev.target.files[0])
-                    handleSubmit(ev);
-                  }} />
+                  <input 
+                    ref={fileInputRef} 
+                    type="file" 
+                    accept="image/*" 
+                    hidden 
+                    multiple={true}
+                    onChange={ev => handleImages(ev.target.files)}
+                  />
                 </p>
               </>
             )

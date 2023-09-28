@@ -28,9 +28,10 @@ exports.uploadPlaceImages = upload.fields([
 
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 
+  console.log(req.files);
+
   const imageCover = req.files.imageCover[0];
   const images = req.files.images;
-
 
   if(!imageCover || !images) return next();
 
