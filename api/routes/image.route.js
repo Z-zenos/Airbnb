@@ -8,7 +8,7 @@ const router = express.Router();
 
 /* NOTE: id -> placeId */
 
-router.all('/:id/*', placeController.checkPlace);
+router.all('/:id/:imageName?', placeController.checkPlace);
 
 router
   .route('/:id')

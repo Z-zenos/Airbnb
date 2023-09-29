@@ -72,15 +72,23 @@ export default function ImageUpload({
 
   const fileInputRef = useRef(null);
 
-  async function handleRemoveImage (url) {
-    
+  async function handleRemoveImage (ev, url) {
+    ev.preventDefault();
+
+    if(!previewUrls.length) return;
+
+    const res = await axios.delete(`/images/65150230db6c8bcce87227ec/${url}`);
+
+    const place = res.data.data.place;
+
+    setPreviewUrls([place.imageCover, ...place.images]);
   }
 
   const preview = previewUrls.map((url, i) => (
     <div className={`relative rounded-lg border-dashed border-neutral-600 border-[1px] ${!i ? 'h-[40vh] w-full col-span-2' : 'h-[20vh] w-full'}`} key={url + i}>
       <img alt="not found" className="w-full h-full rounded-lg object-cover" src={`http://localhost:3000/images/places/${url}`} />
 
-      <button onClick={() => handleRemoveImage(url)}>
+      <button onClick={async (ev) => await handleRemoveImage(ev, url)}>
         <BsTrash3 className="absolute right-4 top-4 p-2 bg-white shadow-sm rounded-full w-8 h-8" />
       </button>
     </div>

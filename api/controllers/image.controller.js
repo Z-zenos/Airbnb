@@ -73,8 +73,6 @@ exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.deleteImage = catchErrorAsync(async (req, res, next) => {
-  console.log(req.params);
-  
   const { imageName } = req.params;
   const place = req.place;  
 
