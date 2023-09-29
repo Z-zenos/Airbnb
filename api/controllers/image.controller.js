@@ -1,6 +1,6 @@
+const fs = require('fs').promises;
 const multer = require('multer');
 const sharp = require('sharp');
-const Place = require('../models/place.model');
 
 const AppError = require("../utils/appError");
 const catchErrorAsync = require("../utils/catchErrorAsync");
@@ -61,12 +61,7 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
-  const id = req.params.placeId;
-  const place = await Place.findById(id);
-
-  if(!place) {
-    return next(new AppError('No place found with that ID', 404));
-  }
+  const place = req.place;
 
   res.status(200).json({
     status: 'success',
@@ -75,4 +70,29 @@ exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
       images: place.images
     }
   });
+});
+
+exports.deleteImage = catchErrorAsync(async (req, res, next) => {
+  console.log(req.params);
+  
+  const { imageName } = req.params;
+  const place = req.place;  
+
+  if(imageName === place.imageCover) {
+    place.imageCover = req.body.imageCover = undefined; 
+  }
+  else {
+    for(let i = 0; i < place.images.length; i++) {
+      if(place.images[i] === imageName) {
+        req.body.images = place.images.filter(i => i !== imageName);
+        break;
+      }
+    }
+  }
+
+  const imagePath = `${__dirname}/../resources/images/places/${imageName}`;
+  await fs.unlink(imagePath);
+
+  next();
+  
 });

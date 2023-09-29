@@ -5,14 +5,21 @@ const placeController = require('../controllers/place.controller');
 
 const router = express.Router();
 
-// router
-//   .route('/')
-//   .get();
+
+/* NOTE: id -> placeId */
+
+router.all('/:id/*', placeController.checkPlace);
 
 router
-  .route('/:placeId')
+  .route('/:id')
   .get(imageController.getAllImagesOfPlace)
-  // .delete();
+
+router
+  .route('/:id/:imageName')
+  .delete(
+    imageController.deleteImage, 
+    placeController.updatePlace
+  );
 
 router
   .route('/:id/upload') // id -> placeId

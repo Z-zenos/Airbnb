@@ -6,6 +6,7 @@ const AppError = require('../utils/appError');
 
 exports.getAllPlaces = factory.getAll(Place);
 exports.getPlace = factory.getOne(Place);
+exports.checkPlace = factory.checkOne(Place);
 // exports.createPlace = factory.createOne(Place);
 exports.updatePlace = factory.updateOne(Place);
 // exports.deletePlace = factory.deleteOne(Place);
