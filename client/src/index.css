@@ -21,3 +21,9 @@
 .leaflet-top {
   z-index: 0 !important;
 }
+
+.mce-notification.mce-in {
+  display: none;
+}
+
+.tox-notification { display: none !important }

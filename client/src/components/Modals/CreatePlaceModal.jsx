@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import{useForm} from "react-hook-form";
 import Modal from "./Modal";
 import Heading from "../Heading/Heading";
@@ -10,6 +10,8 @@ import LocationInput from "../Input/LocationInput";
 import Map from "../Map";
 import Counter from "../Input/Counter";
 import ImageUpload from "../Input/ImageUpload";
+import Input from "../Input/Input";
+import { Editor } from "@tinymce/tinymce-react";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -24,6 +26,7 @@ const STEPS = {
 export default function CreatePlaceModal() {
   const [open, setOpen] = useState(true);
   const [step, setStep] = useState(STEPS['PLACE_TYPES']);
+  const editorRef = useRef(null);
 
   const {
     register,
@@ -74,7 +77,7 @@ export default function CreatePlaceModal() {
 
   const actionLabel = useMemo(() => {
     if(step === STEPS['PRICE'])
-      return 'Create';
+      return 'Publish';
 
     return 'Next';
   }, [step]);
@@ -193,16 +196,58 @@ export default function CreatePlaceModal() {
 
   if(step === STEPS['DESCRIPTION']) {
     bodyContent = (
-      <div>
+      <div className="flex flex-col gap-8">
+        <Heading 
+          title="How would you describe your place?"
+          subtitle="Short and sweet works best!"
+        />
 
+        <Input label="Title" name="title" type="text" className="rounded-[8px]"  errors={errors} required />
+
+        <hr />
+
+        <Heading 
+          title="Create your description"
+          subtitle="Share what makes your place special."
+        />
+
+        <Editor
+          onInit={(evt, editor) => editorRef.current = editor}
+          initialValue="<p>Feel refreshed when you stay in this rustic gem.</p>"
+          init={{
+            height: 300,
+            menubar: false,
+            plugins: [
+              'advlist autolink lists link image charmap print preview anchor',
+              'searchreplace visualblocks code fullscreen',
+              'insertdatetime media table paste code help wordcount'
+            ],
+            toolbar: 'undo redo | formatselect | ' +
+            'bold italic backcolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+          }}
+          
+        />
       </div>
     );
   }
 
   if(step === STEPS['PRICE']) {
     bodyContent = (
-      <div>
+      <div className="flex flex-col gap-8">
+        <Heading 
+          title="Now, set your price"
+          subtitle="How much do you charge per night?"
+        />
 
+        <Input 
+          label="Price"
+          type="number"
+          errors={errors}
+          required
+        />
       </div>
     );
   }

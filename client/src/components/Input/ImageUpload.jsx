@@ -16,7 +16,9 @@ export default function ImageUpload({
 
       const { imageCover, images } = res.data.data;
 
-      setPreviewUrls([imageCover, ...images]);
+      const urls = [imageCover, ...images].filter(Boolean);
+
+      setPreviewUrls(urls);
     })();
   }, []);
 
@@ -31,7 +33,7 @@ export default function ImageUpload({
       // send the file and description to the server
       const formData = new FormData();
       images.forEach((image, i) => {
-        if(!i) formData.append("imageCover", images[0]);
+        if(!i && !images.length) formData.append("imageCover", image);
         else formData.append("images", image);
       });
 
@@ -84,7 +86,7 @@ export default function ImageUpload({
     setPreviewUrls([place.imageCover, ...place.images]);
   }
 
-  const preview = previewUrls.map((url, i) => (
+  const preview = previewUrls.length > 0 && previewUrls.map((url, i) => (
     <div className={`relative rounded-lg border-dashed border-neutral-600 border-[1px] ${!i ? 'h-[40vh] w-full col-span-2' : 'h-[20vh] w-full'}`} key={url + i}>
       <img alt="not found" className="w-full h-full rounded-lg object-cover" src={`http://localhost:3000/images/places/${url}`} />
 
