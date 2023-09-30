@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '../contexts/user.context';
+import { ModalContext } from '../contexts/modal.context';
 
 
 export default function Header() {
+  const { setIsCreatePlaceModalOpen } = useContext(ModalContext);
   const [userBox, setUserBox] = useState(false);
   const {user} = useContext(UserContext);
   
@@ -56,14 +58,26 @@ export default function Header() {
 
         </div>
 
-        { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm'>
+        { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm z-50'>
           <ul>
             {user.email ? (
-              <Link to={'/profile'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Account</Link>
+              <>
+                <Link to={'/profile'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Account</Link>
+                <li 
+                  className='px-4 py-2 hover:bg-gray-100 cursor-pointer' 
+                  onClick={() => {
+                    setIsCreatePlaceModalOpen(true)
+                    setUserBox(false);
+                  }}
+                >
+                  Create your places
+                </li>
+              </>
             ) : (
               <>
                 <Link to={'/login'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Login</Link>
                 <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>Register</li>
+                
               </>
             )}
           </ul>

@@ -8,6 +8,7 @@ import axios from 'axios';
 import { UserContextProvider } from './contexts/user.context';
 import PlacePage from './pages/PlacePage';
 import { PlaceContextProvider } from './contexts/place.context';
+import { ModalContextProvider } from './contexts/modal.context';
 
 
 // Apply for all requests
@@ -32,13 +33,15 @@ function App() {
   return (
     <PlaceContextProvider>
       <UserContextProvider>
-        <Routes>
-          <Route path='/' element={ <MainLayout /> } >
-            <Route index element={<IndexPage />} />
-            <Route path='/login' element={ <AuthPage /> } />
-            <Route path='/places' element={ <PlacePage /> } />
-          </Route>
-        </Routes>
+        <ModalContextProvider>
+          <Routes>
+            <Route path='/' element={ <MainLayout /> } >
+              <Route index element={<IndexPage />} />
+              <Route path='/login' element={ <AuthPage /> } />
+              <Route path='/places' element={ <PlacePage /> } />
+            </Route>
+          </Routes>
+        </ModalContextProvider>
       </UserContextProvider>
     </PlaceContextProvider>
   );

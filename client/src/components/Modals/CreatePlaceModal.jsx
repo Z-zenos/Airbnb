@@ -1,5 +1,5 @@
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import{useForm} from "react-hook-form";
 import Modal from "./Modal";
 import Heading from "../Heading/Heading";
@@ -12,6 +12,7 @@ import Counter from "../Input/Counter";
 import ImageUpload from "../Input/ImageUpload";
 import Input from "../Input/Input";
 import { Editor } from "@tinymce/tinymce-react";
+import { ModalContext } from "../../contexts/modal.context";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -24,7 +25,8 @@ const STEPS = {
 
 
 export default function CreatePlaceModal() {
-  const [open, setOpen] = useState(true);
+  const { isCreatePlaceModalOpen, setIsCreatePlaceModalOpen } = useContext(ModalContext);
+
   const [step, setStep] = useState(STEPS['PLACE_TYPES']);
   const editorRef = useRef(null);
 
@@ -116,7 +118,7 @@ export default function CreatePlaceModal() {
       />
 
       <div
-        className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[40vh] px-4 overflow-y-auto"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
       >
         { placeTypeList.length && placeTypeList.map((pt, i) => (
           <div key={pt.name + i} className="col-span-1">
@@ -252,16 +254,23 @@ export default function CreatePlaceModal() {
     );
   }
 
+  const saveBtn = (
+    <button className="border px-4 py-1 border-gray-primary hover:bg-black hover:text-white font-medium">
+      Save
+    </button>
+  )
+
   return (
     <Modal 
-      isOpen={open} 
-      onClose={() => setOpen(false)} 
+      isOpen={isCreatePlaceModalOpen} 
+      onClose={() => setIsCreatePlaceModalOpen(false)} 
       onSubmit={step === STEPS['PRICE'] ? handleSubmit : onNext}
       title="Airbnb your home!"
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
       body={bodyContent}
+      optionBtn={saveBtn}
     />
   );
 }

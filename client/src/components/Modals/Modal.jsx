@@ -5,7 +5,8 @@ import Button from "../Button/Button";
 export default function Modal({ 
   isOpen, onClose, children, title, body,
   secondaryAction, secondaryActionLabel, disabled,
-  actionLabel, onSubmit, footer
+  actionLabel, onSubmit, footer,
+  optionBtn
 }) {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -65,6 +66,8 @@ export default function Modal({
             </button>
 
             <p className="text-lg font-semibold text-primary">{title}</p>
+            
+            <span className="absolute right-8">{optionBtn}</span>
           </div>
 
           {/* BODY */}
