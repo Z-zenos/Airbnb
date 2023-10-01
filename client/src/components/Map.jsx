@@ -22,7 +22,7 @@ const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">Op
 export default function Map({ center }) {
   return (
     <MapContainer 
-      center={center || [51, -0.09]} 
+      center={ center || [51, -0.09]} 
       zoom={center ? 4 : 2} 
       // scrollWheelZoom={false} 
       className="h-[35vh] rounded-lg"

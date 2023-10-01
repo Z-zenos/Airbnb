@@ -36,9 +36,10 @@ export default function CreatePlaceModal() {
     setValue,
     watch,
     formState: {
-      errors
+      errors,
+      isDirty
     },
-    reset
+    reset,
   } = useForm({
     defaultValues: {
       placeType: '',
@@ -136,7 +137,7 @@ export default function CreatePlaceModal() {
 
   if(step === STEPS['LOCATION']) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4">
         <Heading 
           title="Where is your place located?"
           subtitle="Help guests find you!"
@@ -254,10 +255,15 @@ export default function CreatePlaceModal() {
     );
   }
 
-  const saveBtn = (
-    <button className="border px-4 py-1 border-gray-primary hover:bg-black hover:text-white font-medium">
-      Save
-    </button>
+  const saveBtn = !errors.length && isDirty && (
+    <div>
+      <button className="border px-4 py-1 border-gray-primary hover:bg-red-500 hover:border-red-500 hover:text-white font-medium mr-3">
+        Discard
+      </button>
+      <button className="border px-4 py-1 border-gray-primary hover:bg-blue-500 hover:border-blue-500 hover:text-white font-medium">
+        Save
+      </button>
+    </div>
   )
 
   return (

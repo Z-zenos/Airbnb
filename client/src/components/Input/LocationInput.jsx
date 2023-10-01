@@ -1,15 +1,49 @@
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import useCountries from '../../hooks/useCountries';
-
+import { GoLocation } from "react-icons/go";
 
 export default function LocationInput({
   value, onChange
 }) {
   const { getAll } = useCountries();
 
+  const asyncGetCurrentPosition = options => new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(resolve, reject, options);
+  });
+
+  const handleLocationClick = async () => {
+    let {coords: {latitude, longitude}} = await asyncGetCurrentPosition();
+    return [latitude, longitude];
+  }
+
+  const selectMenuButton = (props) => {
+    return (
+      <components.MenuList {...props}>
+        <p 
+          className="flex items-center py-4 justify-center cursor-pointer"
+          onClick={async () => {
+            const latlng = await handleLocationClick();
+            onChange({ 
+              latlng: latlng, 
+              label: "My location",
+              flag: "📍",
+              region: "",
+              value: "ML",
+            })
+          }}
+        >
+          <GoLocation className='inline w-6 h-6 mr-1 text-primary' />
+          <span className='font-light hover:underline'>Use my location</span>
+        </p>
+        <div className='mt-1'>{ props.children }</div>
+      </components.MenuList>
+    )
+  };
+
   return (
     <>
       <Select
+        components={{ MenuList: selectMenuButton }}
         placeholder="Anywhere"
         isClearable
         options={getAll()}
@@ -26,6 +60,7 @@ export default function LocationInput({
             </div>
           </div>
         )}
+        className='relative'
 
         classNames={{
           control: () => 'p-3 border-2',
