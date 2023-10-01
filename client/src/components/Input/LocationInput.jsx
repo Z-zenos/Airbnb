@@ -1,6 +1,8 @@
 import Select, { components } from 'react-select';
 import useCountries from '../../hooks/useCountries';
 import { GoLocation } from "react-icons/go";
+import Input from './Input';
+import { useRef } from 'react';
 
 export default function LocationInput({
   value, onChange
@@ -30,7 +32,8 @@ export default function LocationInput({
               flag: "📍",
               region: `Nice place`,
               value: "ML",
-            })
+              address: addressInputRef.current.value
+            });
           }}
         >
           <GoLocation className='inline w-6 h-6 mr-1 text-primary' />
@@ -41,15 +44,19 @@ export default function LocationInput({
     )
   };
 
+  const addressInputRef = useRef(null);
+  console.log(value);
+
   return (
     <>
+      <Input type="text" label="Address" value={value?.address} onChange={() => onChange({ ...value, address: addressInputRef.current.value })} ref={addressInputRef} className="rounded-lg "/>
       <Select
         components={{ MenuList: selectMenuButton }}
         placeholder="Anywhere"
         isClearable
         options={getAll()}
         value={value}
-        onChange={value => onChange(value)}
+        onChange={value => onChange({...value, address: addressInputRef.current.value})}
         formatOptionLabel={option => (
           <div className="flex flex-row items-center gap-3">
             <div>{option.flag}</div>
@@ -65,8 +72,8 @@ export default function LocationInput({
 
         classNames={{
           control: () => 'p-3 border-2',
-          input: () => 'text-lg',
-          option: () => 'text-lg'
+          input: () => 'text-md',
+          option: () => 'text-md'
         }}
 
         theme={(theme) => ({
