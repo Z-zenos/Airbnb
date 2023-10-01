@@ -1,4 +1,4 @@
-import { MapContainer, Marker, TileLayer } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
@@ -9,10 +9,16 @@ const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">Op
 const customIcon = new Icon({
   iconUrl: 'https://cdn-icons-png.flaticon.com/128/9384/9384815.png',
   iconSize: [38, 38]
-})
+});
 
 
-export default function Map({ center }) {
+function ChangeView({ center, zoom }) {
+  const map = useMap();
+  map.setView(center, zoom);
+  return null;
+}
+
+export default function Map({ country, center = [0,0] }) {
 
   return (
     <MapContainer 
@@ -21,12 +27,15 @@ export default function Map({ center }) {
       // scrollWheelZoom={false} 
       className="h-[35vh] rounded-lg"
     >
+      <ChangeView center={center} zoom={4} />
       <TileLayer
         url={url}
         attribution={attribution}
       />
       {center && (
-        <Marker position={center} icon={customIcon} />
+        <Marker position={center} icon={customIcon} >
+          <Popup>{country}</Popup>
+        </Marker>
       )}
     </MapContainer>
   );

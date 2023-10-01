@@ -148,7 +148,7 @@ export default function CreatePlaceModal() {
           onChange={value => setCustomValue('location', value)}
         />
 
-        <Map center={location?.latlng} />
+        <Map country={location?.label} center={location?.latlng} />
       </div>
     );
   }
