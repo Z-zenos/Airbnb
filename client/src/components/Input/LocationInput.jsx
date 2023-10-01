@@ -23,11 +23,12 @@ export default function LocationInput({
           className="flex items-center py-4 justify-center cursor-pointer"
           onClick={async () => {
             const latlng = await handleLocationClick();
+            
             onChange({ 
               latlng: latlng, 
               label: "My location",
               flag: "📍",
-              region: "",
+              region: `Nice place`,
               value: "ML",
             })
           }}
