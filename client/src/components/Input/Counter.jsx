@@ -3,17 +3,19 @@ import { useCallback } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 export default function Counter({
-  title, subtitle, value, onChange
+  title, subtitle, value, onChange, plussedNumber = 1, max = 50, min = 1
 }) {
   const onAdd = useCallback(() => {
-    onChange(value + 1);
-  }, [onChange, value]);
+    if(value === max) return;
+
+    onChange(value + plussedNumber);
+  }, [onChange, value, max, plussedNumber]);
 
   const onReduce = useCallback(() => {
-    if(value === 1) return;
+    if(value === plussedNumber) return;
 
-    onChange(value - 1);
-  }, [onChange, value]);
+    onChange(value - plussedNumber);
+  }, [onChange, value, plussedNumber]);
 
   return (
     <div className="flex flex-row items-center justify-between">
@@ -24,7 +26,7 @@ export default function Counter({
 
       <div className="flex flex-row items-center gap-4">
         <div
-          className="w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition"
+          className={`w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ${value === min ? ' opacity-50 cursor-auto pointer-events-none' : ''}`}
           onClick={onReduce}
         >
           <AiOutlineMinus />
@@ -35,7 +37,7 @@ export default function Counter({
         </div>
 
         <div
-          className="w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition"
+          className={`w-10 h-10 rounded-full border-[1px] border-neutral-400 flex items-center justify-center text-neutral-600 cursor-pointer hover:opacity-80 transition ${value === max ? ' opacity-50 cursor-auto pointer-events-none' : ''}`}
           onClick={onAdd}
         >
           <AiOutlinePlus />

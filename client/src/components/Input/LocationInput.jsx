@@ -61,7 +61,7 @@ export default function LocationInput({
           <div className="flex flex-row items-center gap-3">
             <div>{option.flag}</div>
             <div>
-              {option.label},
+              {option.label}{option?.label ? ',' : ''}
               <span className="text-neutral-500 ml-1">
                 {option.region}
               </span>

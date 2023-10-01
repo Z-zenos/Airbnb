@@ -18,9 +18,10 @@ const STEPS = {
   PLACE_TYPES: 0,
   LOCATION: 1,
   INFO: 2,
-  IMAGES: 3,
-  DESCRIPTION: 4,
-  PRICE: 5
+  AMENITIES: 3,
+  IMAGES: 4,
+  DESCRIPTION: 5,
+  PRICE: 6
 };
 
 
@@ -52,6 +53,7 @@ export default function CreatePlaceModal() {
       name: '',
       photos: [],
       price: 1,
+      amenities: [],
     }
   });
 
@@ -59,7 +61,9 @@ export default function CreatePlaceModal() {
   const location = watch('location');
   const guests = watch('guests');
   const bedrooms = watch('bedrooms');
+  const beds = watch('beds');
   const bathrooms = watch('bathrooms');
+  const amenities = watch('amenities');
   
   const setCustomValue = (id, value) => {
     setValue(id, value, {
@@ -68,7 +72,6 @@ export default function CreatePlaceModal() {
       shouldValidate: true
     });
   }
-  
 
   function onNext() {
     setStep(prevStep => prevStep + 1);
@@ -110,6 +113,18 @@ export default function CreatePlaceModal() {
       }
     })();
   }, []); 
+
+
+  const [amenityList, setAmenityList] = useState([]);
+
+  useEffect(() => {
+    if(step === STEPS['AMENITIES']) {
+      (async () => {
+        const resp = await axios.get('/amenities');
+        setAmenityList(resp.data.data.amenity);
+      })();
+    }
+  }, [step]);
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -158,13 +173,14 @@ export default function CreatePlaceModal() {
       <div className="flex flex-col gap-8">
         <Heading
           title="Share some basics about your place"
-          subtitle="What amenitis do you have?"
+          subtitle="You'll add more details later, like bed types."
         />
         <Counter
           onChange={(value) => setCustomValue('guests', value)}
           value={guests}
           title="Guests" 
           subtitle="How many guests do you allow?"
+          max={16}
         />
         <hr />
         <Counter 
@@ -175,14 +191,51 @@ export default function CreatePlaceModal() {
         />
         <hr />
         <Counter 
+          onChange={(value) => setCustomValue('beds', value)}
+          value={beds}
+          title="Beds" 
+          subtitle="How many beds do you have?"
+        />
+        <hr />
+        <Counter 
           onChange={(value) => setCustomValue('bathrooms', value)}
           value={bathrooms}
           title="Bathrooms" 
           subtitle="How many bathrooms do you have?"
+          plussedNumber={0.5}
+          min={0.5}
         />
       </div>
     );
   }
+
+  if(step === STEPS['AMENITIES']) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Tell guests what your place has to offer"
+          subtitle="You can add more amenities after you publish your listing."
+        />
+
+        <div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
+        >
+          { amenityList.length && amenityList.map((a, i) => (
+            <div key={a.name + i} className="col-span-1">
+              <PlaceTypeInput
+                onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
+                selected={amenities.includes(capitalizeFirstLetter(a.name))}
+                label={capitalizeFirstLetter(a.name)}
+                iconSrc={`http://localhost:3000/images/amenities/${a.iconImage}`}
+              />
+            </div>
+          )) }
+        </div>
+      </div>
+    ) 
+  }
+
+  console.log(amenities);
 
   if(step === STEPS['IMAGES']) {
     bodyContent = (
