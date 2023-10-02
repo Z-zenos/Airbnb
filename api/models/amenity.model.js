@@ -19,6 +19,7 @@ const amenitySchema = new mongoose.Schema(
       default: Date.now
     },
     shortenDesc: String,
+    isEssential: Boolean,
     
     // type also is amenity but it is more generic, no have icon image.
     type: {

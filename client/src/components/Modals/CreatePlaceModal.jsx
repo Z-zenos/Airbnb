@@ -5,7 +5,7 @@ import Modal from "./Modal";
 import Heading from "../Heading/Heading";
 import axios from "axios";
 import capitalizeFirstLetter from "../../utils/capitalizeFirstLetter";
-import PlaceTypeInput from "../Input/PlaceTypeInput";
+import CategoryInput from "../Input/CategoryInput";
 import LocationInput from "../Input/LocationInput";
 import Map from "../Map";
 import Counter from "../Input/Counter";
@@ -136,11 +136,12 @@ export default function CreatePlaceModal() {
       <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
       >
-        { placeTypeList.length && placeTypeList.map((pt, i) => (
-          <div key={pt.name + i} className="col-span-1">
-            <PlaceTypeInput
-              onClick={(placeType) => setCustomValue('placeType', placeType)}
-              selected={placeType === pt.name}
+        { placeTypeList.length && placeTypeList.map(pt => (
+          <div key={pt.id} className="col-span-1">
+            <CategoryInput
+              onClick={placeTypeId => setCustomValue('placeType', placeTypeId)}
+              selected={placeType === pt.id}
+              id={pt.id}
               label={pt.name}
               iconSrc={pt.src}
             />
@@ -220,11 +221,12 @@ export default function CreatePlaceModal() {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
         >
-          { amenityList.length && amenityList.map((a, i) => (
-            <div key={a.name + i} className="col-span-1">
-              <PlaceTypeInput
+          { amenityList.length && amenityList.map(a => (
+            <div key={a.id} className="col-span-1">
+              <CategoryInput
                 onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
-                selected={amenities.includes(capitalizeFirstLetter(a.name))}
+                selected={amenities.includes(a.id)}
+                id={a.id}
                 label={capitalizeFirstLetter(a.name)}
                 iconSrc={`http://localhost:3000/images/amenities/${a.iconImage}`}
               />
@@ -234,8 +236,6 @@ export default function CreatePlaceModal() {
       </div>
     ) 
   }
-
-  console.log(amenities);
 
   if(step === STEPS['IMAGES']) {
     bodyContent = (

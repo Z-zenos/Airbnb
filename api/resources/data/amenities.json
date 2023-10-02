@@ -9,7 +9,8 @@
   },
   {
     "name": "air conditioning",
-    "shortenDesc": "Window AC unit."
+    "shortenDesc": "Window AC unit.",
+    "isEssential": true
   },
   {
     "name": "cleaning products",
@@ -21,7 +22,8 @@
   },
   {
     "name": "dedicated workspace",
-    "shortenDesc": "Guests have a desk or table that’s used just for working, along with a comfortable chair."
+    "shortenDesc": "Guests have a desk or table that’s used just for working, along with a comfortable chair.",
+    "isEssential": true
   },
   {
     "name": "dishes and silverware",
@@ -41,27 +43,33 @@
   },
   {
     "name": "hot tub",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "kitchen",
-    "shortenDesc": "Space where guests can cook their own meals"
+    "shortenDesc": "Space where guests can cook their own meals",
+    "isEssential": true
   },
   {
     "name": "pool",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "tv",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "washer",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "wifi",
-    "shortenDesc": "Available throughout the listing"
+    "shortenDesc": "Available throughout the listing",
+    "isEssential": true
   },
   {
     "name": "bathroom",
@@ -80,10 +88,6 @@
     "shortenDesc": ""
   },
   {
-    "name": "cleaning products",
-    "shortenDesc": ""
-  },
-  {
     "name": "conditioner",
     "shortenDesc": ""
   },
@@ -93,7 +97,8 @@
   },
   {
     "name": "outdoor shower",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "shampoo",
@@ -177,7 +182,8 @@
   },
   {
     "name": "exercise equipment",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "game console",
@@ -201,7 +207,8 @@
   },
   {
     "name": "piano",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "ping pong table",
@@ -209,7 +216,8 @@
   },
   {
     "name": "pool table",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "record player",
@@ -293,7 +301,8 @@
   },
   {
     "name": "indoor fireplace",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "portable fans",
@@ -305,19 +314,23 @@
   },
   {
     "name": "carbon monoxide alarm",
-    "shortenDesc": "Check your local laws, which may require a working carbon monoxide detector in every room"
+    "shortenDesc": "Check your local laws, which may require a working carbon monoxide detector in every room",
+    "isEssential": true
   },
   {
     "name": "fire extinguisher",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "first aid kit",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "smoke alarm",
-    "shortenDesc": "Check your local laws, which may require a working smoke detector in every room"
+    "shortenDesc": "Check your local laws, which may require a working smoke detector in every room",
+    "isEssential": true
   },
   {
     "name": "internet and office",
@@ -409,11 +422,13 @@
   },
   {
     "name": "beach access",
-    "shortenDesc": "Guests can enjoy a nearby beach"
+    "shortenDesc": "Guests can enjoy a nearby beach",
+    "isEssential": true
   },
   {
     "name": "lake access",
-    "shortenDesc": "Guests can get to a lake using a path or dock"
+    "shortenDesc": "Guests can get to a lake using a path or dock",
+    "isEssential": true
   },
   {
     "name": "laundromat nearby",
@@ -429,7 +444,8 @@
   },
   {
     "name": "ski",
-    "shortenDesc": "Guests can access ski lifts without driving or taking paid transportation"
+    "shortenDesc": "Guests can access ski lifts without driving or taking paid transportation",
+    "isEssential": true
   },
   {
     "name": "waterfront",
@@ -445,7 +461,8 @@
   },
   {
     "name": "bbq grill",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "bikes",
@@ -457,7 +474,8 @@
   },
   {
     "name": "fire pit",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "hammock",
@@ -469,7 +487,8 @@
   },
   {
     "name": "patio",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "balcony",
@@ -493,7 +512,8 @@
   },
   {
     "name": "free parking on premises",
-    "shortenDesc": ""
+    "shortenDesc": "",
+    "isEssential": true
   },
   {
     "name": "hockey rink",

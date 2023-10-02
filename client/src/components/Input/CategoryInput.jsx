@@ -1,11 +1,11 @@
 
 
-const PlaceTypeInput = ({
-  iconSrc, label, selected, onClick
+const CategoryInput = ({
+  iconSrc, label, selected, onClick, id = label
 }) => {
   return ( 
     <div
-      onClick={() => onClick(label)}
+      onClick={() => onClick(id)}
       className={`
         rounded-xl
         border-2
@@ -28,4 +28,4 @@ const PlaceTypeInput = ({
 }
 
 
-export default PlaceTypeInput;
+export default CategoryInput;
