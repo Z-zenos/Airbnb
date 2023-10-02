@@ -45,7 +45,6 @@ export default function LocationInput({
   };
 
   const addressInputRef = useRef(null);
-  console.log(value);
 
   return (
     <>

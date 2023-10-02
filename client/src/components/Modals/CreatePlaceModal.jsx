@@ -10,9 +10,9 @@ import LocationInput from "../Input/LocationInput";
 import Map from "../Map";
 import Counter from "../Input/Counter";
 import ImageUpload from "../Input/ImageUpload";
-import Input from "../Input/Input";
 import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
+import Input2 from "../Input/Input2";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -21,15 +21,15 @@ const STEPS = {
   AMENITIES: 3,
   IMAGES: 4,
   DESCRIPTION: 5,
-  PRICE: 6
+  PRICE: 6,
 };
-
 
 export default function CreatePlaceModal() {
   const { isCreatePlaceModalOpen, setIsCreatePlaceModalOpen } = useContext(ModalContext);
-
   const [step, setStep] = useState(STEPS['PLACE_TYPES']);
   const editorRef = useRef(null);
+  const [placeTypeList, setPlaceTypeList] = useState([]);
+  const [amenityList, setAmenityList] = useState([]);
 
   const {
     register,
@@ -54,6 +54,7 @@ export default function CreatePlaceModal() {
       photos: [],
       price: 1,
       amenities: [],
+      discount: 10
     }
   });
 
@@ -95,8 +96,6 @@ export default function CreatePlaceModal() {
     return 'Back';
   }, [step]);
 
-  const [placeTypeList, setPlaceTypeList] = useState([]);
-
   useEffect(() => {
     (async () => {
       try {
@@ -113,9 +112,6 @@ export default function CreatePlaceModal() {
       }
     })();
   }, []); 
-
-
-  const [amenityList, setAmenityList] = useState([]);
 
   useEffect(() => {
     if(step === STEPS['AMENITIES']) {
@@ -258,7 +254,7 @@ export default function CreatePlaceModal() {
           subtitle="Short and sweet works best!"
         />
 
-        <Input label="Title" name="title" type="text" className="rounded-[8px]"  errors={errors} required />
+        <Input2 label="Name" className="rounded-[8px]" errors={errors} register={register} id="name" required={true} disabled={false} />
 
         <hr />
 
@@ -267,7 +263,7 @@ export default function CreatePlaceModal() {
           subtitle="Share what makes your place special."
         />
 
-        <Editor
+        {/* <Editor
           onInit={(evt, editor) => editorRef.current = editor}
           initialValue="<p>Feel refreshed when you stay in this rustic gem.</p>"
           init={{
@@ -285,7 +281,7 @@ export default function CreatePlaceModal() {
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
           }}
           
-        />
+        /> */}
       </div>
     );
   }
@@ -298,17 +294,21 @@ export default function CreatePlaceModal() {
           subtitle="How much do you charge per night?"
         />
 
-        <Input 
-          label="Price"
+        <Input2
+          id="price"
+          label="Price ($)"
           type="number"
           errors={errors}
-          required
+          register={register}
+          validate={{ required: 'ngu', max: {value:3, message: 'ngu'} }}
         />
       </div>
     );
   }
 
-  const saveBtn = !errors.length && isDirty && (
+  console.log(errors);
+
+  const optionBtn = !errors.length && isDirty && (
     <div>
       <button className="border px-4 py-1 border-gray-primary hover:bg-red-500 hover:border-red-500 hover:text-white font-medium mr-3">
         Discard
@@ -329,7 +329,7 @@ export default function CreatePlaceModal() {
       secondaryActionLabel={secondaryActionLabel}
       secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
       body={bodyContent}
-      optionBtn={saveBtn}
+      optionBtn={optionBtn}
     />
   );
 }
