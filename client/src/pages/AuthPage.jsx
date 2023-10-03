@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 
 import axios from "axios";
 import { useForm } from "react-hook-form";
@@ -10,37 +10,7 @@ import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { Navigate } from "react-router-dom";
 import { UserContext } from "../contexts/user.context";
-
-const useYupValidationResolver = validationSchema =>
-  useCallback(
-    async data => {
-      try {
-        const values = await validationSchema.validate(data, {
-          abortEarly: false
-        });
-
-        return {
-          values,
-          errors: {}
-        };
-      } catch (errors) {
-        return {
-          values: {},
-          errors: errors.inner.reduce(
-            (allErrors, currentError) => ({
-              ...allErrors,
-              [currentError.path]: {
-                type: currentError.type ?? "validation",
-                message: currentError.message
-              }
-            }),
-            {}
-          )
-        };
-      }
-    },
-    [validationSchema]
-  );
+import useYupValidationResolver from "../hooks/useYupValidationResolver";
 
 const phoneRegex = /^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/im;
 

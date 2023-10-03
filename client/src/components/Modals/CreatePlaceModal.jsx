@@ -30,6 +30,7 @@ export default function CreatePlaceModal() {
   const editorRef = useRef(null);
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -49,13 +50,14 @@ export default function CreatePlaceModal() {
       bedrooms:1,
       bathrooms: 1,
       beds: 1,
+      photos: [],
+      amenities: [],
       description: '',
       name: '',
-      photos: [],
       price: 1,
-      amenities: [],
       discount: 10
-    }
+    },
+    mode: 'all'
   });
 
   const placeType = watch('placeType');
@@ -254,7 +256,7 @@ export default function CreatePlaceModal() {
           subtitle="Short and sweet works best!"
         />
 
-        <Input2 label="Name" className="rounded-[8px]" errors={errors} register={register} id="name" required={true} disabled={false} />
+        <Input2 label="Name" className="rounded-[8px]" errors={errors} register={register} id="name" disabled={isLoading} required={true} />
 
         <hr />
 
@@ -301,6 +303,7 @@ export default function CreatePlaceModal() {
           errors={errors}
           register={register}
           validate={{ required: 'ngu', max: {value:3, message: 'ngu'} }}
+          disabled={isLoading}
         />
       </div>
     );
@@ -330,6 +333,7 @@ export default function CreatePlaceModal() {
       secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
       body={bodyContent}
       optionBtn={optionBtn}
+      disabled={isLoading}
     />
   );
 }
