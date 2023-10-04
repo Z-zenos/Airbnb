@@ -39,6 +39,7 @@ export default function CreatePlaceModal() {
     formState: {
       isDirty
     },
+    getValues,
   } = useForm({
     defaultValues: {
       placeType: '',
@@ -47,9 +48,9 @@ export default function CreatePlaceModal() {
       bedrooms:1,
       bathrooms: 1,
       beds: 1,
-      photos: [],
+      images: [],
       amenities: [],
-      description: '',
+      description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
       name: '',
       price: 1,
       discount: 10
@@ -67,6 +68,7 @@ export default function CreatePlaceModal() {
   const price = watch('price');
   const name = watch('name');
   const description = watch('description');
+  const images = watch('images');
 
   const setCustomValue = (id, value) => {
     setValue(id, value, {
@@ -96,9 +98,27 @@ export default function CreatePlaceModal() {
         message: "Please choose location for your place."
       }]);
     }
+    else if(step === STEPS['AMENITIES'] && !amenities.length) {
+      setErrors([...errors, {
+        step: step,
+        message: "Please choose at least one amenity for your place."
+      }]);
+    }
+    // else if(step === STEPS['IMAGES'] && !images.length) {
+    //   setErrors(() => [...errors, {
+    //     step: step,
+    //     message: "Please choose at least one image for your place."
+    //   }]);
+    // }
+    else if(step === STEPS['DESCRIPTION'] && !name) {
+      setErrors([...errors, {
+        step: step,
+        message: "Please enter name and description for place."
+      }]);
+    }
   }, [step]);
 
-  console.log(errors, step);
+  console.log(getValues(), errors);
 
   function onNext() {
     if(!isErrorsOfStep(step))
@@ -268,7 +288,10 @@ export default function CreatePlaceModal() {
           subtitle="You'll need 5 photos to get started. You can add more or make changes later."
         />
 
-        <ImageUpload />
+        <ImageUpload
+          value={images}
+          onChange={(images) => setCustomValue('images', images)}
+        />
       </div>
     );
   }
@@ -292,7 +315,7 @@ export default function CreatePlaceModal() {
 
         <Editor
           onInit={(evt, editor) => editorRef.current = editor}
-          initialValue="<p>Feel refreshed when you stay in this rustic gem.</p>"
+          initialValue={description}
           init={{
             height: 300,
             menubar: false,
@@ -307,7 +330,7 @@ export default function CreatePlaceModal() {
             'removeformat | help',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
           }}
-          onChange={ev => setCustomValue('description', ev.target.value)}
+          onChange={ev => setCustomValue('description', ev.target.getContent())}
         />
       </div>
     );

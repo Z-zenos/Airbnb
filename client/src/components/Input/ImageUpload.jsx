@@ -8,7 +8,6 @@ export default function ImageUpload({
   value, onChange
 }) {
   const [images, setImages] = useState([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -18,7 +17,7 @@ export default function ImageUpload({
 
       const urls = [imageCover, ...images].filter(Boolean);
 
-      setPreviewUrls(urls);
+      if(urls.length) onChange(urls);
     })();
   }, []);
 
@@ -49,7 +48,7 @@ export default function ImageUpload({
 
       const place = res.data.data.place;
 
-      setPreviewUrls([...previewUrls, place.imageCover, ...place.images]);
+      onChange([...value, place.imageCover, ...place.images]);
     } catch (err) {
       console.error(err);
     }
@@ -77,16 +76,16 @@ export default function ImageUpload({
   async function handleRemoveImage (ev, url) {
     ev.preventDefault();
 
-    if(!previewUrls.length) return;
+    if(!value.length) return;
 
     const res = await axios.delete(`/images/65150230db6c8bcce87227ec/${url}`);
 
     const place = res.data.data.place;
 
-    setPreviewUrls([place.imageCover, ...place.images]);
+    onChange([place.imageCover, ...place.images]);
   }
 
-  const preview = previewUrls.length > 0 && previewUrls.map((url, i) => (
+  const preview = value.length > 0 && value.map((url, i) => (
     <div className={`relative rounded-lg border-dashed border-neutral-600 border-[1px] ${!i ? 'h-[40vh] w-full col-span-2' : 'h-[20vh] w-full'}`} key={url + i}>
       <img alt="not found" className="w-full h-full rounded-lg object-cover" src={`http://localhost:3000/images/places/${url}`} />
 
@@ -107,7 +106,7 @@ export default function ImageUpload({
         onDrop={handleDrop}
         onDragOver={handleDragOver}
       >
-        { previewUrls.length > 0 && <div className="grid grid-cols-2 gap-4">{preview}</div> }
+        { value.length > 0 && <div className="grid grid-cols-2 gap-4">{preview}</div> }
         
         <div className="h-[40vh] mt-4 rounded-lg border-dashed border-neutral-600 border-[1px] flex flex-col items-center justify-center">
           <div className="text-center">
