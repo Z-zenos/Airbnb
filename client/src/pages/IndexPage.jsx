@@ -1,13 +1,15 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 import {BsCaretLeft, BsCaretRight} from "react-icons/bs";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import PlaceCard from "../components/PlaceCard/PlaceCard";
 import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
+import { ModalContext } from "../contexts/modal.context";
 
 export default function IndexPage() {
+  const { isCreatePlaceModalOpen } = useContext(ModalContext);
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [placeType, setPlaceType] = useState();
   const scrollRef = useHorizontalScroll();
@@ -80,7 +82,7 @@ export default function IndexPage() {
         <PlaceCard />
       </div>
 
-      <CreatePlaceModal />
+      { isCreatePlaceModalOpen && <CreatePlaceModal /> }
     </div>
   );
 }

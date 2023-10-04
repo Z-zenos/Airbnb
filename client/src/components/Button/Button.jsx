@@ -12,8 +12,6 @@ const Button = ({
       onClick={onClick}
       className={`
         relative
-        disabled:opacity-70
-        disabled:cursor-not-allowed
         rounded-lg
         hover:opacity-80
         transition
@@ -25,6 +23,7 @@ const Button = ({
         ${small ? 'py-1' : 'py-3'}
         ${small ? 'font-light' : 'font-semibold'}
         ${small ? 'border-[1px]' : 'border-2'}
+        ${disabled ? 'disabled:pointer-events-none disabled:bg-gray-600 disabled:border-gray-600 disabled:cursor-not-allowed ' : ''}
       `}
     >
       {/* {Icon && (

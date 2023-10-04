@@ -6,7 +6,7 @@ export default function Modal({
   isOpen, onClose, children, title, body,
   secondaryAction, secondaryActionLabel, disabled,
   actionLabel, onSubmit, footer,
-  optionBtn
+  optionBtn,
 }) {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -34,12 +34,8 @@ export default function Modal({
   }, [onSubmit, disabled]);
 
   const handleSecondaryAction = useCallback(() => {
-    if (disabled || !secondaryAction) {
-      return;
-    }
-
     secondaryAction();
-  }, [secondaryAction, disabled]);
+  }, [secondaryAction]);
   
   if(!isOpen) return null;
 
@@ -81,7 +77,6 @@ export default function Modal({
             <div className="flex flex-row items-center gap-4 w-full">
               {secondaryAction && secondaryActionLabel && (
                 <Button 
-                  disabled={disabled} 
                   label={secondaryActionLabel}
                   onClick={handleSecondaryAction}
                   outline

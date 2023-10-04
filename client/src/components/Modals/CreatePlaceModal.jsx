@@ -12,7 +12,7 @@ import Counter from "../Input/Counter";
 import ImageUpload from "../Input/ImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
-import Input2 from "../Input/Input2";
+import Input from "../Input/Input";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -30,18 +30,15 @@ export default function CreatePlaceModal() {
   const editorRef = useRef(null);
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState([]);
 
   const {
-    register,
     handleSubmit,
     setValue,
     watch,
     formState: {
-      errors,
       isDirty
     },
-    reset,
   } = useForm({
     defaultValues: {
       placeType: '',
@@ -67,17 +64,45 @@ export default function CreatePlaceModal() {
   const beds = watch('beds');
   const bathrooms = watch('bathrooms');
   const amenities = watch('amenities');
-  
+  const price = watch('price');
+  const name = watch('name');
+  const description = watch('description');
+
   const setCustomValue = (id, value) => {
     setValue(id, value, {
       shouldDirty: true,
       shouldTouch: true,
       shouldValidate: true
     });
+    setErrors(isErrorsOfStep(step) ? [] : errors);
   }
 
+  function isErrorsOfStep(step) {
+    return !!errors.filter(e => e.step === step).length;
+  }
+
+  useEffect(() => {
+    if(isErrorsOfStep(step)) return;
+
+    if(step === STEPS['PLACE_TYPES'] && !placeType) {
+      setErrors([...errors, {
+        step: step,
+        message: "Please choose one place type."
+      }]);
+    }
+    else if(step === STEPS['LOCATION'] && !location) {
+      setErrors([...errors, {
+        step: step,
+        message: "Please choose location for your place."
+      }]);
+    }
+  }, [step]);
+
+  console.log(errors, step);
+
   function onNext() {
-    setStep(prevStep => prevStep + 1);
+    if(!isErrorsOfStep(step))
+      setStep(prevStep => prevStep + 1);
   }
 
   function onBack() {
@@ -256,7 +281,7 @@ export default function CreatePlaceModal() {
           subtitle="Short and sweet works best!"
         />
 
-        <Input2 label="Name" className="rounded-[8px]" errors={errors} register={register} id="name" disabled={isLoading} required={true} />
+        <Input label="Name" name="name" type="text" className="rounded-t-[8px]" value={name} onChange={(ev) => setCustomValue('name', ev.target.value)} />
 
         <hr />
 
@@ -265,7 +290,7 @@ export default function CreatePlaceModal() {
           subtitle="Share what makes your place special."
         />
 
-        {/* <Editor
+        <Editor
           onInit={(evt, editor) => editorRef.current = editor}
           initialValue="<p>Feel refreshed when you stay in this rustic gem.</p>"
           init={{
@@ -282,8 +307,8 @@ export default function CreatePlaceModal() {
             'removeformat | help',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
           }}
-          
-        /> */}
+          onChange={ev => setCustomValue('description', ev.target.value)}
+        />
       </div>
     );
   }
@@ -296,22 +321,12 @@ export default function CreatePlaceModal() {
           subtitle="How much do you charge per night?"
         />
 
-        <Input2
-          id="price"
-          label="Price ($)"
-          type="number"
-          errors={errors}
-          register={register}
-          validate={{ required: 'ngu', max: {value:3, message: 'ngu'} }}
-          disabled={isLoading}
-        />
+        <Input label="Price ($)" name="price" type="number" className="rounded-t-[8px]" value={price} onChange={(ev) => setCustomValue('price', ev.target.value)} />
       </div>
     );
   }
 
-  console.log(errors);
-
-  const optionBtn = !errors.length && isDirty && (
+  const optionBtn = isDirty && (
     <div>
       <button className="border px-4 py-1 border-gray-primary hover:bg-red-500 hover:border-red-500 hover:text-white font-medium mr-3">
         Discard
@@ -333,7 +348,7 @@ export default function CreatePlaceModal() {
       secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
       body={bodyContent}
       optionBtn={optionBtn}
-      disabled={isLoading}
+      disabled={isErrorsOfStep(step)}
     />
   );
 }
