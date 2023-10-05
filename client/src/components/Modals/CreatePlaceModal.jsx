@@ -33,7 +33,6 @@ export default function CreatePlaceModal() {
   const [errors, setErrors] = useState([]);
 
   const {
-    handleSubmit,
     setValue,
     watch,
     formState: {
@@ -84,6 +83,7 @@ export default function CreatePlaceModal() {
   }
 
   useEffect(() => {
+    console.log("call use effect");
     if(isErrorsOfStep(step)) return;
 
     if(step === STEPS['PLACE_TYPES'] && !placeType) {
@@ -92,7 +92,7 @@ export default function CreatePlaceModal() {
         message: "Please choose one place type."
       }]);
     }
-    else if(step === STEPS['LOCATION'] && !location) {
+    else if(step === STEPS['LOCATION'] && !location?.label) {
       setErrors([...errors, {
         step: step,
         message: "Please choose location for your place."
@@ -116,9 +116,13 @@ export default function CreatePlaceModal() {
         message: "Please enter name and description for place."
       }]);
     }
-  }, [step]);
-
-  console.log(getValues(), errors);
+    else if(step === STEPS['PRICE'] && !price) {
+      setErrors([...errors, {
+        step: step,
+        message: "Please enter price for place."
+      }]);
+    }
+  }, [step, name, location?.label, price]);
 
   function onNext() {
     if(!isErrorsOfStep(step))
@@ -127,6 +131,10 @@ export default function CreatePlaceModal() {
 
   function onBack() {
     setStep(prevStep => prevStep - 1);
+  }
+
+  function handleSubmit() {
+    console.log(getValues());
   }
 
   const actionLabel = useMemo(() => {

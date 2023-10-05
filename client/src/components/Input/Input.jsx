@@ -34,6 +34,7 @@ function CostomInput(props, ref) {
         name={name}
         onFocus={() => setIsFocused(true)}
         ref={ref}
+        value={value}
         {...rest}
       >
       </input>
