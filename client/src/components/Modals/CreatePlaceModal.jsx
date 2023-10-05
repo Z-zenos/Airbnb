@@ -13,6 +13,7 @@ import ImageUpload from "../Input/ImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
 import Input from "../Input/Input";
+import { UserContext } from "../../contexts/user.context";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -31,6 +32,31 @@ export default function CreatePlaceModal() {
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [errors, setErrors] = useState([]);
+  const {user} = useContext(UserContext);
+  console.log(user._id);
+
+  const [creatingPlace, setCreatingPlace] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get('/places/my-places');
+
+      const placeList = res.data.data.places;
+      const creatingPlaceList = placeList.filter(place => place.status === 'creating');
+
+      if(!placeList.length || !creatingPlaceList.length) {
+        const createResp = await axios.post('/places', {}, {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        });
+        console.log(createResp.data);
+      }
+      else {
+        setCreatingPlace(creatingPlaceList[0]);
+      }
+    })();
+  }, []);
 
   const {
     setValue,
@@ -42,7 +68,9 @@ export default function CreatePlaceModal() {
   } = useForm({
     defaultValues: {
       placeType: '',
-      location: null, // obj
+      location: {
+        address: ""
+      }, // obj
       guests: 1,
       bedrooms:1,
       bathrooms: 1,
@@ -52,7 +80,8 @@ export default function CreatePlaceModal() {
       description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
       name: '',
       price: 1,
-      discount: 10
+      discount: 10,
+      host: user._id
     },
     mode: 'all'
   });
@@ -83,7 +112,6 @@ export default function CreatePlaceModal() {
   }
 
   useEffect(() => {
-    console.log("call use effect");
     if(isErrorsOfStep(step)) return;
 
     if(step === STEPS['PLACE_TYPES'] && !placeType) {
@@ -92,7 +120,7 @@ export default function CreatePlaceModal() {
         message: "Please choose one place type."
       }]);
     }
-    else if(step === STEPS['LOCATION'] && !location?.label) {
+    else if(step === STEPS['LOCATION'] && !location?.country) {
       setErrors([...errors, {
         step: step,
         message: "Please choose location for your place."
@@ -122,7 +150,7 @@ export default function CreatePlaceModal() {
         message: "Please enter price for place."
       }]);
     }
-  }, [step, name, location?.label, price]);
+  }, [step, name, location?.country, price]);
 
   function onNext() {
     if(!isErrorsOfStep(step))
@@ -134,7 +162,11 @@ export default function CreatePlaceModal() {
   }
 
   function handleSubmit() {
-    console.log(getValues());
+    const data = {
+      ...getValues(),
+      host: user._id
+    }
+    console.log(getValues(), user);
   }
 
   const actionLabel = useMemo(() => {
@@ -215,7 +247,7 @@ export default function CreatePlaceModal() {
           onChange={value => setCustomValue('location', value)}
         />
 
-        <Map country={location?.label} center={location?.latlng} />
+        <Map country={location?.country} center={location?.coordinates} />
       </div>
     );
   }

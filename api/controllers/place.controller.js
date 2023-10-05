@@ -3,11 +3,43 @@ const Place = require('./../models/place.model');
 const PlaceType = require('../models/place_type.model');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
+const mongoose = require("mongoose");
 
 exports.getAllPlaces = factory.getAll(Place);
 exports.getPlace = factory.getOne(Place);
 exports.checkPlace = factory.checkOne(Place);
-// exports.createPlace = factory.createOne(Place);
+
+exports.createPlace = catchErrorAsync(async(req, res, next) => {
+  console.log("test");
+  const newPlace = await Place.collection.insertOne(
+    {
+      placeType: "",
+      location: {
+        address: ""
+      },
+      guests: 1,
+      bedrooms:1,
+      bathrooms: 1,
+      beds: 1,
+      images: [],
+      amenities: [],
+      description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
+      name: "",
+      price: 1,
+      host: new mongoose.Types.ObjectId(req.user.id)
+    }
+  );
+
+  const insertedPlace = await Place.findById(newPlace.insertedId);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      place: insertedPlace
+    }
+  });
+});
+
 exports.updatePlace = factory.updateOne(Place);
 // exports.deletePlace = factory.deleteOne(Place);
 
@@ -23,6 +55,18 @@ exports.getAllPlaceTypes = catchErrorAsync(async(req, res, next) => {
     result: placeTypeList.length,
     data: {
       placeTypeList
+    }
+  })
+});
+
+exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
+  const places = await Place.find({ host: req.user.id });
+
+  res.status(200).json({
+    status: 'success',
+    result: places.length,
+    data: {
+      places
     }
   })
 });

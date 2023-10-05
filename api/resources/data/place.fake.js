@@ -54,6 +54,7 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
           postalCode: faker.location.zipCode(),
         },
         host: `${getRandomElement(userIdList)}`,
+        status: 'published'
       });
     }
   

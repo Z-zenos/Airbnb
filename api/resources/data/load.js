@@ -15,16 +15,16 @@ const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSW
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
 // READ JSON FILE
-// const places = JSON.parse(fs.readFileSync(`${__dirname}/places.json`, 'utf-8'));
-let amenities = JSON.parse(fs.readFileSync(`${__dirname}/amenities.json`, 'utf-8'));
+const places = JSON.parse(fs.readFileSync(`${__dirname}/places.json`, 'utf-8'));
+// let amenities = JSON.parse(fs.readFileSync(`${__dirname}/amenities.json`, 'utf-8'));
 
 // IMPORT DATA INTO DB
 const importData = async () => {
   try {
 
-    amenities = amenities.map(a => ({...a, iconImage: `${a.name.replace(' ', '_')}.png`}));
+    // amenities = amenities.map(a => ({...a, iconImage: `${a.name.replace(' ', '_')}.png`}));
     
-    await Amenity.create(amenities);
+    await Place.create(places);
 
     console.log('Data successfully loaded!');
   }
@@ -37,7 +37,7 @@ const importData = async () => {
 // DELETE ALL DATA IN DB
 const deleteData = async () => {
   try {
-    await Amenity.deleteMany();
+    await Place.deleteMany();
     console.log('Data successfully deleted!');
   }
   catch (err) {

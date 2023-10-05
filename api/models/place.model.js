@@ -87,7 +87,7 @@ const placeSchema = new mongoose.Schema(
 
     priceType: {
       type: String,
-      required: [true, 'A place must have a price type'],
+      // required: [true, 'A place must have a price type'],
       enum: {
         values: ['night', 'week', 'month'],
         message: 'Difficulty is either: night, week, month'
@@ -152,12 +152,20 @@ const placeSchema = new mongoose.Schema(
       description: String,
       postalCode: Number,
       scenicViews: [String],
+      flag: String
     },
 
     host: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
       required: [true, 'A place must be hosted by certain host']
+    },
+    status: {
+      type: String,
+      enum: {
+        values: ['creating', 'published', 'inactive'],
+        message: 'status is either: creating, published, inactive'
+      }
     }
   },
   {
@@ -189,8 +197,6 @@ placeSchema.pre('save', function(next) {
 });
 
 // placeSchema.pre('save', async function(next) {
-//   const guidesPromises = this.guides.map(async id => await User.findById(id));
-//   this.guides = await Promise.all(guidesPromises);
 //   next();
 // });
 
