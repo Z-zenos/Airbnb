@@ -145,8 +145,14 @@ export default function CreatePlaceModal() {
   async function handleSubmit() {
     if(step !== STEPS['PRICE']) return;
 
+    const placeData = { ...getValues() };
+    delete placeData._id;
+    delete placeData.host;
+
+    console.log(placeData);
+
     try {
-      const resp = axios.patch(`/places/${getValues('id')}`, getValues(), {
+      const resp = await axios.patch(`/places/${getValues()._id}`, placeData, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -373,7 +379,7 @@ export default function CreatePlaceModal() {
           subtitle="How much do you charge per night?"
         />
 
-        <Input label="Price ($)" name="price" type="number" className="rounded-t-[8px]" value={price} onChange={(ev) => setCustomValue('price', ev.target.value)} />
+        <Input label="Price ($)" name="price" type="number" className="rounded-t-[8px]" value={price} onChange={(ev) => setCustomValue('price', +ev.target.value)} />
       </div>
     );
   }

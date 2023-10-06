@@ -30,6 +30,7 @@ exports.deleteOne = Model => catchErrorAsync(async (req, res, next) => {
 });
 
 exports.updateOne = Model => catchErrorAsync(async (req, res, next) => {
+  console.log(req.body, req.params.id);
   const doc = await Model.findByIdAndUpdate(
     req.params.id,
     req.body,

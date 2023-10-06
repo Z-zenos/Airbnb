@@ -8,7 +8,6 @@ export default function ImageUpload({
   value, onChange, placeId
 }) {
   const [images, setImages] = useState([]);
-  console.log(placeId);
 
   useEffect(() => {
     (async () => {
@@ -33,9 +32,11 @@ export default function ImageUpload({
       // send the file and description to the server
       const formData = new FormData();
       images.forEach((image, i) => {
-        if(!i && !images.length) formData.append("imageCover", image);
+        if(!i) formData.append("imageCover", image);
         else formData.append("images", image);
       });
+
+      console.log(formData);
 
       const res = await axios.patch(
         `/images/${placeId}/upload`,
