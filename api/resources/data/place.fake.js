@@ -6,6 +6,9 @@ const Amenity = require('../../models/amenity.model');
 const User = require('../../models/user.model');
 const PlaceType = require('../../models/place_type.model');
 
+const dirs = fs.readdirSync(`${__dirname}/../images/places`);
+
+
 if (process.env.NODE_ENV !== 'production') {
   dotenv.config({ path: './.env' }); 
 }
@@ -44,8 +47,8 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
         priceType: faker.helpers.arrayElement(['night', 'week', 'month']),
         priceDiscount: faker.number.int(60),
         description: faker.commerce.productDescription(),
-        imageCover: '0',
-        images: ['1', '2', '3', '4', '5'],
+        imageCover: faker.helpers.arrayElement(dirs),
+        images: faker.helpers.arrayElements(dirs, { min: 5, max: 10 }),
         location: {
           type: "Point",
           address: `${faker.location.secondaryAddress()} - ${faker.location.streetAddress()}, ${faker.location.city()}`,

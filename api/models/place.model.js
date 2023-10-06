@@ -122,7 +122,7 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have images'],
       validate: {
         validator: function (val) {
-          return val.length <= 5;
+          return val.length >= 5;
         },
         message: "Place's images must more than 5 images"
       }
@@ -150,7 +150,7 @@ const placeSchema = new mongoose.Schema(
       coordinates: [Number],
       country: String,
       description: String,
-      postalCode: Number,
+      zipCode: String,
       scenicViews: [String],
       flag: String
     },
