@@ -13,7 +13,6 @@ import ImageUpload from "../Input/ImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
 import Input from "../Input/Input";
-import { UserContext } from "../../contexts/user.context";
 
 const STEPS = {
   PLACE_TYPES: 0,
@@ -32,33 +31,8 @@ export default function CreatePlaceModal() {
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [errors, setErrors] = useState([]);
-  const {user} = useContext(UserContext);
-  console.log(user._id);
 
-  const [creatingPlace, setCreatingPlace] = useState(null);
-
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get('/places/my-places');
-
-      const placeList = res.data.data.places;
-      const creatingPlaceList = placeList.filter(place => place.status === 'creating');
-
-      if(!placeList.length || !creatingPlaceList.length) {
-        const createResp = await axios.post('/places', {}, {
-          headers: {
-            "Content-Type": "application/json"
-          },
-        });
-        console.log(createResp.data);
-      }
-      else {
-        setCreatingPlace(creatingPlaceList[0]);
-      }
-    })();
-  }, []);
-
-  const {
+  let {
     setValue,
     watch,
     formState: {
@@ -66,24 +40,29 @@ export default function CreatePlaceModal() {
     },
     getValues,
   } = useForm({
-    defaultValues: {
-      placeType: '',
-      location: {
-        address: ""
-      }, // obj
-      guests: 1,
-      bedrooms:1,
-      bathrooms: 1,
-      beds: 1,
-      images: [],
-      amenities: [],
-      description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
-      name: '',
-      price: 1,
-      discount: 10,
-      host: user._id
-    },
-    mode: 'all'
+    mode: 'all',
+    defaultValues: async () => {
+      try {
+        const res = await axios.get('/places/my-places');
+
+        const placeList = res.data.data.places;
+        const creatingPlaceList = placeList.filter(place => place.status === 'creating');
+
+        if(!placeList.length || !creatingPlaceList.length) {
+          const createResp = await axios.post('/places', {}, {
+            headers: {
+              "Content-Type": "application/json"
+            },
+          });
+          return createResp.data.data.place;
+        }
+        else {
+          return creatingPlaceList[0];
+        }
+      } catch(err) {
+        console.error(err);
+      }
+    }
   });
 
   const placeType = watch('placeType');
@@ -132,12 +111,12 @@ export default function CreatePlaceModal() {
         message: "Please choose at least one amenity for your place."
       }]);
     }
-    // else if(step === STEPS['IMAGES'] && !images.length) {
-    //   setErrors(() => [...errors, {
-    //     step: step,
-    //     message: "Please choose at least one image for your place."
-    //   }]);
-    // }
+    else if(step === STEPS['IMAGES'] && !images.length) {
+      setErrors(() => [...errors, {
+        step: step,
+        message: "Please choose at least one image for your place."
+      }]);
+    }
     else if(step === STEPS['DESCRIPTION'] && !name) {
       setErrors([...errors, {
         step: step,
@@ -152,6 +131,8 @@ export default function CreatePlaceModal() {
     }
   }, [step, name, location?.country, price]);
 
+  console.log(getValues());
+
   function onNext() {
     if(!isErrorsOfStep(step))
       setStep(prevStep => prevStep + 1);
@@ -161,12 +142,19 @@ export default function CreatePlaceModal() {
     setStep(prevStep => prevStep - 1);
   }
 
-  function handleSubmit() {
-    const data = {
-      ...getValues(),
-      host: user._id
+  async function handleSubmit() {
+    if(step !== STEPS['PRICE']) return;
+
+    try {
+      const resp = axios.patch(`/places/${getValues('id')}`, getValues(), {
+        headers: {
+          "Content-Type": "application/json"
+        },
+      });
+      console.log(resp);
+    } catch(err) {
+      console.log(err);
     }
-    console.log(getValues(), user);
   }
 
   const actionLabel = useMemo(() => {
@@ -247,7 +235,7 @@ export default function CreatePlaceModal() {
           onChange={value => setCustomValue('location', value)}
         />
 
-        <Map country={location?.country} center={location?.coordinates} />
+        <Map country={location?.country} center={location?.coordinates.length ? location.coordinates : [0,0]} />
       </div>
     );
   }
@@ -331,6 +319,7 @@ export default function CreatePlaceModal() {
         <ImageUpload
           value={images}
           onChange={(images) => setCustomValue('images', images)}
+          placeId={getValues()._id}
         />
       </div>
     );

@@ -26,14 +26,11 @@ router
 
 router
   .route('/:id')
-  .get(placeController.getPlace);
-  // .patch(
-  //   authController.protect,
-  //   authController.restrictTo('admin', 'lead-guide'),
-  //   placeController.uploadTourImages,
-  //   placeController.resizeTourImages,
-  //   placeController.updateTour
-  // )
+  .get(placeController.getPlace)
+  .patch(
+    authController.protect,
+    placeController.updatePlace
+  )
   // .delete(
   //   authController.protect,
   //   placeController.deleteTour

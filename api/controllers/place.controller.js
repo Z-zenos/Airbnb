@@ -10,7 +10,6 @@ exports.getPlace = factory.getOne(Place);
 exports.checkPlace = factory.checkOne(Place);
 
 exports.createPlace = catchErrorAsync(async(req, res, next) => {
-  console.log("test");
   const newPlace = await Place.collection.insertOne(
     {
       placeType: "",
@@ -21,12 +20,14 @@ exports.createPlace = catchErrorAsync(async(req, res, next) => {
       bedrooms:1,
       bathrooms: 1,
       beds: 1,
+      imageCover: "",
       images: [],
       amenities: [],
       description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
       name: "",
       price: 1,
-      host: new mongoose.Types.ObjectId(req.user.id)
+      host: new mongoose.Types.ObjectId(req.user.id),
+      status: "creating"
     }
   );
 
@@ -60,7 +61,9 @@ exports.getAllPlaceTypes = catchErrorAsync(async(req, res, next) => {
 });
 
 exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
-  const places = await Place.find({ host: req.user.id });
+  let places = Array.from(await Place.find({ host: req.user.id }));
+
+  places = places.map(place => place.placeType ? place : { ...place._doc, placeType: "" });
 
   res.status(200).json({
     status: 'success',

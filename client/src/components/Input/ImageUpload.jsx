@@ -5,13 +5,14 @@ import { AiOutlineCloudUpload } from "react-icons/ai";
 import axios from "axios";
 
 export default function ImageUpload({
-  value, onChange
+  value, onChange, placeId
 }) {
   const [images, setImages] = useState([]);
+  console.log(placeId);
 
   useEffect(() => {
     (async () => {
-      const res = await axios.get('/images/65150230db6c8bcce87227ec');
+      const res = await axios.get(`/images/${placeId}`);
 
       const { imageCover, images } = res.data.data;
 
@@ -37,7 +38,7 @@ export default function ImageUpload({
       });
 
       const res = await axios.patch(
-        '/images/65150230db6c8bcce87227ec/upload',
+        `/images/${placeId}/upload`,
         formData,
         {
           headers: {
@@ -78,7 +79,7 @@ export default function ImageUpload({
 
     if(!value.length) return;
 
-    const res = await axios.delete(`/images/65150230db6c8bcce87227ec/${url}`);
+    const res = await axios.delete(`/images/${placeId}/${url}`);
 
     const place = res.data.data.place;
 
