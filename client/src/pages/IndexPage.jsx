@@ -13,7 +13,7 @@ export default function IndexPage() {
   const [placeTypeList, setPlaceTypeList] = useState([]);
   const [placeType, setPlaceType] = useState();
   const scrollRef = useHorizontalScroll();
-  
+  const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -32,13 +32,24 @@ export default function IndexPage() {
         console.error(err);
       }
     })();
-  }, []);  
+  }, []);
+  
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get('/places');
+        setPlaces(res.data.data.places);
+
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   function scrollHorizontal(scrollOffset) {
     scrollRef.current.scrollLeft += scrollOffset;
   }
 
-  
   return (
     <div className="lg:px-20 md:px-10 mb-10">
       <div className="mt-4 flex justify-start items-center">
@@ -73,13 +84,8 @@ export default function IndexPage() {
         />
       </div>
       
-      <div className="flex flex-wrap items-center justify-between">
-        <PlaceCard />
-        <PlaceCard />
-        <PlaceCard />
-        <PlaceCard />
-        <PlaceCard />
-        <PlaceCard />
+      <div className="grid grid-cols-6">
+        { places.length > 0 && places.map(place => <PlaceCard key={place.id} place={place} />) } 
       </div>
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }

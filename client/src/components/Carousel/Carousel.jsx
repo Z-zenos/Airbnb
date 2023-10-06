@@ -21,7 +21,7 @@ export default function Carousel({ slides, imageClassName }) {
         }}
       >
         { slides.length && slides.map((s, i) => {
-          return <img className={imageClassName} src={s} key={'img' + i} />;
+          return <img className={imageClassName} src={`http://localhost:3000/images/places/${s}`} key={'img' + i} />;
         }) }
       </div>
 

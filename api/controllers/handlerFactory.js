@@ -101,7 +101,7 @@ exports.getAll = Model => catchErrorAsync(async (req, res, next) => {
     status: 'success',
     result: docs.length,
     data: {
-      [Model.modelName.toLowerCase()]: docs
+      [`${Model.modelName.toLowerCase()}s`]: docs
     }
   });
 });
