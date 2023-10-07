@@ -6,12 +6,13 @@ export const ModalContext = createContext({});
 export function ModalContextProvider({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isCreatePlaceModalOpen, setIsCreatePlaceModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   
-
   return (
     <ModalContext.Provider value={{
       isOpen, isCreatePlaceModalOpen,
-      setIsOpen, setIsCreatePlaceModalOpen
+      setIsOpen, setIsCreatePlaceModalOpen,
+      isFilterModalOpen, setIsFilterModalOpen,
     }}>
       { children }
     </ModalContext.Provider>
