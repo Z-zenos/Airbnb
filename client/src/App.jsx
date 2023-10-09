@@ -9,6 +9,7 @@ import { UserContextProvider } from './contexts/user.context';
 import PlacePage from './pages/PlacePage';
 import { PlaceContextProvider } from './contexts/place.context';
 import { ModalContextProvider } from './contexts/modal.context';
+import { ToastContextProvider } from './contexts/toast.context';
 
 
 // Apply for all requests
@@ -34,13 +35,15 @@ function App() {
     <PlaceContextProvider>
       <UserContextProvider>
         <ModalContextProvider>
-          <Routes>
-            <Route path='/' element={ <MainLayout /> } >
-              <Route index element={<IndexPage />} />
-              <Route path='/login' element={ <AuthPage /> } />
-              <Route path='/places' element={ <PlacePage /> } />
-            </Route>
-          </Routes>
+          <ToastContextProvider>
+            <Routes>
+              <Route path='/' element={ <MainLayout /> } >
+                <Route index element={<IndexPage />} />
+                <Route path='/login' element={ <AuthPage /> } />
+                <Route path='/places' element={ <PlacePage /> } />
+              </Route>
+            </Routes>
+          </ToastContextProvider>
         </ModalContextProvider>
       </UserContextProvider>
     </PlaceContextProvider>
