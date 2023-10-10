@@ -23,7 +23,7 @@ function CostomInput(props, ref) {
       onClick={handleClick}
       onBlur={() => setIsFocused(false)}
     >
-      { (isFocused && (value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
+      { ((value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       
       {/* 
         This is the correct answer given @Joris's solution would override the change handler spread from {...register('name')} which returns {onChange, onBlur, name, ref}, and this could lead to bugs. 
