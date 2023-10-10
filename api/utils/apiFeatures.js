@@ -15,12 +15,21 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
+    // Query for array
+    Object.keys(queryObj).forEach(key => {
+      if(Array.isArray(queryObj[key]))
+        queryObj[key] = {
+          '$all': queryObj[key]
+        };
+    })
+
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
       /\b(gte|gt|lte|lt)\b/g,
       op => `$${op}`
     );
     // queryStr = { "duration": { "$gt":"7" } }
+    console.log(queryObj, queryStr);
 
 
     this.Query = this.Query.find(JSON.parse(queryStr));

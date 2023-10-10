@@ -91,7 +91,7 @@ export default function IndexPage() {
         </div>
 
         <div 
-          className="relative flex items-center mx-auto justify-center lg:col-span-1 md:col-span-2 border border-gray-300 rounded-md w-[120px] h-[60px] cursor-pointer translate-y-1" 
+          className="relative flex items-center mx-auto justify-center lg:col-span-1 md:col-span-2 border border-gray-300 rounded-md w-[120px] h-[60px] cursor-pointer translate-y-1 hover:border-gray-primary transition-all" 
           onClick={() => setIsFilterModalOpen(true)}
         >
           <CgFilters className=" w-6 h-6" />

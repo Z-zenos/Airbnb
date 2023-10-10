@@ -10,19 +10,17 @@ import axios from "axios";
 import Checkbox from "../Input/Checkbox";
 
 const MIN_PRICE = 10;
-const MAX_PRICE = 150;
-
+const MAX_PRICE = 250;
 
 export default function FilterModal () {
   const { isFilterModalOpen, setIsFilterModalOpen } = useContext(ModalContext);
-  const [places, setPlaces] = useState([1, 2, 3]);
-
+  const [places, setPlaces] = useState([]);
   const [prices, setPrices] = useState([MIN_PRICE, MAX_PRICE]);
   const [bedrooms, setBedrooms] = useState(0);
   const [beds, setBeds] = useState(0);
   const [bathrooms, setBathrooms] = useState(0);
-
   const [amenities, setAmenities] = useState([]);
+  const amenitiesTracker = JSON.stringify(amenities);
 
   useEffect(() => {
     (async () => {
@@ -70,7 +68,28 @@ export default function FilterModal () {
     setAmenities([...amenitiesClone]);
   }
 
-  console.log(amenities);
+  function handleFilters() {
+    (async () => {
+      try {
+
+        const bedroomsQuery = !bedrooms ? '' : `&bedrooms${bedrooms < 8 ? `=` : `[gte]=`}${bedrooms}`;
+        const bedsQuery = !beds ? '' : `&beds${beds < 8 ? `=` : `[gte]=`}${beds}`;
+        const bathroomsQuery = !bathrooms ? '' : `&bathrooms${bathrooms < 8 ? `=` : `[gte]=`}${bathrooms}`;
+        const priceQuery = prices[0] === prices[1] ? `price=${prices[0]}` : `price[gte]=${prices[0]}&price[lte]=${prices[1]}`;
+        const selectedAmenities = amenities.filter(a => a.selected === true);
+        const amenitiesQuery = selectedAmenities.length ? `&${selectedAmenities.map(a => 'amenities=' + a.id).join('&')}` : '';
+
+        const queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}`;
+
+        const res = await axios.get(`/places?${queryStr}`);
+        setPlaces(res.data.data.places);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }
+
+  useEffect(handleFilters, [bedrooms, beds, amenitiesTracker, bathrooms]);
 
   const bodyContent = (
     <div className="w-full px-12 md:px-6 m-auto h-[500px] overflow-y-scroll">
@@ -81,7 +100,7 @@ export default function FilterModal () {
         />
         <div>
           <div className="my-6">
-            <ReactSlider value={prices} min={MIN_PRICE} max={MAX_PRICE} onChange={setPrices} />
+            <ReactSlider value={prices} min={MIN_PRICE} max={MAX_PRICE} onChange={setPrices} onAfterChange={handleFilters} />
           </div>
           <div className="flex justify-between gap-3 items-center">
             <Input label="Minimum" value={prices[0]} beforeText="$" className="rounded-lg" onChange={handleChangeMinimumPrice} onBlur={handleBlurMinimumPrice} />

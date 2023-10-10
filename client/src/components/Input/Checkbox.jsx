@@ -1,4 +1,3 @@
-import { useState } from "react";
 import capitailizeFirstLetter from "../../utils/capitalizeFirstLetter";
 import "./Input.css";
 
