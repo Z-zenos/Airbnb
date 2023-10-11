@@ -52,7 +52,7 @@ class APIFeatures {
 
   paginate() {
     const page = +this.queryString.page || 1,
-      limit = +this.queryString.limit || 10, // number of documents per page
+      limit = +this.queryString.limit || 12, // number of documents per page
       skip = (page - 1) * limit;
 
     this.Query = this.Query.skip(skip).limit(limit);

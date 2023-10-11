@@ -1,0 +1,492 @@
+[
+  {
+    "name": "a frames",
+    "iconImage": "a_frames.png",
+    "place_type": [
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "adapted",
+    "iconImage": "adapted.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "amazing pools",
+    "iconImage": "amazing_pools.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "amazing views",
+    "iconImage": "amazing_views.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "arctic",
+    "iconImage": "arctic.png",
+    "place_type": [
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "barns",
+    "iconImage": "barns.png",
+    "place_type": [
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "beach",
+    "iconImage": "beach.png",
+    "place_type": [
+      "entire home",
+      "shared room",
+      "room"
+    ]
+  },
+  {
+    "name": "beachfront",
+    "iconImage": "beachfront.png",
+    "place_type": [
+      "shared room",
+      "room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "bed and breakfasts",
+    "iconImage": "bed_and_breakfasts.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "boats",
+    "iconImage": "boats.png",
+    "place_type": [
+      "room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "cabins",
+    "iconImage": "cabins.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "campers",
+    "iconImage": "campers.png",
+    "place_type": [
+      "room",
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "camping",
+    "iconImage": "camping.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "casas particulares",
+    "iconImage": "casas_particulares.png",
+    "place_type": [
+      "shared room",
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "castles",
+    "iconImage": "castles.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "caves",
+    "iconImage": "caves.png",
+    "place_type": [
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "chef kitchens",
+    "iconImage": "chef_kitchens.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "containers",
+    "iconImage": "containers.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "countryside",
+    "iconImage": "countryside.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "creative spaces",
+    "iconImage": "creative_spaces.png",
+    "place_type": [
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "cycladic homes",
+    "iconImage": "cycladic_homes.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "dammusi",
+    "iconImage": "dammusi.png",
+    "place_type": [
+      "room",
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "desert",
+    "iconImage": "desert.png",
+    "place_type": [
+      "shared room",
+      "room"
+    ]
+  },
+  {
+    "name": "design",
+    "iconImage": "design.png",
+    "place_type": [
+      "room",
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "domes",
+    "iconImage": "domes.png",
+    "place_type": [
+      "room",
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "earth homes",
+    "iconImage": "earth_homes.png",
+    "place_type": [
+      "room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "farms",
+    "iconImage": "farms.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "golfing",
+    "iconImage": "golfing.png",
+    "place_type": [
+      "room",
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "grand pianos",
+    "iconImage": "grand_pianos.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "hanoks",
+    "iconImage": "hanoks.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "historical homes",
+    "iconImage": "historical_homes.png",
+    "place_type": [
+      "room",
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "houseboats",
+    "iconImage": "houseboats.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "iconic cities",
+    "iconImage": "iconic_cities.png",
+    "place_type": [
+      "shared room",
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "islands",
+    "iconImage": "islands.png",
+    "place_type": [
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "lake",
+    "iconImage": "lake.png",
+    "place_type": [
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "lakefront",
+    "iconImage": "lakefront.png",
+    "place_type": [
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "luxe",
+    "iconImage": "luxe.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "mansions",
+    "iconImage": "mansions.png",
+    "place_type": [
+      "shared room",
+      "room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "minsus",
+    "iconImage": "minsus.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "national parks",
+    "iconImage": "national_parks.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "new",
+    "iconImage": "new.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "off the grid",
+    "iconImage": "off_the_grid.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "omg",
+    "iconImage": "omg.png",
+    "place_type": [
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "play",
+    "iconImage": "play.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "riads",
+    "iconImage": "riads.png",
+    "place_type": [
+      "room",
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "rooms",
+    "iconImage": "rooms.png",
+    "place_type": [
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "ryokans",
+    "iconImage": "ryokans.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "shepherd huts",
+    "iconImage": "shepherd_huts.png",
+    "place_type": [
+      "room",
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "ski in out",
+    "iconImage": "ski_in_out.png",
+    "place_type": [
+      "shared room",
+      "room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "skiing",
+    "iconImage": "skiing.png",
+    "place_type": [
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "surfing",
+    "iconImage": "surfing.png",
+    "place_type": [
+      "entire home"
+    ]
+  },
+  {
+    "name": "tiny homes",
+    "iconImage": "tiny_homes.png",
+    "place_type": [
+      "entire home",
+      "shared room",
+      "room"
+    ]
+  },
+  {
+    "name": "top of the world",
+    "iconImage": "top_of_the_world.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "towers",
+    "iconImage": "towers.png",
+    "place_type": [
+      "shared room"
+    ]
+  },
+  {
+    "name": "treehouses",
+    "iconImage": "treehouses.png",
+    "place_type": [
+      "room"
+    ]
+  },
+  {
+    "name": "trending",
+    "iconImage": "trending.png",
+    "place_type": [
+      "entire home",
+      "shared room"
+    ]
+  },
+  {
+    "name": "tropical",
+    "iconImage": "tropical.png",
+    "place_type": [
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "trulli",
+    "iconImage": "trulli.png",
+    "place_type": [
+      "room",
+      "shared room",
+      "entire home"
+    ]
+  },
+  {
+    "name": "vineyards",
+    "iconImage": "vineyards.png",
+    "place_type": [
+      "entire home",
+      "room",
+      "shared room"
+    ]
+  },
+  {
+    "name": "windmills",
+    "iconImage": "windmills.png",
+    "place_type": [
+      "shared room",
+      "entire home",
+      "room"
+    ]
+  },
+  {
+    "name": "yurts",
+    "iconImage": "yurts.png",
+    "place_type": [
+      "entire home",
+      "room"
+    ]
+  }
+]

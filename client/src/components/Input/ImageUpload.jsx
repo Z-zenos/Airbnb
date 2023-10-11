@@ -13,9 +13,9 @@ export default function ImageUpload({
     (async () => {
       const res = await axios.get(`/images/${placeId}`);
 
-      const { imageCover, images } = res.data.data;
+      const { image_cover, images } = res.data.data;
 
-      const urls = [imageCover, ...images].filter(Boolean);
+      const urls = [image_cover, ...images].filter(Boolean);
 
       if(urls.length) onChange(urls);
     })();
@@ -32,7 +32,7 @@ export default function ImageUpload({
       // send the file and description to the server
       const formData = new FormData();
       images.forEach((image, i) => {
-        if(!i) formData.append("imageCover", image);
+        if(!i) formData.append("image_cover", image);
         else formData.append("images", image);
       });
 
@@ -50,7 +50,7 @@ export default function ImageUpload({
 
       const place = res.data.data.place;
 
-      onChange([...value, place.imageCover, ...place.images]);
+      onChange([...value, place.image_cover, ...place.images]);
     } catch (err) {
       console.error(err);
     }
@@ -84,7 +84,7 @@ export default function ImageUpload({
 
     const place = res.data.data.place;
 
-    onChange([place.imageCover, ...place.images]);
+    onChange([place.image_cover, ...place.images]);
   }
 
   const preview = value.length > 0 && value.map((url, i) => (

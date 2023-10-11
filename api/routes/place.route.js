@@ -14,8 +14,8 @@ router
 
 
 router
-  .route('/place-types')
-  .get(placeController.getAllPlaceTypes);
+  .route('/property-types')
+  .get(placeController.getAllPropertyTypes);
 
 router
   .route('/my-places')

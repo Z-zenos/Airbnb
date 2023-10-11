@@ -22,23 +22,23 @@ const upload = multer({
 });
 
 exports.uploadPlaceImages = upload.fields([
-  { name: 'imageCover', maxCount: 1 },
+  { name: 'image_cover', maxCount: 1 },
   { name: 'images', maxCount: 5 }
 ]);
 
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
-  const imageCover = req.files?.imageCover[0];
+  const image_cover = req.files?.image_cover[0];
   const images = req.files?.images;
 
-  if(!imageCover || !images) return next();
+  if(!image_cover || !images) return next();
 
   // 1) Cover image
-  req.body.imageCover = `place-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(imageCover.buffer)
+  req.body.image_cover = `place-${req.params.id}-${Date.now()}-cover.jpeg`;
+  await sharp(image_cover.buffer)
     .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
-    .toFile(`resources/images/places/${req.body.imageCover}`);
+    .toFile(`resources/images/places/${req.body.image_cover}`);
 
   // 2) Images
   req.body.images = [];
@@ -66,7 +66,7 @@ exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      imageCover: place.imageCover,
+      image_cover: place.image_cover,
       images: place.images
     }
   });
@@ -76,8 +76,8 @@ exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   const { imageName } = req.params;
   const place = req.place;  
 
-  if(imageName === place.imageCover) {
-    place.imageCover = req.body.imageCover = undefined; 
+  if(imageName === place.image_cover) {
+    place.image_cover = req.body.image_cover = undefined; 
   }
   else {
     for(let i = 0; i < place.images.length; i++) {

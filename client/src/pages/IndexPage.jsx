@@ -16,22 +16,23 @@ export default function IndexPage() {
     isCreatePlaceModalOpen,
     isFilterModalOpen, 
   } = useContext(ModalContext);
-  const [placeTypeList, setPlaceTypeList] = useState([]);
-  const [placeType, setPlaceType] = useState();
+  const [propertyTypeList, setPropertyTypeList] = useState([]);
+  const [propertyType, setPropertyType] = useState();
   const scrollRef = useHorizontalScroll();
   const [places, setPlaces] = useState([]);
+  const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get('/places/place-types');
+        const res = await axios.get('/places/property-types');
 
-        setPlaceType(res.data.data.placeTypeList[0].id);
+        setPropertyType(res.data.data.propertyTypeList[0].id);
 
-        setPlaceTypeList(() => res.data.data.placeTypeList.map(pt => ({
+        setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
           id: pt.id,
           name: capitalizeFirstLetter(pt.name),
-          src: `http://localhost:3000/images/place_types/${pt.iconImage}` 
+          src: `http://localhost:3000/images/property_types/${pt.iconImage}` 
         })));
 
       } catch (err) {
@@ -39,6 +40,7 @@ export default function IndexPage() {
       }
     })();
   }, []);
+
   
   useEffect(() => {
     (async () => {
@@ -54,26 +56,36 @@ export default function IndexPage() {
 
   function scrollHorizontal(scrollOffset) {
     scrollRef.current.scrollLeft += scrollOffset;
+    handleScroll();
+  }
+
+  function handleScroll() {
+    if(scrollRef.current.scrollLeft === 0) setIsHideScrollBtn(-1);
+    else if(scrollRef.current.scrollLeft + scrollRef.current.offsetWidth === scrollRef.current.scrollWidth) setIsHideScrollBtn(1);
+    else setIsHideScrollBtn(0);
   }
 
   return (
     <div className="lg:px-20 md:px-10 mb-10">
       <div className="grid grid-cols-10 items-center gap-6">
-        <div className="mt-4 flex justify-start items-center lg:col-span-9 md:col-span-8">
-          <BsCaretLeft 
-            className="h-full md:w-[120px] xl:w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500" 
-            onClick={() => scrollHorizontal(-400)} 
-          />
+        <div className="mt-4 grid grid-cols-12 items-center lg:col-span-9 md:col-span-8">
+          { isHideScrollBtn !== -1 && 
+            <BsCaretLeft 
+              className="w-[40px] h-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 col-span-1 mx-auto xl:translate-x-[100%]" 
+              onClick={() => scrollHorizontal(-400)} 
+            />
+          }
 
-          <div className="relative mx-4 w-[90%] before:absolute before:bottom-0 before:h-full before:w-4 before:z-10 before:bg-gradient-to-b before:from-transparent before:to-[#fdfdfd] after:absolute after:bottom-0 after:h-full after:w-4 after:z-10 after:right-0 after:bg-gradient-to-b after:from-transparent after:to-[#fdfdfd]">
+          <div className={`col-span-10 relative mx-4 ${isHideScrollBtn !== -1 ? 'before:absolute before:bottom-0 before:h-full before:left-[-10px] before:w-4 before:z-10 before:bg-gradient-to-b before:from-transparent before:to-[#fdfdfd]' : ''} ${isHideScrollBtn !== 1 ? 'after:absolute after:bottom-0 after:h-full after:w-4 after:z-10 after:right-[-10px] after:bg-gradient-to-b after:from-transparent after:to-[#fdfdfd]' : ''}`}>
             <div 
-              className="flex justify-start gap-8  overflow-auto scroll-smooth" 
+              className="flex justify-start gap-8 overflow-auto scroll-smooth" 
               ref={scrollRef}
+              onWheel={handleScroll}
             >
-              { placeTypeList.length && placeTypeList.map((pt, i) => (
+              { propertyTypeList.length && propertyTypeList.map((pt, i) => (
                   <div 
-                    className={`py-3 flex justify-center items-center flex-col ${pt.id === placeType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
-                    onClick={() => setPlaceType(pt.id)}
+                    className={`py-3 flex justify-center items-center flex-col ${pt.id === propertyType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
+                    onClick={() => setPropertyType(pt.id)}
                   >
                     <img className="w-8" src={pt.src} />
                     <p className="mt-1 text-[12px] font-medium whitespace-nowrap">{pt.name}</p>
@@ -83,11 +95,13 @@ export default function IndexPage() {
             </div>
           </div>
 
-
-          <BsCaretRight 
-            className="h-full md:w-[120px] xl:w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none" 
-            onClick={() => scrollHorizontal(400)}  
-          />
+          { isHideScrollBtn !== 1 && 
+            <BsCaretRight 
+              className="col-span-1 h-[40px] w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none mx-auto  xl:translate-x-[-100%]" 
+              onClick={() => scrollHorizontal(400)} 
+              
+            />
+          }
         </div>
 
         <div 

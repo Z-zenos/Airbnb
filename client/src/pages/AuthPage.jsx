@@ -113,7 +113,6 @@ export default function AuthPage() {
         const res = await axios.post(`/auth/${entry}`, body, config);
         const loggedUser = res.data.data.user;
         setUser(loggedUser);
-        // console.log(loggedUser);
         setRedirect(true);
       } catch (err) {
         console.error(err);

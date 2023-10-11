@@ -1,6 +1,6 @@
 const catchErrorAsync = require('../utils/catchErrorAsync');
 const Place = require('./../models/place.model');
-const PlaceType = require('../models/place_type.model');
+const PropertyType = require('../models/property_type.model');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const mongoose = require("mongoose");
@@ -12,7 +12,7 @@ exports.checkPlace = factory.checkOne(Place);
 exports.createPlace = catchErrorAsync(async(req, res, next) => {
   const newPlace = await Place.collection.insertOne(
     {
-      placeType: "",
+      property_type: "",
       location: {
         address: ""
       },
@@ -20,7 +20,7 @@ exports.createPlace = catchErrorAsync(async(req, res, next) => {
       bedrooms:1,
       bathrooms: 1,
       beds: 1,
-      imageCover: "",
+      image_cover: "",
       images: [],
       amenities: [],
       description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
@@ -44,26 +44,26 @@ exports.createPlace = catchErrorAsync(async(req, res, next) => {
 exports.updatePlace = factory.updateOne(Place);
 // exports.deletePlace = factory.deleteOne(Place);
 
-exports.getAllPlaceTypes = catchErrorAsync(async(req, res, next) => {
-  const placeTypeList = await PlaceType.find({}, { name: 1, iconImage: 1 });
+exports.getAllPropertyTypes = catchErrorAsync(async(req, res, next) => {
+  const propertyTypeList = await PropertyType.find({}, { name: 1, iconImage: 1 });
 
-  if (!placeTypeList) {
+  if (!propertyTypeList) {
     return next(new AppError(`Place type list is empty`, 404));
   }
 
   res.status(200).json({
     status: 'success',
-    result: placeTypeList.length,
+    result: propertyTypeList.length,
     data: {
-      placeTypeList
+      propertyTypeList
     }
-  })
+  });
 });
 
 exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
   let places = Array.from(await Place.find({ host: req.user.id }));
 
-  places = places.map(place => place.placeType ? place : { ...place._doc, placeType: "" });
+  places = places.map(place => place.property_type ? place : { ...place._doc, property_type: "" });
 
   res.status(200).json({
     status: 'success',
@@ -71,5 +71,5 @@ exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
     data: {
       places
     }
-  })
+  });
 });

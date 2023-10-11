@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const PlaceType = require('./place_type.model');
+const PropertyType = require('./property_type.model');
 const Amenity = require('./amenity.model');
+const safetySchema = require('./safety.model');
+const checkinoutSchema = require('./checkinout.model');
+const ruleSchema = require('./rule.model');
+const View = require('./view.model');
 
 const placeSchema = new mongoose.Schema(
   {
@@ -11,18 +15,27 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have a name'],
       unique: true,
       trim: true,
-      maxlength: [255, 'A place name must have less or equal than 255 characters'],
+      maxlength: [50, 'A place name must have less or equal than 255 characters'],
       minlength: [10, 'A place name must have more or equal than 10 characters']
     },
 
-    placeType: {
+    property_type: {
       type: mongoose.Schema.ObjectId,
-      ref: PlaceType,
-      required: [true, 'A place must have type']
+      ref: PropertyType,
+    },
+
+    place_type: {
+      type: String,
+      enum: {
+        values: ['room', 'entire home', 'shared room'],
+        message: 'Property type is either: room, entire home, shared room'
+      },
+      required: [true, "A place must be have a type"]
     },
 
     slug: String,
     language: String,
+    built: Number,
 
     guests: {
       type: Number,
@@ -67,7 +80,7 @@ const placeSchema = new mongoose.Schema(
       ref: Amenity,
     }],
 
-    averageRatings: {
+    average_ratings: {
       type: Number,
       default: 0,
       min: [0, 'Rating must be above 0'],
@@ -75,7 +88,7 @@ const placeSchema = new mongoose.Schema(
       set: val => Math.round(val * 100) / 100
     },
 
-    quantityRatings: {
+    quantity_ratings: {
       type: Number,
       default: 0
     },
@@ -85,7 +98,7 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have a price']
     },
 
-    priceType: {
+    price_type: {
       type: String,
       // required: [true, 'A place must have a price type'],
       enum: {
@@ -94,7 +107,7 @@ const placeSchema = new mongoose.Schema(
       }
     },
 
-    priceDiscount: {
+    price_discount: {
       type: Number,
       validate: {
         validator: function(val) {
@@ -112,7 +125,7 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have description']
     },
 
-    imageCover: {
+    image_cover: {
       type: String,
       required: [true, 'A place must have a cover image']
     },
@@ -151,8 +164,17 @@ const placeSchema = new mongoose.Schema(
       country: String,
       description: String,
       zipCode: String,
-      scenicViews: [String],
       flag: String
+    },
+
+    views: [{
+      type: mongoose.Schema.ObjectId,
+      ref: View,
+    }],
+
+    rules: {
+      type: ruleSchema,
+      default: () => ({})
     },
 
     host: {
@@ -160,12 +182,24 @@ const placeSchema = new mongoose.Schema(
       ref: 'User',
       required: [true, 'A place must be hosted by certain host']
     },
+
     status: {
       type: String,
       enum: {
-        values: ['creating', 'published', 'inactive'],
-        message: 'status is either: creating, published, inactive'
+        values: ['creating', 'published', 'deactivated'],
+        message: 'status is either: creating, published, deactivated'
       }
+    },
+    
+    safety: {
+      type: safetySchema,
+      default: () => ({}),
+      required: [true, 'A place must be have safety']
+    },
+
+    checkinout: {
+      type: checkinoutSchema,
+      default: () => ({})
     }
   },
   {
@@ -221,11 +255,14 @@ placeSchema.pre(/^find/, function(next) {
 
 placeSchema.pre(/^find/, function(next) {
   this.populate({
-    path: 'placeType',
+    path: 'property_type',
     select: '-__v -_id -created -modified'
   }).populate({
     path: 'amenities',
     select: '-__v -created -modified -_id'
+  }).populate({
+    path: 'views',
+    select: '-__v'
   });
 
   next();

@@ -25,6 +25,10 @@ const amenitySchema = new mongoose.Schema(
     type: {
       type: mongoose.Schema.ObjectId,
       ref: 'Amenity'
+    },
+    amenity_id: {
+      type: Number,
+      required: [true, 'Amenity must be have id']
     }
 
   },

@@ -33,7 +33,6 @@ export default function FilterModal () {
     })();
   }, []);
 
-
   function handleSubmit() { }
 
   function handleClearAll() {}

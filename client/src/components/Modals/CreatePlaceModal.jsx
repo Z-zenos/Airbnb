@@ -15,7 +15,7 @@ import { ModalContext } from "../../contexts/modal.context";
 import Input from "../Input/Input";
 
 const STEPS = {
-  PLACE_TYPES: 0,
+  PROPERTY_TYPES: 0,
   LOCATION: 1,
   INFO: 2,
   AMENITIES: 3,
@@ -26,9 +26,9 @@ const STEPS = {
 
 export default function CreatePlaceModal() {
   const { isCreatePlaceModalOpen, setIsCreatePlaceModalOpen } = useContext(ModalContext);
-  const [step, setStep] = useState(STEPS['PLACE_TYPES']);
+  const [step, setStep] = useState(STEPS['PROPERTY_TYPES']);
   const editorRef = useRef(null);
-  const [placeTypeList, setPlaceTypeList] = useState([]);
+  const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [errors, setErrors] = useState([]);
 
@@ -65,7 +65,7 @@ export default function CreatePlaceModal() {
     }
   });
 
-  const placeType = watch('placeType');
+  const property_type = watch('property_type');
   const location = watch('location');
   const guests = watch('guests');
   const bedrooms = watch('bedrooms');
@@ -93,7 +93,7 @@ export default function CreatePlaceModal() {
   useEffect(() => {
     if(isErrorsOfStep(step)) return;
 
-    if(step === STEPS['PLACE_TYPES'] && !placeType) {
+    if(step === STEPS['PROPERTY_TYPES'] && !property_type) {
       setErrors([...errors, {
         step: step,
         message: "Please choose one place type."
@@ -171,7 +171,7 @@ export default function CreatePlaceModal() {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if(step === STEPS['PLACE_TYPES'])
+    if(step === STEPS['PROPERTY_TYPES'])
       return undefined;
 
     return 'Back';
@@ -182,10 +182,10 @@ export default function CreatePlaceModal() {
       try {
         const res = await axios.get('/places/place-types');
 
-        setPlaceTypeList(() => res.data.data.placeTypeList.map(pt => ({
+        setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
           id: pt.id,
           name: capitalizeFirstLetter(pt.name),
-          src: `http://localhost:3000/images/place_types/${pt.iconImage}` 
+          src: `http://localhost:3000/images/property_types/${pt.iconImage}` 
         })));
 
       } catch (err) {
@@ -213,11 +213,11 @@ export default function CreatePlaceModal() {
       <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
       >
-        { placeTypeList.length && placeTypeList.map(pt => (
+        { propertyTypeList.length && propertyTypeList.map(pt => (
           <div key={pt.id} className="col-span-1">
             <CategoryInput
-              onClick={placeTypeId => setCustomValue('placeType', placeTypeId)}
-              selected={placeType === pt.id}
+              onClick={property_typeId => setCustomValue('property_type', property_typeId)}
+              selected={property_type === pt.id}
               id={pt.id}
               label={pt.name}
               iconSrc={pt.src}
@@ -403,7 +403,7 @@ export default function CreatePlaceModal() {
       title="Airbnb your home!"
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS['PLACE_TYPES'] ? undefined : onBack}
+      secondaryAction={step === STEPS['PROPERTY_TYPES'] ? undefined : onBack}
       body={bodyContent}
       optionBtn={optionBtn}
       disabled={isErrorsOfStep(step)}

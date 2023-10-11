@@ -7,10 +7,9 @@ export default function PlaceCard({place}) {
   if(!place.name) return;
 
   return (
-
     <div className="w-[270px] my-6 cursor-pointer">
       <div className="rounded-lg w-[270px] h-[260px]">
-        <Carousel slides={[place.imageCover, ...place.images.slice(0, 4)]} imageClassName="h-[260px] object-cover rounded-lg" />
+        <Carousel slides={[place.image_cover, ...place.images.slice(0, 4)]} imageClassName="h-[260px] object-fill aspect-video rounded-lg" />
       </div>
 
       <div className="mt-3">
@@ -18,7 +17,7 @@ export default function PlaceCard({place}) {
           <span className="font-medium">{place.location.address}</span>
           <span className="font-light flex items-center">
             <AiFillStar className="inline mr-1" />
-            {place.averageRatings}
+            {place.average_ratings}
           </span>
         </p>
         <p className="opacity-70 text-sm">Bowling alley</p>

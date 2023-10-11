@@ -1,0 +1,83 @@
+[
+  {
+    "view_id": 1,
+    "name": "Bay"
+  },
+  {
+    "view_id": 2,
+    "name": "Beach"
+  },
+  {
+    "view_id": 3,
+    "name": "Canal"
+  },
+  {
+    "view_id": 4,
+    "name": "City skyline"
+  },
+  {
+    "view_id": 5,
+    "name": "Courtyard"
+  },
+  {
+    "view_id": 6,
+    "name": "Desert"
+  },
+  {
+    "view_id": 7,
+    "name": "Garden"
+  },
+  {
+    "view_id": 8,
+    "name": "Golf course"
+  },
+  {
+    "view_id": 9,
+    "name": "Harbor"
+  },
+  {
+    "view_id": 10,
+    "name": "Lake"
+  },
+  {
+    "view_id": 11,
+    "name": "Marina"
+  },
+  {
+    "view_id": 12,
+    "name": "Mountain"
+  },
+  {
+    "view_id": 13,
+    "name": "Ocean"
+  },
+  {
+    "view_id": 14,
+    "name": "Park"
+  },
+  {
+    "view_id": 15,
+    "name": "Pool"
+  },
+  {
+    "view_id": 16,
+    "name": "Resort"
+  },
+  {
+    "view_id": 17,
+    "name": "River"
+  },
+  {
+    "view_id": 18,
+    "name": "Valley"
+  },
+  {
+    "view_id": 19,
+    "name": "Vineyard"
+  },
+  {
+    "view_id": 20,
+    "name": "Sea"
+  }
+  
+]

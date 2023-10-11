@@ -15,6 +15,10 @@ export default {
       },
       boxShadow: {
         'gray-primary': "rgba(0, 0, 0, 0.24) 0 3px 8px"
+      },
+      gridTemplateColumns: {
+        '16': 'repeat(16, minmax(0, 1fr))',
+        '14': 'repeat(14, minmax(0, 1fr))',
       }
     },
   },
