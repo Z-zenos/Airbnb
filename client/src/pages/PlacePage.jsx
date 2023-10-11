@@ -19,10 +19,14 @@ import { PlaceContext } from "../contexts/place.context";
 import axios from "axios";
 import Modal from "../components/Modals/Modal";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
+import { useLocation } from "react-router-dom";
+import { ModalContext } from "../contexts/modal.context";
+import ImageModal from "../components/Modals/ImageModal";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
   const [open, setOpen] = useState(false);
+  const { isImageModalOpen, setIsImageModalOpen } = useContext(ModalContext);
 
   const purchaseCardRef = useRef(null);
   const isPurchaseCardVisible = useOnScreen(purchaseCardRef);
@@ -31,6 +35,7 @@ export default function PlacePage() {
   const amenitiesRef = useRef(null);
   const reviewsRef = useRef(null);
   const locationRef = useRef(null);
+  const location = useLocation();
 
   const {
     checkInDate, checkOutDate,
@@ -41,15 +46,16 @@ export default function PlacePage() {
 
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
+  const priceAfterDiscount = place.price -  Math.trunc(place.price * place.price_discount / 100);
 
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get('/places/65058538d31130157a5a2a2a');
+        const res = await axios.get(location.pathname);
         setPlace(() => res.data.data.place);
         setAmenities(() => res.data.data.place.amenities.map(a => ({
           name: capitalizeFirstLetter(a.name),
-          src: `http://localhost:3000/images/amenities/${a.iconImage}`,
+          src: a.iconImage,
           shortenDesc: a.shortenDesc
         })));
 
@@ -76,20 +82,32 @@ export default function PlacePage() {
   return (
     <>
       <Navbar className="flex justify-between items-center w-full">
-          <div className="flex gap-10 text-sm font-medium cursor-pointer h-full" onClick={handleScrollTo}>
-            <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Photos</span>
-            <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Amenities</span>
-            <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Reviews</span>
-            <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Location</span>
-          </div>
+        <div className="flex gap-10 text-sm font-medium cursor-pointer h-full" onClick={handleScrollTo}>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Photos</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Amenities</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Reviews</span>
+          <span className="flex h-full items-center border-b-white border-b-2 hover:border-b-primary">Location</span>
+        </div>
 
-          {!isPurchaseCardVisible && (
-            <div className="flex justify-start items-center">
+        {!isPurchaseCardVisible && (
+          <div className="flex justify-start items-center">
             <div className="w-[140px]">
-            <span className="-translate-y-1 font-light text-sm line-through text-gray-400"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span></span>
-              <span className="-translate-y-1 font-light text-sm"><span className="font-medium text-lg"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span> night</span>
+              <span className="-translate-y-1 font-light text-sm line-through text-gray-400">
+                <span className="font-medium text-lg">
+                  <BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}
+                </span>
+              </span>
+              <span className="-translate-y-1 font-light text-sm">
+                <span className="font-medium text-lg mr-1">
+                  <BsCurrencyDollar className="inline -translate-y-[2px]" />
+                  {priceAfterDiscount}
+                </span> 
+                night
+              </span>
               <div className="text-[12px]">
-                <span className=""><AiFillStar className="inline font-medium text-yellow-400" /> 4.88</span>
+                <span className="">
+                  <AiFillStar className="inline font-medium text-yellow-400" /> {place.average_ratings}
+                </span>
                 <span className="mx-1 font-medium">·</span>
                 <span className="text-gray-500">205 reviews</span>
               </div>
@@ -101,9 +119,9 @@ export default function PlacePage() {
             >
               Reverse
             </button>
-            </div>
-          )}
-        </Navbar>
+          </div>
+        )}
+      </Navbar>
       <div className=" lg:w-3/5 mx-auto">
 
         <div className="p-6">
@@ -111,60 +129,78 @@ export default function PlacePage() {
           <h2 className="font-bold text-2xl mb-1">{place.name}</h2>
           <div className="flex justify-between items-center">
             <div className="text-sm">
-              <span className="font-medium"><AiFillStar className="inline" /> 4.88</span>
+              <span className="font-medium"><AiFillStar className="inline" /> {place.average_ratings}</span>
               <span className="mx-2 font-medium">·</span>
               <span className="underline font-medium">205 reviews</span>
               <span className="mx-2 font-medium">·</span>
               <span><BiSolidAward className="inline" /> Superhost</span>
               <span className="mx-2 font-medium">·</span>
-              <span className="underline font-medium">Hibhi, Himachai Pradesh, India</span>
+              <span className="underline font-medium">{place.location?.address}</span>
             </div>
             <div className="gap-1 flex">
-              <Button icon="share" title="Share" className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-100 transition-all rounded-md underline font-medium text-sm" iconClassName="translate-y-[2px]">
+              <Button 
+                label="Share" 
+                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-medium text-sm" 
+                iconClassName="translate-y-[2px]"
+                outline={true}
+                small={true}
+              >
                 <CiShare1 />
               </Button>
 
-              <Button icon="heart" title="Heart" className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-100 transition-all rounded-md underline font-medium text-sm" iconClassName="translate-y-[2px]" >
+              <Button 
+                label="Heart" 
+                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-medium text-sm" 
+                iconClassName="translate-y-[2px]" 
+                outline={true}
+                small={true}
+              >
                 <AiOutlineHeart />
               </Button>
             </div>
           </div>
 
           <div className="image-container w-full mt-6 py-2 h-[480px] relative" ref={photosRef}>
-            <div className="-m-1 h-full flex md:-m-2">
-              <div className="flex h-full w-1/2 flex-wrap">
-                <div className="w-1/2 p-1 md:p-2">
-                  <img
-                    alt="gallery"
-                    className="block h-full w-full rounded-lg object-cover object-center"
-                    src="https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(70).webp" />
+            { place.images && (
+              <div className="-m-1 h-full flex md:-m-2">
+                <div className="flex h-full w-1/2 flex-wrap">
+                  <div className="w-1/2 p-1 md:p-2">
+                    <img
+                      alt="gallery"
+                      className="block h-full w-full rounded-lg object-cover object-center"
+                      src={`http://localhost:3000/images/places/${place?.images[0]}`} />
+                  </div>
+                  <div className="w-1/2 p-1 md:p-2">
+                    <img
+                      alt="gallery"
+                      className="block h-full w-full rounded-lg object-cover object-center"
+                      src={`http://localhost:3000/images/places/${place?.images[1]}`} />
+                  </div>
+                  <div className="w-full h-3/5 p-1 md:p-2">
+                    <img
+                      alt="gallery"
+                      className="block w-full h-full rounded-lg object-cover object-center"
+                      src={`http://localhost:3000/images/places/${place?.images[2]}`} />
+                  </div>
                 </div>
-                <div className="w-1/2 p-1 md:p-2">
-                  <img
-                    alt="gallery"
-                    className="block h-full w-full rounded-lg object-cover object-center"
-                    src="https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(72).webp" />
-                </div>
-                <div className="w-full h-3/5 p-1 md:p-2">
-                  <img
-                    alt="gallery"
-                    className="block w-full h-full rounded-lg object-cover object-center"
-                    src="https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(73).webp" />
+                <div className="flex w-3/5 h-full flex-wrap ">
+                  <div className="w-full h-full p-1 md:p-2">
+                    <img
+                      alt="gallery"
+                      className="block h-full w-full rounded-lg object-cover object-center"
+                      src={`http://localhost:3000/images/places/${place?.image_cover}`} />
+                  </div>
                 </div>
               </div>
-              <div className="flex w-3/5 h-full flex-wrap ">
-                <div className="w-full h-full p-1 md:p-2">
-                  <img
-                    alt="gallery"
-                    className="block h-full w-full rounded-lg object-cover object-center"
-                    src="https://tecdn.b-cdn.net/img/Photos/Horizontal/Nature/4-col/img%20(74).webp" />
-                </div>
-              </div>
-            </div>
+            )}
 
-            <Button className="absolute flex items-center border border-gray-700 py-1 px-2 gap-2 hover:bg-gray-100 transition-all rounded-md font-light text-sm bottom-6 right-8 md:bottom-12 md:right-6 bg-white" title="Show all photos" >
+            <Button 
+              className="absolute flex items-center border border-gray-700 py-1 px-2 gap-2 hover:bg-white hover:text-primary transition-all rounded-md font-light text-sm bottom-6 right-8 md:bottom-12 md:right-6 " label="Show all photos" 
+              onClick={() => setIsImageModalOpen(true)}
+            >
               <CgMenuGridO />
             </Button>
+            { (isImageModalOpen && place.images) && <ImageModal images={place.images ? [place.image_cover, ...place.images] : []} /> }
 
           </div>
 
@@ -180,7 +216,7 @@ export default function PlacePage() {
                   <span className="mx-2 font-medium">·</span>
                   <span>{place.beds} beds</span>
                   <span className="mx-2 font-medium">·</span>
-                  <span>{place.bathrooms} bath</span>
+                  <span>{place.bathrooms} bathrooms</span>
                 </div>
 
                 <div className="rounded w-14 h-14">
@@ -230,7 +266,7 @@ export default function PlacePage() {
                   MozBoxOrient: 'vertical'
                 }}>
                   <p>
-                    { place.description }
+                    { `${place.description} ${place.description} ${place.description} ${place.description}` }
                   </p>
                 </div>
 
@@ -245,12 +281,12 @@ export default function PlacePage() {
               <div className="py-8 px-2" ref={amenitiesRef}>
                 <h3 className="font-medium text-2xl">What this place offers</h3>
                 <div className="mt-4">
-                  { amenities.length && amenities.slice(0, 6).map(amenity => (
+                  { amenities.length && amenities.slice(0, 6).map(amenity => amenity.src && (
                     <div className="flex gap-4 items-center mb-4" key={amenity.name}>
                       <span>
                         <img 
                           className="inline text-[24px] font-light w-[25px] h-[25px]" 
-                          src={amenity.src} 
+                          src={`http://localhost:3000/images/amenities/${amenity.src}`} 
                           onError={({ currentTarget }) => {
                             currentTarget.onerror = null; // prevents looping
                             currentTarget.style.display = 'none';
@@ -270,13 +306,13 @@ export default function PlacePage() {
                   </div> */}
                 </div>
 
-                <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100" title="Show all 10 amenities" onClick={() => setOpen(true)} />
+                <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary" label="Show all 10 amenities" onClick={() => setOpen(true)} />
               </div>
 
               <div className="h-[1px] bg-gray-300"></div>
 
               <div className="py-8 px-2">
-                <h3 className="text-2xl mb-2">7 nights in Graeter London</h3>
+                <h3 className="text-2xl mb-2">7 nights in {place.location?.country}</h3>
                 <p className="font-light text-sm text-gray-600">Oct, 9 2023 - Oct 16, 2023</p>
                 <div>
                 <SimpleDateRange
@@ -295,9 +331,9 @@ export default function PlacePage() {
 
             <div ref={purchaseCardRef} className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
               <div className="flex justify-between items-center">
-                <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}</span> night</p>
+                <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{priceAfterDiscount}</span> night</p>
                 <div>
-                  <span className="font-medium"><AiFillStar className="inline text-yellow-400" /> 4.88</span>
+                  <span className="font-medium"><AiFillStar className="inline text-yellow-400" /> {place.average_ratings}</span>
                   <span className="mx-2 font-medium">·</span>
                   <span className="underline font-light text-sm">205 reviews</span>
                 </div>
@@ -321,9 +357,9 @@ export default function PlacePage() {
                 <div className="flex justify-between items-center mb-4">
                   <span className="underline">
                     <BsCurrencyDollar className="inline -translate-y-[2px]" />
-                    {place.price} x <span>{datediff} nights</span>
+                    {priceAfterDiscount} x <span>{datediff} nights</span>
                   </span>
-                  <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />{place.price * datediff}</span>
+                  <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />{priceAfterDiscount * datediff}</span>
                 </div>
                 <div className="flex justify-between items-center mb-4">
                   <span className="underline">
@@ -337,7 +373,7 @@ export default function PlacePage() {
 
               <div className="flex justify-between items-center mt-4 font-medium">
                 <p>Total before taxes</p>
-                <p><BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price * datediff + 144}</p>
+                <p><BsCurrencyDollar className="inline -translate-y-[2px]" />{priceAfterDiscount * datediff + 144}</p>
               </div>
             </div>
           </div>
@@ -346,7 +382,7 @@ export default function PlacePage() {
 
           <div className="py-8 px-2 text-xl">
             <div className="font-medium">
-              <span className=""><AiFillStar className="inline text-yellow-400" /> 4.88</span>
+              <span className=""><AiFillStar className="inline text-yellow-400" /> {place.average_ratings}</span>
               <span className="mx-2 font-medium">·</span>
               <span className="underline">205 reviews</span>
             </div>
@@ -367,7 +403,7 @@ export default function PlacePage() {
               </div>
             </div>
             
-            <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px]" title="Show all 90 reviews" />
+            <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px] hover:text-primary" label="Show all 90 reviews" />
             
           </div>
 
@@ -378,7 +414,7 @@ export default function PlacePage() {
 
             {/* 
               Two options for q=
-              + q=lat,long -> q=25.30{place.price}008,51.4803216
+              + q=lat,long -> q=25.30{priceAfterDiscount}008,51.4803216
               + q=name_address -> q=morklake or q=Google, 8th Avenue, New York, NY, USA
             */}
             { place.location && <iframe className="mt-6 mx-auto" width="800" height="500" id="gmap_canvas" src={`https://maps.google.com/maps?q=${place.location.coordinates[1]},${place.location.coordinates[0]}&t=&z=13&ie=UTF8&iwloc=&output=embed&hl=en`} >
@@ -386,14 +422,42 @@ export default function PlacePage() {
           </div>
         </div>
 
-        <Modal isOpen={open} onClose={() => setOpen(false)} >
+        <div className="h-[1px] bg-gray-300 mt-1"></div>
+        <div className="py-8 px-8">
+          <h3 className="text-2xl font-medium">Things to know</h3>
+          <div className="grid grid-cols-3">
+            <div className="my-2">
+              <p className="text-lg">House rules</p>
+              <div className="font-light">
+                <p>Check-in after {new Date(place?.checkinout?.checkin_date).toLocaleDateString('en-US')}</p>
+                <p>Checkout before {new Date(place?.checkinout?.checkout_date).toLocaleDateString('en-US')}</p>
+                <p>{place.guests} guests max</p>
+                {place.rules && Object.keys(place?.rules).map(rule =>  (
+                <p className={`${rule === '_id' || rule === 'cancellation_policy' || rule === 'additional_rules' ? 'hidden' : ''} font-light ${place.safety[rule] ? '' : 'line-through'}`} key={rule}>{capitalizeFirstLetter(rule.replace(/_/g, ' '))}</p>
+              ))}
+              </div>
+            </div>
+            <div className="my-2">
+              <p className="text-lg">Safety & property</p>
+              {place.safety && Object.keys(place?.safety).map(sp =>  (
+                <p className={`${sp === '_id' ? 'hidden' : ''} font-light ${place.safety[sp] ? '' : 'line-through'}`} key={sp}>{capitalizeFirstLetter(sp.replace(/_/g, ' '))}</p>
+              ))}
+            </div>
+            <div className="my-2">
+              <p className="text-lg">Cancellation policy</p>
+              <p className="font-light">{place.rules.cancellation_policy.description}</p>
+            </div>
+          </div>
+        </div>
+
+        <Modal isOpen={open} onSubmit={() => setOpen(false)} onClose={() => setOpen(false)} actionLabel={"Close"} >
           <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
             <h3 className="font-medium text-2xl my-8">What this place offers?</h3>
             { amenities.length && amenities.map((amenity, i) => (
               <div key={amenity.name + i} className="py-5 border-b-[1px] border-gray-200">
                 <div className="font-light flex gap-5 items-center">
                   <img 
-                    src={amenity.src}  
+                    src={`http://localhost:3000/images/amenities/${amenity.src}`}  
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null; // prevents looping
                       currentTarget.style.display = 'none';

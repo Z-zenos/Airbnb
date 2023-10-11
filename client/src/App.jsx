@@ -39,7 +39,7 @@ function App() {
               <Route path='/' element={ <MainLayout /> } >
                 <Route index element={<IndexPage />} />
                 <Route path='/login' element={ <AuthPage /> } />
-                <Route path='/places' element={ <PlacePage /> } />
+                <Route path='/places/:id' element={ <PlacePage /> } />
               </Route>
             </Routes>
           </ToastContextProvider>
