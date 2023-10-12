@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 
 class APIFeatures {
   constructor(Query, queryString) {
@@ -21,7 +22,13 @@ class APIFeatures {
         queryObj[key] = {
           '$all': queryObj[key]
         };
-    })
+
+      if(mongoose.isValidObjectId(queryObj[key])) {
+        queryObj[key] = new mongoose.Types.ObjectId(queryObj[key]);
+      }
+    });
+
+    console.log(queryObj);
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
@@ -29,8 +36,8 @@ class APIFeatures {
       op => `$${op}`
     );
     // queryStr = { "duration": { "$gt":"7" } }
-    console.log(queryObj, queryStr);
 
+    console.log(queryStr);
 
     this.Query = this.Query.find(JSON.parse(queryStr));
 

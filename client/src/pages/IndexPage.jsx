@@ -65,6 +65,18 @@ export default function IndexPage() {
     else setIsHideScrollBtn(0);
   }
 
+  async function hanldleFilterPlaceByPropertyType(propertyTypeId) {
+    try {
+      const res = await axios.get(`/places?property_type=${propertyTypeId}`);
+      setPlaces(res.data.data.places);
+      setPropertyType(propertyTypeId);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  console.log(places);
+
   return (
     <div className="lg:px-20 md:px-10 mb-10">
       <div className="grid grid-cols-10 items-center gap-6">
@@ -85,7 +97,7 @@ export default function IndexPage() {
               { propertyTypeList.length && propertyTypeList.map((pt, i) => (
                   <div 
                     className={`py-3 flex justify-center items-center flex-col ${pt.id === propertyType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
-                    onClick={() => setPropertyType(pt.id)}
+                    onClick={async () => await hanldleFilterPlaceByPropertyType(pt.id)}
                   >
                     <img className="w-8" src={pt.src} />
                     <p className="mt-1 text-[12px] font-medium whitespace-nowrap">{pt.name}</p>

@@ -79,6 +79,7 @@ export default function PlacePage() {
     }[ev.target.textContent]);
   }
 
+
   return (
     <>
       <Navbar className="flex justify-between items-center w-full">
@@ -126,7 +127,7 @@ export default function PlacePage() {
 
         <div className="p-6">
 
-          <h2 className="font-bold text-2xl mb-1">{place.name}</h2>
+          <h2 className="font-bold text-2xl mb-1">{place?.name}</h2>
           <div className="flex justify-between items-center">
             <div className="text-sm">
               <span className="font-medium"><AiFillStar className="inline" /> {place.average_ratings}</span>
@@ -432,9 +433,9 @@ export default function PlacePage() {
                 <p>Check-in after {new Date(place?.checkinout?.checkin_date).toLocaleDateString('en-US')}</p>
                 <p>Checkout before {new Date(place?.checkinout?.checkout_date).toLocaleDateString('en-US')}</p>
                 <p>{place.guests} guests max</p>
-                {place.rules && Object.keys(place?.rules).map(rule =>  (
-                <p className={`${rule === '_id' || rule === 'cancellation_policy' || rule === 'additional_rules' ? 'hidden' : ''} font-light ${place.safety[rule] ? '' : 'line-through'}`} key={rule}>{capitalizeFirstLetter(rule.replace(/_/g, ' '))}</p>
-              ))}
+                {place.rules && Object.keys(place?.rules).map(rule => (
+                  <p className={`${rule === '_id' || rule === 'cancellation_policy' || rule === 'additional_rules' ? 'hidden' : ''} font-light ${place.safety[rule] ? '' : 'line-through'}`} key={rule}>{capitalizeFirstLetter(rule.replace(/_/g, ' '))}</p>
+                ))}
               </div>
             </div>
             <div className="my-2">
@@ -445,7 +446,7 @@ export default function PlacePage() {
             </div>
             <div className="my-2">
               <p className="text-lg">Cancellation policy</p>
-              <p className="font-light">{place.rules.cancellation_policy.description}</p>
+              <p className="font-light">{place.rules?.cancellation_policy?.description}</p>
             </div>
           </div>
         </div>
