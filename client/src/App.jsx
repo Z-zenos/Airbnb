@@ -38,6 +38,7 @@ function App() {
             <Routes>
               <Route path='/' element={ <MainLayout /> } >
                 <Route index element={<IndexPage />} />
+                <Route path="/places" element={<IndexPage />} />
                 <Route path='/login' element={ <AuthPage /> } />
                 <Route path='/places/:id' element={ <PlacePage /> } />
               </Route>
