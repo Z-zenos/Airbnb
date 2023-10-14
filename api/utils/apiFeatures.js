@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 class APIFeatures {
+  rules = ['commercial_photography_and_filming_allowed', 'smoking_allowed', 'events_allowed', 'pets_allowed'];
+
   constructor(Query, queryString) {
     this.Query = Query;
     this.queryString = queryString;
@@ -16,15 +18,19 @@ class APIFeatures {
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    // Query for array
     Object.keys(queryObj).forEach(key => {
       if(Array.isArray(queryObj[key]))
         queryObj[key] = {
           '$all': queryObj[key]
         };
 
-      if(mongoose.isValidObjectId(queryObj[key])) {
+      else if(mongoose.isValidObjectId(queryObj[key])) {
         queryObj[key] = new mongoose.Types.ObjectId(queryObj[key]);
+      }
+
+      else if (this.rules.includes(key)) {
+        Object.defineProperty(queryObj, `rules.${key}`, Object.getOwnPropertyDescriptor(queryObj, key));
+        delete queryObj[key];
       }
     });
 

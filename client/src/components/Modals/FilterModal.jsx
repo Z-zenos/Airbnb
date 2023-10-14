@@ -9,9 +9,10 @@ import QuantityChoice from "../Input/QuantityChoice";
 import axios from "axios";
 import Checkbox from "../Input/Checkbox";
 import ToggleButton from "../Button/ToggleButton";
+import { useLocation } from "react-router-dom";
 
 const MIN_PRICE = 10;
-const MAX_PRICE = 250;
+const MAX_PRICE = 10000;
 const PLACE_TYPE = ['any type', 'room', 'entire home'];
 
 const BOOKING_OPTIONS = [
@@ -45,8 +46,10 @@ export default function FilterModal () {
   const [amenities, setAmenities] = useState([]);
   const [placeType, setPlaceType] = useState(PLACE_TYPE[0]);
   const [bookingOptions, setBookingOptions] = useState(BOOKING_OPTIONS);
+  const location = useLocation();
 
   const amenitiesTracker = JSON.stringify(amenities);
+  const bookingOptionsTracker = JSON.stringify(bookingOptions);
 
   useEffect(() => {
     (async () => {
@@ -98,7 +101,6 @@ export default function FilterModal () {
   }
 
   function handleToggleBookingOptions(bookingOption) {
-    console.log(bookingOption);
     const bookingOptionIndex = bookingOptions.findIndex(bo => bo.title === bookingOption.title);
 
     const tmpBookingOptions = [...bookingOptions];
@@ -121,17 +123,18 @@ export default function FilterModal () {
   function handleFilters() {
     (async () => {
       try {
-
+        const placeTypeQuery = placeType === 'any type' ? '' : `&place_type=${placeType}`;
         const bedroomsQuery = !bedrooms ? '' : `&bedrooms${bedrooms < 8 ? `=` : `[gte]=`}${bedrooms}`;
         const bedsQuery = !beds ? '' : `&beds${beds < 8 ? `=` : `[gte]=`}${beds}`;
         const bathroomsQuery = !bathrooms ? '' : `&bathrooms${bathrooms < 8 ? `=` : `[gte]=`}${bathrooms}`;
         const priceQuery = prices[0] === prices[1] ? `price=${prices[0]}` : `price[gte]=${prices[0]}&price[lte]=${prices[1]}`;
         const selectedAmenities = amenities.filter(a => a.selected === true);
         const amenitiesQuery = selectedAmenities.length ? `&${selectedAmenities.map(a => 'amenities=' + a.id).join('&')}` : '';
+        const bookingOptionsQuery = bookingOptions.filter(bo => bo.selected).map(b => `&${b.param}=true`).join('');
 
-        const queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}`;
+        let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
 
-        const res = await axios.get(`/places?${queryStr}`);
+        const res = await axios.get(`/places${location.search ? location.search + '&' : '?'}${queryStr}`);
         setPlaces(res.data.data.places);
       } catch (err) {
         console.error(err);
@@ -139,7 +142,7 @@ export default function FilterModal () {
     })();
   }
 
-  useEffect(handleFilters, [bedrooms, beds, amenitiesTracker, bathrooms]);
+  useEffect(handleFilters, [bedrooms, beds, amenitiesTracker, bathrooms, placeType, bookingOptionsTracker]);
 
   const bodyContent = (
     <div className="w-full px-12 md:px-6 m-auto h-[500px] overflow-y-scroll">

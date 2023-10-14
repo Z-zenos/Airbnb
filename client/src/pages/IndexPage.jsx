@@ -25,6 +25,8 @@ export default function IndexPage() {
   const location = useLocation();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
 
+  console.log(places);
+
   useEffect(() => {
     (async () => {
       try {
@@ -45,7 +47,7 @@ export default function IndexPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get(`/places${location.search ? '?' + location.search : ''}`);
+        const res = await axios.get(`/places${location.search ? location.search : ''}`);
         setPlaces(res.data.data.places);
 
       } catch (err) {
