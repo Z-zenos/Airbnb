@@ -12,6 +12,7 @@ export default function Header() {
   const { openToast } = useContext(ToastContext);
   const [userBox, setUserBox] = useState(false);
   const {user} = useContext(UserContext);
+  const { setIsSearchModalOpen } = useContext(ModalContext);
   
   return (
     <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px]">
@@ -23,7 +24,10 @@ export default function Header() {
         <span className='font-bold text-2xl'>airbnb</span>
       </Link>
 
-      <div className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'>
+      <div 
+        className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
+        onClick={() => setIsSearchModalOpen(true)}
+      >
         <div>Anywhere</div>
         <div className='border-l bg-gray-700 h-5'></div>
         <div>Any week</div>
@@ -89,8 +93,7 @@ export default function Header() {
           </ul>
         </div>
         } 
-      </div>
-      
+      </div>      
     </header>
   );
 }

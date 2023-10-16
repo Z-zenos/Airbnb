@@ -11,12 +11,15 @@ import { ModalContext } from "../contexts/modal.context";
 import FilterModal from "../components/Modals/FilterModal";
 import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
 import PlaceCardSkeleton from "../components/PlaceCard/PlaceCardSkeleton";
+import Spinner from "../components/Spinner/Spinner";
+import SearchModal from "../components/Modals/SearchModal";
 
 export default function IndexPage() {
   const { 
     setIsFilterModalOpen, 
     isCreatePlaceModalOpen,
     isFilterModalOpen, 
+    isSearchModalOpen,
   } = useContext(ModalContext);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [propertyType, setPropertyType] = useState();
@@ -98,16 +101,18 @@ export default function IndexPage() {
               ref={scrollRef}
               onWheel={handleScroll}
             >
-              { propertyTypeList.length && propertyTypeList.map((pt, i) => (
-                  <div 
-                    className={`py-3 flex justify-center items-center flex-col ${pt.id === propertyType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
-                    onClick={() => hanldleFilterPlaceByPropertyType(pt.id)}
-                  >
-                    <img className="w-8" src={pt.src} />
-                    <p className="mt-1 text-[12px] font-medium whitespace-nowrap">{pt.name}</p>
-                  </div>
-                )
-              )}
+              { propertyTypeList.length > 0 
+                ? propertyTypeList.map((pt, i) => (
+                    <div 
+                      className={`py-3 flex justify-center items-center flex-col ${pt.id === propertyType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
+                      onClick={() => hanldleFilterPlaceByPropertyType(pt.id)}
+                    >
+                      <img className="w-8" src={pt.src} />
+                      <p className="mt-1 text-[12px] font-medium whitespace-nowrap">{pt.name}</p>
+                    </div>
+                  ))
+                : <Spinner />
+              }
             </div>
           </div>
 
@@ -138,6 +143,7 @@ export default function IndexPage() {
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
       { isFilterModalOpen && <FilterModal places={places} setPlaces={setPlaces} /> }
+      { isSearchModalOpen && <SearchModal /> }
     </div>
   );
 }
