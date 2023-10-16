@@ -12,10 +12,13 @@ router
     placeController.createPlace
   );
 
-
 router
   .route('/property-types')
   .get(placeController.getAllPropertyTypes);
+
+router
+  .route('/average-price-by-place-type')
+  .get(placeController.getAveragePriceByPlaceType);
 
 router
   .route('/my-places')

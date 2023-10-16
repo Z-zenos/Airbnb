@@ -10,6 +10,7 @@ import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
 import { ModalContext } from "../contexts/modal.context";
 import FilterModal from "../components/Modals/FilterModal";
 import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
+import PlaceCardSkeleton from "../components/PlaceCard/PlaceCardSkeleton";
 
 export default function IndexPage() {
   const { 
@@ -24,8 +25,6 @@ export default function IndexPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
-
-  console.log(places);
 
   useEffect(() => {
     (async () => {
@@ -133,16 +132,12 @@ export default function IndexPage() {
       <div className="grid lg:grid-cols-6 md:grid-cols-3 md:gap-5">
         { places.length > 0 
           ? places.map(place => <PlaceCard key={place.id} place={place} />) 
-          : (
-            <div className="flex items-center col-span-6 py-[200px] justify-center">
-              <p className="font-medium opacity-60 text-3xl" >No Resutls</p>
-            </div>
-          )
+          : <PlaceCardSkeleton cards={12} />
         } 
       </div>
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
-      { isFilterModalOpen && <FilterModal /> }
+      { isFilterModalOpen && <FilterModal places={places} setPlaces={setPlaces} /> }
     </div>
   );
 }

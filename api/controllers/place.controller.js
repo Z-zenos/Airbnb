@@ -73,3 +73,42 @@ exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
     }
   });
 });
+
+exports.getAveragePriceByPlaceType = catchErrorAsync(async(req, res, next) => {
+  const averages = await Place.aggregate([
+    {
+      $match: {
+        status: 'published'
+      }
+    },
+    {
+      $group: {
+        _id: '$place_type',
+        average: { $avg: "$price" },
+        totalPlaces: { $sum: 1 },
+        totalPrices: { $sum: '$price' }
+      }
+    },
+    {
+      $project: {
+        type: '$_id',
+        avg: { $round: '$average' },
+        _id: 0,
+        totalPrices: 1,
+        totalPlaces : 1,
+      }
+    }
+  ]);
+
+  averages.push({
+    type: 'any type',
+    avg: Math.trunc(averages.reduce((acc, avg) => acc + avg.totalPrices, 0) / averages.reduce((acc, avg) => acc + avg.totalPlaces, 0))
+  });
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      averages
+    }
+  });
+});

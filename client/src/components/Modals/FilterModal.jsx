@@ -13,7 +13,6 @@ import { useLocation } from "react-router-dom";
 
 const MIN_PRICE = 10;
 const MAX_PRICE = 10000;
-const PLACE_TYPE = ['any type', 'room', 'entire home'];
 
 const BOOKING_OPTIONS = [
   {
@@ -36,16 +35,17 @@ const BOOKING_OPTIONS = [
   },
 ];
 
-export default function FilterModal () {
+export default function FilterModal ({ setPlaces }) {
   const { isFilterModalOpen, setIsFilterModalOpen } = useContext(ModalContext);
-  const [places, setPlaces] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState([]);
   const [prices, setPrices] = useState([MIN_PRICE, MAX_PRICE]);
   const [bedrooms, setBedrooms] = useState(0);
   const [beds, setBeds] = useState(0);
   const [bathrooms, setBathrooms] = useState(0);
   const [amenities, setAmenities] = useState([]);
-  const [placeType, setPlaceType] = useState(PLACE_TYPE[0]);
+  const [placeType, setPlaceType] = useState('any type');
   const [bookingOptions, setBookingOptions] = useState(BOOKING_OPTIONS);
+  const [placeTypes, setPlaceTypes] = useState([]);
   const location = useLocation();
 
   const amenitiesTracker = JSON.stringify(amenities);
@@ -59,10 +59,11 @@ export default function FilterModal () {
         id: a.id,
         selected: false
       })));
+
+      const respAvgPricesByPlaceType = await axios.get('places/average-price-by-place-type');
+      setPlaceTypes(respAvgPricesByPlaceType.data.data.averages.filter(avg => avg.type !== 'shared room'));
     })();
   }, []);
-
-  function handleSubmit() { }
 
   function handleClearAll() {}
 
@@ -120,6 +121,11 @@ export default function FilterModal () {
     setBookingOptions(() => tmpBookingOptions);
   }
 
+  function handleUpdatePlacesIndexPage() {
+    setPlaces([...filteredPlaces]);
+    setIsFilterModalOpen(false);
+  }
+
   function handleFilters() {
     (async () => {
       try {
@@ -135,7 +141,7 @@ export default function FilterModal () {
         let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
 
         const res = await axios.get(`/places${location.search ? location.search + '&' : '?'}${queryStr}`);
-        setPlaces(res.data.data.places);
+        setFilteredPlaces(res.data.data.places);
       } catch (err) {
         console.error(err);
       }
@@ -153,21 +159,21 @@ export default function FilterModal () {
           subtitle="Search rooms, entire homes and more. Nightly prices don't include fees or taxes."
         />
         <div className="grid grid-cols-3 px-8 py-5 text-center">
-          { PLACE_TYPE.map((pt, i) => (
+          { placeTypes.map((pt, i) => (
             <div 
-              key={pt} 
+              key={pt.type} 
               className={`
                 border border-gray-300 cursor-pointer py-4 
                 transition-all font-medium
-                ${pt === 'any type' ? 'rounded-tl-xl rounded-bl-xl' : ''}
-                ${pt === 'entire home' ? 'rounded-tr-xl rounded-br-xl': ''}
+                ${pt.type === 'room' ? 'rounded-tl-xl rounded-bl-xl' : ''}
+                ${pt.type === 'any type' ? 'rounded-tr-xl rounded-br-xl': ''}
                 ${i === 1 ? 'border-x-0' : ''}
-                ${pt === placeType ? 'text-white shadow-[rgb(0,_0,_0)_0px_2px_8px_0px_inset] bg-[rgb(34,34,34)] bg-[linear-gradient(rgba(255,255,255,0.16),rgba(255,255,255,0))] border-[rgb(34,34,34)]' : ''}
+                ${pt.type === placeType ? 'text-white shadow-[rgb(0,_0,_0)_0px_2px_8px_0px_inset] bg-[rgb(34,34,34)] bg-[linear-gradient(rgba(255,255,255,0.16),rgba(255,255,255,0))] border-[rgb(34,34,34)]' : ''}
               `} 
-              onClick={() => handleSelectPlaceType(pt)}
+              onClick={() => handleSelectPlaceType(pt.type)}
             >
-              <p className="text-md">{pt}</p>
-              <p className="text-sm opacity-70">$127 avg</p>
+              <p className="text-md">{pt.type}</p>
+              <p className="text-sm opacity-70">${pt.avg} avg</p>
             </div>
           )) }
         </div>
@@ -259,9 +265,9 @@ export default function FilterModal () {
     <Modal
       isOpen={isFilterModalOpen} 
       onClose={() => setIsFilterModalOpen(false)} 
-      onSubmit={handleSubmit}
+      onSubmit={handleUpdatePlacesIndexPage}
       title="Filters"
-      actionLabel={`Show ${places.length} places`}
+      actionLabel={`Show ${filteredPlaces.length} places`}
       secondaryActionLabel="Clear all"
       secondaryAction={handleClearAll}
       body={bodyContent}
