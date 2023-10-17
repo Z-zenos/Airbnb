@@ -12,10 +12,10 @@ export default function Counter({
   }, [onChange, value, max, plussedNumber]);
 
   const onReduce = useCallback(() => {
-    if(value === plussedNumber) return;
+    if(value === min) return;
 
     onChange(value - plussedNumber);
-  }, [onChange, value, plussedNumber]);
+  }, [onChange, value, plussedNumber, min]);
 
   return (
     <div className="flex flex-row items-center justify-between">
