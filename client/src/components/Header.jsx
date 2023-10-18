@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '../contexts/user.context';
 import { ModalContext } from '../contexts/modal.context';
@@ -6,6 +6,9 @@ import { ToastContext } from '../contexts/toast.context';
 import Toast from './Toast/Toast';
 
 const toast = ['error', 'success', 'info', 'warn'];
+const MONTHS = ["January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
 
 export default function Header() {
   const { setIsCreatePlaceModalOpen } = useContext(ModalContext);
@@ -13,6 +16,26 @@ export default function Header() {
   const [userBox, setUserBox] = useState(false);
   const {user} = useContext(UserContext);
   const { setIsSearchModalOpen } = useContext(ModalContext);
+  const [searchParams] = useSearchParams();
+
+  const time = () => {
+    const checkin = +searchParams.get('checkin');
+    const checkout = +searchParams.get('checkout');
+
+    if(checkin && checkout) {
+      return `${MONTHS[new Date(checkin).getMonth()].slice(0, 3)}, ${new Date(checkin).getDate()} - ${MONTHS[new Date(checkout).getMonth()].slice(0, 3)}, ${new Date(checkout).getDate()}`;
+    }
+    else if(checkin) return `After ${MONTHS[new Date(checkin).getMonth()].slice(0, 3)}, ${new Date(checkin).getDate()}`;
+    else if(checkout) return `Before ${MONTHS[new Date(checkout).getMonth()].slice(0, 3)} - ${new Date(checkout).getDate()}`;
+    else return '';
+  }
+
+  const guests = () => {
+    const adults = +searchParams.get('adults') || 0;
+    const children = +searchParams.get('children') || 0;
+
+    return adults + children ? adults + children + ' guest(s)' : 'Add guests';
+  }
   
   return (
     <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px]">
@@ -28,11 +51,11 @@ export default function Header() {
         className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
         onClick={() => setIsSearchModalOpen(true)}
       >
-        <div>Anywhere</div>
+        <div>{ searchParams.get('region') || searchParams.get('address') || 'Anywhere'}</div>
         <div className='border-l bg-gray-700 h-5'></div>
-        <div>Any week</div>
+        <div>{ time() || 'Any week'}</div>
         <div className='border-l bg-gray-700 h-5'></div>
-        <div className='text-gray-800 font-thin'>Add guests</div>
+        <div className='text-gray-800 font-thin'>{guests()}</div>
         <button className='bg-primary rounded-full p-2 text-white font-bold'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />

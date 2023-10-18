@@ -7,26 +7,29 @@ import Heading from "../Heading/Heading";
 import capitalizeFirstLetter from "../../utils/capitalizeFirstLetter";
 import { Calendar } from "react-date-range";
 import Counter from "../Input/Counter";
-import { useNavigate, createSearchParams } from "react-router-dom";
+import { useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
 
-const SEARCH_CRITERIA = ['where', 'check in', 'check out', 'who'];
+const SEARCH_CRITERIA = ['where', 'who', 'check in', 'check out'];
 const REGIONS = ['Any', 'Europe', 'Australia', 'North America', 'South America', 'Asia'];
 const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
 export default function SearchModal () {
-  const { isSearchModalOpen, setIsSearchModalOpen } = useContext(ModalContext);
-  const [currentSelectedSearch, setCurrentSelectedSearch] = useState(SEARCH_CRITERIA[0]);
-
-  const [adults, setAdults] = useState(0);
-  const [children, setChildren] = useState(0);
-  const [pets, setPets] = useState(0);
-  const [checkin, setCheckin] = useState(null);
-  const [checkout, setCheckout] = useState(null);
-  const [address, setAddress] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [currentSelectedSearch, setCurrentSelectedSearch] = useState(searchParams.get('region') || SEARCH_CRITERIA[0]);
+  const { isSearchModalOpen, setIsSearchModalOpen } = useContext(ModalContext);
+
+  const [adults, setAdults] = useState(+searchParams.get('adults') || 0);
+  const [children, setChildren] = useState(+searchParams.get('children') || 0);
+  const [pets, setPets] = useState(+searchParams.get('pets') || 0);
+  const [checkin, setCheckin] = useState(searchParams.get('checkin') ? new Date(+searchParams.get('checkin')) : null);
+  const [checkout, setCheckout] = useState(searchParams.get('checkout') ? new Date(+searchParams.get('checkout')) : null);
+  const [address, setAddress] = useState(searchParams.get('address') || "");
+  const [selectedRegion, setSelectedRegion] = useState(searchParams.get('region') || "");
+
+  console.log(checkin);
 
   function handleSearch() {
     let params = {};
@@ -39,6 +42,8 @@ export default function SearchModal () {
     if(adults) params.adults = adults;
     if(children) params.children = children;
     if(pets) params.pets = pets;
+
+    params = { ...Object.fromEntries([...searchParams]), ...params };
 
     const options = {
       pathname: '/places/search',
@@ -87,7 +92,7 @@ export default function SearchModal () {
   if(currentSelectedSearch === 'check in') {
     searchContentOfCriteria = (
       <Calendar 
-        date={checkin && new Date()} 
+        date={checkin ? checkin : new Date()} 
         onChange={date => setCheckin(date)} 
         className={"my-8 text-black text-lg border border-gray-300 rounded-xl flex items-center"}  
         color="#ff385c"
@@ -99,7 +104,7 @@ export default function SearchModal () {
   if(currentSelectedSearch === 'check out') {
     searchContentOfCriteria = (
       <Calendar 
-        date={checkout && new Date()} 
+        date={checkout ? checkout : new Date()} 
         onChange={date => setCheckout(date)} 
         className={"my-8 text-black text-lg border border-gray-300 rounded-xl flex items-center"}  
         color="#ff385c"
@@ -142,37 +147,35 @@ export default function SearchModal () {
   }
 
   const bodyContent = (
-    <div className="w-full px-12 md:px-6 m-auto  overflow-y-scroll">
+    <div className="w-full px-12 md:px-6 m-auto max-h-[600px] overflow-y-scroll">
       <div 
-        className='grid grid-cols-5 text-center items-center text-md border border-gray-300 rounded-full shadow-md shadow-gray-300 cursor-pointer'
+        className='grid grid-cols-4 text-center  overflow-hidden items-center text-md border border-gray-300 rounded-full shadow-md shadow-gray-300 cursor-pointer'
       >
         { SEARCH_CRITERIA.map((sc, i) => (
           <div 
-            className={`
-              ${i === 0 || i === 3 ? 'self-stretch' : ''}
-              ${i === 0 && 'col-span-2'}
-            `} 
+            className="self-stretch col-span-2" 
             key={sc}
           >
             <div 
               className={`
                 py-4 px-4 transition-all font-light
-                ${i !== 3 ? 'border-r border-r-gray-300' : ''}
+                ${i !== 1 ? 'border-r border-r-gray-300' : ''}
                 ${sc === currentSelectedSearch ? 'font-medium bg-primary text-white' : ''}
-                ${i === 0 ? 'rounded-l-full flex h-full flex-col items-center justify-center' : ''}
-                ${i === 3 ? 'rounded-r-full flex h-full flex-col items-center justify-center' : ''}
+                flex h-full items-center justify-center
               `}
               onClick={() => setCurrentSelectedSearch(sc)}
             >
-              {i !== 3 && capitalizeFirstLetter(sc)}
-              {i === 3 && (adults + children + pets === 0) && capitalizeFirstLetter(sc)}
-              <p className="text-sm font-medium">
-                { (i === 0 && (selectedRegion || address)) && <span className=" inline-block whitespace-nowrap overflow-hidden text-ellipsis w-[150px]">{selectedRegion || address }</span> }
-                { (i === 1 && checkin) ? `${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}` : '' }
-                { (i === 2 && checkout) ? `${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}` : '' }
-                { (i === 3 && (adults + children + pets !== 0)) && (
-                  <span>{adults} adults, {children} children, {pets} pets</span>
+
+              { (i === 0 && (!selectedRegion && !address)) && 'Where'}
+              { (i !== 0 && i !== 1) && capitalizeFirstLetter(sc)}
+              { (i === 1 && (adults + children + pets === 0) && 'Who') }
+              <p className="text-sm flex items-center justify-center font-medium">
+                { (i === 0 && (selectedRegion || address)) && <span className=" inline-block whitespace-nowrap overflow-hidden text-ellipsis w-[150px]"> {selectedRegion || address }</span> }
+                { (i === 1 && (adults + children + pets !== 0)) && (
+                  <span>{adults} adults, {children} childs, {pets} pets</span>
                 )}
+                { (i === 2 && checkin) ? ` : ${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}` : '' }
+                { (i === 3 && checkout) ? ` : ${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}` : '' }
               </p>
             </div>
           </div>

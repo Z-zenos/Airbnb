@@ -29,14 +29,11 @@ export default function IndexPage() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
-  const [skeleton, setSkeleton] = useState();
-
-  console.log(searchParams);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        setSkeleton(<PlaceCardSkeleton cards={12} />);
         const res = await axios.get('/places/property-types');
 
         setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
@@ -47,23 +44,27 @@ export default function IndexPage() {
 
       } catch (err) {
         console.error(err);
-      } finally {
-        setSkeleton(<div className="text-2xl font-bold opacity-70 py-[250px] text-center col-span-10">No results</div>);
-      }
+      } 
     })();
   }, []);
   
   useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
     (async () => {
       try {
-        console.log(location);
         const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}`);
         setPlaces(res.data.data.places);
 
       } catch (err) {
         console.error(err);
-      }
+      } 
     })();
+
+    return () => clearTimeout(timer);
   }, [location]);
 
   function scrollHorizontal(scrollOffset) {
@@ -129,7 +130,6 @@ export default function IndexPage() {
             <BsCaretRight 
               className="col-span-1 h-[40px] w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none mx-auto  xl:translate-x-[-100%]" 
               onClick={() => scrollHorizontal(400)} 
-              
             />
           }
         </div>
@@ -144,10 +144,9 @@ export default function IndexPage() {
       </div>
       
       <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
-        { places.length > 0 
-          ? places.map(place => <PlaceCard key={place.id} place={place} />) 
-          : skeleton
-        } 
+        { (places.length > 0 && !loading) && places.map(place => <PlaceCard key={place.id} place={place} />) } 
+        { loading && <PlaceCardSkeleton cards={12} /> }
+        { (!loading && !places.length) && <div className=" col-span-10 text-3xl opacity-70 font-bold text-center py-[250px]">No results</div> }
       </div>
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
