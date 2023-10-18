@@ -24,7 +24,7 @@ class APIFeatures {
           '$all': queryObj[key]
         };
 
-      else if(mongoose.isValidObjectId(queryObj[key])) {
+      else if(mongoose.isValidObjectId(queryObj[key].toString())) {
         queryObj[key] = new mongoose.Types.ObjectId(queryObj[key]);
       }
 

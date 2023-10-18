@@ -30,8 +30,6 @@ export default function SearchModal () {
   const [address, setAddress] = useState(searchParams.get('address') || "");
   const [selectedRegion, setSelectedRegion] = useState(searchParams.get('region') || "");
 
-  console.log(checkin);
-
   function handleSearch() {
     let params = {};
 
@@ -45,6 +43,7 @@ export default function SearchModal () {
     if(pets) params.pets = pets;
 
     params = { ...Object.fromEntries([...searchParams]), ...params };
+    
 
     const options = {
       pathname: '/places/search',
@@ -198,6 +197,9 @@ export default function SearchModal () {
                         setAdults(0);
                         setChildren(0);
                         setPets(0);
+                        searchParams.delete('adults');
+                        searchParams.delete('children');
+                        searchParams.delete('pets');
                       }} />
                   </>
                 )}
