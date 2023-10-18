@@ -22,7 +22,7 @@ export default function IndexPage() {
     isSearchModalOpen,
   } = useContext(ModalContext);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
-  const [propertyType, setPropertyType] = useState();
+  const [propertyType, setPropertyType] = useState(0);
   const scrollRef = useHorizontalScroll();
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
@@ -35,6 +35,12 @@ export default function IndexPage() {
     (async () => {
       try {
         const res = await axios.get('/places/property-types');
+
+        res.data.data.propertyTypeList.unshift({
+          id: 0,
+          name: 'all',
+          iconImage: 'all.png'
+        });
 
         setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
           id: pt.id,
@@ -86,6 +92,8 @@ export default function IndexPage() {
       property_type: propertyTypeId,
     };
 
+    if(!propertyTypeId) delete params.property_type;
+
     const options = {
       pathname: location.pathname === '/' ? 'places' : location.pathname,
       search: `?${createSearchParams(params)}`
@@ -117,7 +125,7 @@ export default function IndexPage() {
                       className={`py-3 flex justify-center items-center flex-col ${pt.id === propertyType ? 'border-b-[2px] border-black' : 'opacity-60'} cursor-pointer`} key={pt.name + i}
                       onClick={() => hanldleFilterPlaceByPropertyType(pt.id)}
                     >
-                      <img className="w-8" src={pt.src} />
+                      <img className={`w-8 h-8 ${!i && ' max-w-none'}`} src={pt.src} />
                       <p className="mt-1 text-[12px] font-medium whitespace-nowrap">{pt.name}</p>
                     </div>
                   ))
