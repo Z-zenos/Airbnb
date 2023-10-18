@@ -25,6 +25,10 @@ router
   .get(placeController.searchByQuery, placeController.getAllPlaces);
 
 router
+  .route('/count-place')
+  .get(placeController.countPlace);
+
+router
   .route('/my-places')
   .get(
     authController.protect, 

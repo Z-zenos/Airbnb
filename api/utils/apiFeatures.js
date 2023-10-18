@@ -8,7 +8,7 @@ class APIFeatures {
     this.queryString = queryString;
   }
 
-  filter() {
+  filter(count = false) {
     const queryObj = { ...this.queryString };
 
     /*
@@ -34,18 +34,13 @@ class APIFeatures {
       }
     });
 
-    console.log("queryObj: ", queryObj);
-
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
       /\b(gte|gt|lte|lt)\b/g,
       op => `$${op}`
     );
-    // queryStr = { "duration": { "$gt":"7" } }
 
-    console.log("queryStr: ", queryStr);
-
-    this.Query = this.Query.find(JSON.parse(queryStr));
+    this.Query = this.Query[count ? 'countDocuments' : 'find'](JSON.parse(queryStr));
 
     // For chaining methods
     return this;

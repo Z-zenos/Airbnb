@@ -4,6 +4,7 @@ const PropertyType = require('../models/property_type.model');
 const factory = require('./handlerFactory');
 const AppError = require('../utils/appError');
 const mongoose = require("mongoose");
+const APIFeatures = require('../utils/apiFeatures');
 
 exports.getAllPlaces = factory.getAll(Place);
 exports.getPlace = factory.getOne(Place);
@@ -144,3 +145,15 @@ exports.searchByQuery = (req, res, next) => {
   req.query = {...queryObj, ...query };
   next();
 };
+
+exports.countPlace = catchErrorAsync(async (req, res, next) => {
+  const features = new APIFeatures(Place.find(), req.query)
+    .filter(true);
+
+  const docs = await features.Query;
+
+  res.status(200).json({
+    status: 'success',
+    count: docs,
+  });
+});

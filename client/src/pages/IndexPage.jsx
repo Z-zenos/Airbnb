@@ -30,6 +30,7 @@ export default function IndexPage() {
   const [searchParams] = useSearchParams();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [filterCriteriaNumber, setFilterCriteriaNumber] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -59,6 +60,8 @@ export default function IndexPage() {
     const timer = setTimeout(() => {
       setLoading(false);
     }, 2000);
+
+    if(!location.search) setFilterCriteriaNumber(0);
 
     (async () => {
       try {
@@ -143,11 +146,12 @@ export default function IndexPage() {
         </div>
 
         <div 
-          className="relative flex items-center mx-auto justify-center lg:col-span-1 md:col-span-2 border border-gray-300 rounded-md w-[120px] h-[60px] cursor-pointer translate-y-1 hover:border-gray-primary transition-all" 
+          className={`relative flex items-center mx-auto justify-center lg:col-span-1 md:col-span-2 border border-gray-300 rounded-md w-[120px] h-[60px] cursor-pointer translate-y-1 hover:border-gray-primary hover:bg-gray-100 transition-all ${filterCriteriaNumber ? 'border-gray-primary' : ''}`}
           onClick={() => setIsFilterModalOpen(true)}
         >
           <CgFilters className=" w-6 h-6" />
           <p className=" ml-2">Filter</p>
+          { filterCriteriaNumber > 0 &&  <span className="absolute -top-2 -right-2 bg-black text-sm py-1 px-2 text-white rounded-full">{filterCriteriaNumber}</span> }
         </div>
       </div>
       
@@ -158,7 +162,7 @@ export default function IndexPage() {
       </div>
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
-      { isFilterModalOpen && <FilterModal places={places} setPlaces={setPlaces} /> }
+      { isFilterModalOpen && <FilterModal setFilterCriteriaNumber={setFilterCriteriaNumber} /> }
       { isSearchModalOpen && <SearchModal /> }
     </div>
   );

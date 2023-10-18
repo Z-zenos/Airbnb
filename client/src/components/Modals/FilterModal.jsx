@@ -9,10 +9,10 @@ import QuantityChoice from "../Input/QuantityChoice";
 import axios from "axios";
 import Checkbox from "../Input/Checkbox";
 import ToggleButton from "../Button/ToggleButton";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const MIN_PRICE = 10;
-const MAX_PRICE = 10000;
+const MAX_PRICE = 1000;
 
 const BOOKING_OPTIONS = [
   {
@@ -35,9 +35,9 @@ const BOOKING_OPTIONS = [
   },
 ];
 
-export default function FilterModal ({ setPlaces }) {
+export default function FilterModal ({ setFilterCriteriaNumber }) {
   const { isFilterModalOpen, setIsFilterModalOpen } = useContext(ModalContext);
-  const [filteredPlaces, setFilteredPlaces] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState(0);
   const [prices, setPrices] = useState([MIN_PRICE, MAX_PRICE]);
   const [bedrooms, setBedrooms] = useState(0);
   const [beds, setBeds] = useState(0);
@@ -47,6 +47,8 @@ export default function FilterModal ({ setPlaces }) {
   const [bookingOptions, setBookingOptions] = useState(BOOKING_OPTIONS);
   const [placeTypes, setPlaceTypes] = useState([]);
   const location = useLocation();
+  const navigate = useNavigate();
+  const [query, setQuery] = useState("");
 
   const amenitiesTracker = JSON.stringify(amenities);
   const bookingOptionsTracker = JSON.stringify(bookingOptions);
@@ -122,7 +124,13 @@ export default function FilterModal ({ setPlaces }) {
   }
 
   function handleUpdatePlacesIndexPage() {
-    setPlaces([...filteredPlaces]);
+    const options = {
+      pathname: location.pathname !== '/' ? location.pathname : '/places',
+      search: `${location.search ? location.search + '&' : '?'}${query}`
+    };
+
+    navigate(options, { replace: true });
+    setFilterCriteriaNumber(query.split('&').length);
     setIsFilterModalOpen(false);
   }
 
@@ -139,9 +147,10 @@ export default function FilterModal ({ setPlaces }) {
         const bookingOptionsQuery = bookingOptions.filter(bo => bo.selected).map(b => `&${b.param}=true`).join('');
 
         let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
+        setQuery(queryStr);
 
-        const res = await axios.get(`${location.pathname !== '/' ? location.pathname : '/places'}${location.search ? location.search + '&' : '?'}${queryStr}`);
-        setFilteredPlaces(res.data.data.places);
+        const res = await axios.get(`places/count-place${location.search ? location.search + '&' : '?'}${queryStr}`);
+        setFilteredPlaces(res.data.count);
       } catch (err) {
         console.error(err);
       }
@@ -267,7 +276,7 @@ export default function FilterModal ({ setPlaces }) {
       onClose={() => setIsFilterModalOpen(false)} 
       onSubmit={handleUpdatePlacesIndexPage}
       title="Filters"
-      actionLabel={`Show ${filteredPlaces.length} places`}
+      actionLabel={`Show ${filteredPlaces} places`}
       secondaryActionLabel="Clear all"
       secondaryAction={handleClearAll}
       body={bodyContent}
