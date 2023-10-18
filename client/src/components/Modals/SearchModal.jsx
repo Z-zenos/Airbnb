@@ -182,6 +182,8 @@ export default function SearchModal () {
                       onClick={() => {
                         if(address) setAddress('');
                         if(selectedRegion) setSelectedRegion('');
+                        searchParams.delete('address');
+                        searchParams.delete('region');
                       }} 
                     />
                   </>
@@ -200,7 +202,8 @@ export default function SearchModal () {
                         searchParams.delete('adults');
                         searchParams.delete('children');
                         searchParams.delete('pets');
-                      }} />
+                      }} 
+                    />
                   </>
                 )}
 
@@ -211,7 +214,13 @@ export default function SearchModal () {
                         <span>
                           {` : ${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}`}
                         </span>
-                        <AiOutlineClose className="absolute right-5" onClick={() => setCheckin(null)} />
+                        <AiOutlineClose 
+                          className="absolute right-5" 
+                          onClick={() => {
+                            setCheckin(null);
+                            searchParams.delete('checkin');
+                          }} 
+                        />
                       </>
                     ) 
                   : '' 
@@ -224,7 +233,13 @@ export default function SearchModal () {
                         <span>
                           {` : ${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}`}
                         </span>
-                        <AiOutlineClose className="absolute right-5" onClick={() => setCheckout(null)} />
+                        <AiOutlineClose 
+                          className="absolute right-5" 
+                          onClick={() => {
+                            setCheckout(null);
+                            searchParams.delete('checkout');
+                          }} 
+                        />
                       </>
                     ) 
                   : '' 
