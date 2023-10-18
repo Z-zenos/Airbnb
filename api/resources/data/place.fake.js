@@ -36,7 +36,7 @@ const create = async () => {
   
     const places = [];
   
-    for(let i = 0; i < 50; i++) {
+    for(let i = 0; i < 1000; i++) {
       const propertyType = getRandomElement(propertyTypeList);
       const pets = faker.number.int(3);
 

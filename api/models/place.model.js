@@ -152,7 +152,11 @@ const placeSchema = new mongoose.Schema(
         default: 'Point',
         enum: ['Point']
       },
-      address: String,
+      address: {
+        type: String,
+        text: true,
+        index: true
+      },
       coordinates: [Number],
       country: String,
       description: String,
@@ -204,7 +208,7 @@ const placeSchema = new mongoose.Schema(
 
 // // placeSchema.index({ price: 1 });
 // placeSchema.index({ price: 1, ratingsAverage: -1 });
-// placeSchema.index({ slug: 1 });
+placeSchema.index({ 'location.address': "text" });
 // placeSchema.index({ startLocation: '2dsphere' });
 
 // placeSchema.virtual('durationWeeks').get(function() {
@@ -239,13 +243,6 @@ placeSchema.pre('save', function(next) {
 // });
 
 // QUERY MIDDLEWARE
-// placeSchema.pre('find', function(next) {
-placeSchema.pre(/^find/, function(next) {
-  this.find({ secretplace: { $ne: true } });
-
-  this.start = Date.now();
-  next();
-});
 
 placeSchema.pre(/^find/, function(next) {
   this.populate({

@@ -131,8 +131,11 @@ exports.searchByQuery = (req, res, next) => {
   }
 
   if(query.region && query.region !== 'Any') queryObj['location.region'] = query.region;
-  if(query.address) queryObj['location.address'] = query.address;
-
+  if(query.address) {
+    queryObj['$text'] = {
+      '$search': query.address
+    };
+  }
   const searchCriteria = ['children', 'pets', 'adults', 'checkin', 'checkout', 'region', 'address'];
   searchCriteria.forEach(sc => {
     if(query[sc]) delete query[sc];

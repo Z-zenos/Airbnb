@@ -29,7 +29,7 @@ mongoose
 		console.log(err);
 		throw new AppError("Disconnect to MongoDB", 500)
 	});
-	
+
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
 	logger.success(`App running on port ${port}`);
