@@ -202,13 +202,17 @@ const placeSchema = new mongoose.Schema(
   },
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
+    autoIndex: true
   }
 );
 
 // // placeSchema.index({ price: 1 });
 // placeSchema.index({ price: 1, ratingsAverage: -1 });
-placeSchema.index({ 'location.address': "text" });
+placeSchema.index({ 'location.address': "text" }, {
+  default_language: "none",
+  language_override: "none"
+});
 // placeSchema.index({ startLocation: '2dsphere' });
 
 // placeSchema.virtual('durationWeeks').get(function() {
@@ -223,6 +227,18 @@ placeSchema.index({ 'location.address': "text" });
 // });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
+
+placeSchema.pre(/^find/, async function(next) {
+  await Place.ensureIndexes({ 
+    "location.address": "text", 
+  }, { 
+    "name": "users_full_text", 
+    "default_language": "en",
+    "language_override": "language"
+  })
+  next();
+})
+
 placeSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
