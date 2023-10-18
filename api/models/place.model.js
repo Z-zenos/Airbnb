@@ -108,14 +108,7 @@ const placeSchema = new mongoose.Schema(
     },
 
     price_discount: {
-      type: Number,
-      validate: {
-        validator: function(val) {
-          // this only points to current doc on NEW document creation
-          return val < this.price;
-        },
-        message: 'Discount price ({VALUE}) should be below regular price'
-      }
+      type: Number
     },
 
     description: {
@@ -164,7 +157,8 @@ const placeSchema = new mongoose.Schema(
       country: String,
       description: String,
       zipCode: String,
-      flag: String
+      flag: String,
+      region: String,
     },
 
     views: [{

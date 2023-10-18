@@ -21,6 +21,10 @@ router
   .get(placeController.getAveragePriceByPlaceType);
 
 router
+  .route('/search')
+  .get(placeController.searchByQuery, placeController.getAllPlaces);
+
+router
   .route('/my-places')
   .get(
     authController.protect, 

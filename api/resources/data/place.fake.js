@@ -6,6 +6,7 @@ const Amenity = require('../../models/amenity.model');
 const User = require('../../models/user.model');
 const PropertyType = require('../../models/property_type.model');
 const View = require('../../models/view.model');
+const Place = require('../../models/place.model');
 
 const dirs = fs.readdirSync(`${__dirname}/../images/places`);
 const views = JSON.parse(JSON.stringify(require("./views.json")));
@@ -26,7 +27,7 @@ const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSW
 
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
-(async () => {
+const create = async () => {
   try {
     const propertyTypeList = await PropertyType.find({});
     const amenityIdList = await getIdList(Amenity);
@@ -35,8 +36,9 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
   
     const places = [];
   
-    for(let i = 0; i < 25; i++) {
+    for(let i = 0; i < 50; i++) {
       const propertyType = getRandomElement(propertyTypeList);
+      const pets = faker.number.int(3);
 
       places.push({
         name: `${faker.person.firstName()} ${faker.company.name().toLowerCase()}`,
@@ -46,15 +48,15 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
         language: faker.location.country(),
         built: new Date(Date.now()).getFullYear() - faker.number.int(20),
 
-        guests: faker.number.int(16),
-        bedrooms: faker.number.int(50),
-        beds: faker.number.int(50),
-        bathrooms: faker.number.int(50),
+        guests: faker.number.int({ min: 1, max: 16 }),
+        bedrooms: faker.number.int({ min: 1, max: 50 }),
+        beds: faker.number.int({ min: 1, max: 50 }),
+        bathrooms: faker.number.int({ min:1, max: 50 }),
         amenities: faker.helpers.arrayElements(amenityIdList, { min: 5, max: 50 }),
 
         price: faker.commerce.price({ dec: 0 }),
         price_type: faker.helpers.arrayElement(['night', 'week', 'month']),
-        price_discount: faker.number.int(60),
+        price_discount: faker.number.int(60) / 100,
 
         description: faker.commerce.productDescription(),
 
@@ -67,9 +69,15 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
           coordinates: [faker.location.longitude(), faker.location.latitude()],
           country: faker.location.country(),
           zipCode: faker.location.zipCode(),
+          region: faker.helpers.arrayElement(['Europe', 'Australia', 'North America', 'South America', 'Asia'])
         },
 
         views: faker.helpers.arrayElements(viewIdList, { min: 1, max: 2 }),
+        rules: {
+          children: faker.number.int(10),
+          pets: pets,
+          pets_allowed: pets > 0
+        },
 
         host: `${getRandomElement(userIdList)}`,
         status: 'published',
@@ -85,4 +93,34 @@ mongoose.connect(DB).then(() => console.log('DB connection successful!'));
 
   process.exit();
   
-})();
+};
+
+const addFields= async () => {
+  try {
+    const placeIdList = await Place.find({}, { _id: 1 });
+
+    placeIdList.forEach(async (placeId) => {
+      const randVal = {
+        'rules.children' : faker.number.int(10),
+        'rules.pets': faker.number.int(3),
+        'rules.pets_allowed': this['rules.pets'] > 0
+      };
+
+      await Place.findByIdAndUpdate(placeId, { $set: randVal });
+      console.log("Add some fields successfully");
+    });
+  } catch (err) {
+    console.error(err);
+  }
+
+  process.exit();
+
+}
+
+
+if (process.argv[2] === '--add-fields') {
+  addFields();
+}
+else if (process.argv[2] === '--create') {
+  create();
+}

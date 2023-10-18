@@ -34,7 +34,7 @@ class APIFeatures {
       }
     });
 
-    console.log(queryObj);
+    console.log("queryObj: ", queryObj);
 
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(
@@ -43,7 +43,7 @@ class APIFeatures {
     );
     // queryStr = { "duration": { "$gt":"7" } }
 
-    console.log(queryStr);
+    console.log("queryStr: ", queryStr);
 
     this.Query = this.Query.find(JSON.parse(queryStr));
 

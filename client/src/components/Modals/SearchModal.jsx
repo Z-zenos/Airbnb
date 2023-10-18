@@ -22,32 +22,31 @@ export default function SearchModal () {
   const [adults, setAdults] = useState(0);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
-  const [checkin, setCheckin] = useState(new Date());
-  const [checkout, setCheckout] = useState(new Date());
+  const [checkin, setCheckin] = useState(null);
+  const [checkout, setCheckout] = useState(null);
   const [address, setAddress] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("");
   const navigate = useNavigate();
 
   function handleSearch() {
-    const where = selectedRegion || address;
+    let params = {};
 
-    const params = {
-      where,
-      checkin: checkin.getTime(),
-      checkout: checkout.getTime(),
-      adults,
-      children,
-      pets
-    };
+    if(address) params.address = address;
+    else if(selectedRegion) params.region = selectedRegion;
 
-    if(!where) delete params.where;
+    if(checkin) params.checkin = checkin.getTime();
+    if(checkout) params.checkout = checkout.getTime();
+    if(adults) params.adults = adults;
+    if(children) params.children = children;
+    if(pets) params.pets = pets;
 
     const options = {
-      pathname: '/places',
+      pathname: '/places/search',
       search: `?${createSearchParams(params)}`
     };
 
     navigate(options, { replace: true });
+    setIsSearchModalOpen(false);
   }
 
   let searchContentOfCriteria = (
@@ -88,11 +87,11 @@ export default function SearchModal () {
   if(currentSelectedSearch === 'check in') {
     searchContentOfCriteria = (
       <Calendar 
-        date={checkin} 
+        date={checkin && new Date()} 
         onChange={date => setCheckin(date)} 
         className={"my-8 text-black text-lg border border-gray-300 rounded-xl flex items-center"}  
         color="#ff385c"
-        maxDate={checkout}
+        maxDate={checkout && new Date()}
       />
     );
   }
@@ -100,11 +99,11 @@ export default function SearchModal () {
   if(currentSelectedSearch === 'check out') {
     searchContentOfCriteria = (
       <Calendar 
-        date={checkout} 
+        date={checkout && new Date()} 
         onChange={date => setCheckout(date)} 
         className={"my-8 text-black text-lg border border-gray-300 rounded-xl flex items-center"}  
         color="#ff385c"
-        minDate={checkin}
+        minDate={checkin && new Date()}
       />
     );
   }
@@ -126,7 +125,7 @@ export default function SearchModal () {
           value={children}
           title="Children" 
           subtitle="Ages 2 - 12"
-          max={16}
+          max={10}
           min={0}
         />
         <hr />
@@ -135,7 +134,7 @@ export default function SearchModal () {
           value={pets}
           title="Pets" 
           subtitle="Bringing a service animal?"
-          max={5}
+          max={3}
           min={0}
         />
       </div>
@@ -169,8 +168,8 @@ export default function SearchModal () {
               {i === 3 && (adults + children + pets === 0) && capitalizeFirstLetter(sc)}
               <p className="text-sm font-medium">
                 { (i === 0 && (selectedRegion || address)) && <span className=" inline-block whitespace-nowrap overflow-hidden text-ellipsis w-[150px]">{selectedRegion || address }</span> }
-                { i === 1 && `${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}` }
-                { i === 2 && `${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}` }
+                { (i === 1 && checkin) ? `${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}` : '' }
+                { (i === 2 && checkout) ? `${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}` : '' }
                 { (i === 3 && (adults + children + pets !== 0)) && (
                   <span>{adults} adults, {children} children, {pets} pets</span>
                 )}

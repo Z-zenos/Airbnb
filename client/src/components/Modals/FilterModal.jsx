@@ -140,7 +140,7 @@ export default function FilterModal ({ setPlaces }) {
 
         let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
 
-        const res = await axios.get(`/places${location.search ? location.search + '&' : '?'}${queryStr}`);
+        const res = await axios.get(`${location.pathname !== '/' ? location.pathname : '/places'}${location.search ? location.search + '&' : '?'}${queryStr}`);
         setFilteredPlaces(res.data.data.places);
       } catch (err) {
         console.error(err);

@@ -112,3 +112,24 @@ exports.getAveragePriceByPlaceType = catchErrorAsync(async(req, res, next) => {
     }
   });
 });
+
+exports.searchByQuery = (req, res, next) => {
+  const { query } = req;
+  let queryObj = {};
+
+  if(query.children) queryObj['rules.children'] = query.children;
+  if(query.pets) queryObj['rules.pets'] = query.pets;
+  if(query.adults) queryObj.guests = { '$gte': query.adults + query.children };
+  if(query.checkin) queryObj['checkinout.checkin_date'] = { '$gte': query.checkin };
+  if(query.checkout) queryObj['checkinout.checkout_date'] = { '$lte': query.checkout };
+  if(query.region) queryObj['location.region'] = query.region;
+  if(query.address) queryObj['location.address'] = query.address;
+
+  const searchCriteria = ['children', 'pets', 'adults', 'checkin', 'checkout', 'region', 'address'];
+  searchCriteria.forEach(sc => {
+    if(query[sc]) delete query[sc];
+  });
+
+  req.query = {...queryObj, ...query };
+  next();
+};

@@ -51,11 +51,21 @@ const ruleSchema = new mongoose.Schema(
       default: cancellation_policies[0]
     },
     additional_rules:                           { type: String, default: '' },
-    commercial_photography_and_filming_allowed: { type: Boolean, default: false},
-    smoking_allowed:                            { type: Boolean, default: false},
-    events_allowed:                             { type: Boolean, default: false},
-    pets_allowed:                               { type: Boolean, default: false},
-
+    commercial_photography_and_filming_allowed: { type: Boolean, default: false },
+    smoking_allowed:                            { type: Boolean, default: false },
+    events_allowed:                             { type: Boolean, default: false },
+    pets_allowed: { 
+      type: Boolean, 
+      default: this.pets > 0, 
+      validate: { 
+        validator: function(val) { 
+          return val === (this.pets > 0) ; 
+        },
+        message: 'Place has pets but rules is not allowed' 
+      } 
+    },
+    children:                                   { type: Number, default: 0, max: [10, 'No more than 10 children are allowed in this place.'] },
+    pets:                                       { type: Number, default: 0, max: [3, 'No more than 3 children are allowed in this place.'] },
   }
 );
 

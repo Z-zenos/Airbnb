@@ -9,7 +9,7 @@ import PlaceCard from "../components/PlaceCard/PlaceCard";
 import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
 import { ModalContext } from "../contexts/modal.context";
 import FilterModal from "../components/Modals/FilterModal";
-import { useNavigate, createSearchParams, useLocation } from "react-router-dom";
+import { useNavigate, createSearchParams, useLocation, useSearchParams } from "react-router-dom";
 import PlaceCardSkeleton from "../components/PlaceCard/PlaceCardSkeleton";
 import Spinner from "../components/Spinner/Spinner";
 import SearchModal from "../components/Modals/SearchModal";
@@ -27,11 +27,16 @@ export default function IndexPage() {
   const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
+  const [skeleton, setSkeleton] = useState();
+
+  console.log(searchParams);
 
   useEffect(() => {
     (async () => {
       try {
+        setSkeleton(<PlaceCardSkeleton cards={12} />);
         const res = await axios.get('/places/property-types');
 
         setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
@@ -42,6 +47,8 @@ export default function IndexPage() {
 
       } catch (err) {
         console.error(err);
+      } finally {
+        setSkeleton(<div className="text-2xl font-bold opacity-70 py-[250px] text-center col-span-10">No results</div>);
       }
     })();
   }, []);
@@ -49,7 +56,8 @@ export default function IndexPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get(`/places${location.search ? location.search : ''}`);
+        console.log(location);
+        const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}`);
         setPlaces(res.data.data.places);
 
       } catch (err) {
@@ -73,11 +81,12 @@ export default function IndexPage() {
     setPropertyType(propertyTypeId);
     
     const params = {
-      property_type: propertyTypeId
+      ...Object.fromEntries([...searchParams]),
+      property_type: propertyTypeId,
     };
 
     const options = {
-      pathname: '/places',
+      pathname: location.pathname === '/' ? 'places' : location.pathname,
       search: `?${createSearchParams(params)}`
     };
 
@@ -134,10 +143,10 @@ export default function IndexPage() {
         </div>
       </div>
       
-      <div className="grid lg:grid-cols-6 md:grid-cols-3 md:gap-5">
+      <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
         { places.length > 0 
           ? places.map(place => <PlaceCard key={place.id} place={place} />) 
-          : <PlaceCardSkeleton cards={12} />
+          : skeleton
         } 
       </div>
 
