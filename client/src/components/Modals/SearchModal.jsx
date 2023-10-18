@@ -8,6 +8,7 @@ import capitalizeFirstLetter from "../../utils/capitalizeFirstLetter";
 import { Calendar } from "react-date-range";
 import Counter from "../Input/Counter";
 import { useNavigate, createSearchParams, useSearchParams } from "react-router-dom";
+import { AiOutlineClose } from "react-icons/ai";
 
 const SEARCH_CRITERIA = ['where', 'who', 'check in', 'check out'];
 const REGIONS = ['Any', 'Europe', 'Australia', 'North America', 'South America', 'Asia'];
@@ -158,25 +159,77 @@ export default function SearchModal () {
           >
             <div 
               className={`
-                py-4 px-4 transition-all font-light
-                ${i !== 1 ? 'border-r border-r-gray-300' : ''}
+                py-2 px-4 transition-all font-light border-r-gray-300
+                ${i === 0 ? 'border-r border-b ' : ''}
+                ${i === 1 ? 'border-b' : ''}
+                ${i === 2 ? 'border-r' : ''}
                 ${sc === currentSelectedSearch ? 'font-medium bg-primary text-white' : ''}
-                flex h-full items-center justify-center
+                flex h-full items-center justify-center relative
               `}
               onClick={() => setCurrentSelectedSearch(sc)}
             >
-
               { (i === 0 && (!selectedRegion && !address)) && 'Where'}
               { (i !== 0 && i !== 1) && capitalizeFirstLetter(sc)}
               { (i === 1 && (adults + children + pets === 0) && 'Who') }
               <p className="text-sm flex items-center justify-center font-medium">
-                { (i === 0 && (selectedRegion || address)) && <span className=" inline-block whitespace-nowrap overflow-hidden text-ellipsis w-[150px]"> {selectedRegion || address }</span> }
+                {/* WHERE */}
+                { (i === 0 && (selectedRegion || address)) && (
+                  <>
+                    <span className=" inline-block whitespace-nowrap overflow-hidden text-ellipsis w-[150px]"> 
+                      {selectedRegion || address }
+                    </span>
+                    <AiOutlineClose 
+                      className="absolute right-5" 
+                      onClick={() => {
+                        if(address) setAddress('');
+                        if(selectedRegion) setSelectedRegion('');
+                      }} 
+                    />
+                  </>
+                ) }
+
+                {/* WHO */}
                 { (i === 1 && (adults + children + pets !== 0)) && (
-                  <span>{adults} adults, {children} childs, {pets} pets</span>
+                  <>
+                    <span>{adults} adults, {children} childs, {pets} pets</span>
+                    <AiOutlineClose 
+                      className="absolute right-5" 
+                      onClick={() => {
+                        setAdults(0);
+                        setChildren(0);
+                        setPets(0);
+                      }} />
+                  </>
                 )}
-                { (i === 2 && checkin) ? ` : ${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}` : '' }
-                { (i === 3 && checkout) ? ` : ${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}` : '' }
+
+                {/* CHECK IN */}
+                { (i === 2 && checkin) 
+                  ? (
+                      <>
+                        <span>
+                          {` : ${MONTHS[checkin.getMonth()].slice(0, 3)} ${checkin.getDate()}`}
+                        </span>
+                        <AiOutlineClose className="absolute right-5" onClick={() => setCheckin(null)} />
+                      </>
+                    ) 
+                  : '' 
+                }
+
+                {/* CHECK OUT */}
+                { (i === 3 && checkout) 
+                  ? (
+                      <>
+                        <span>
+                          {` : ${MONTHS[checkout.getMonth()].slice(0, 3)} ${checkout.getDate()}`}
+                        </span>
+                        <AiOutlineClose className="absolute right-5" onClick={() => setCheckout(null)} />
+                      </>
+                    ) 
+                  : '' 
+                }
               </p>
+
+              
             </div>
           </div>
         )) }
