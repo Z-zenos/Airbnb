@@ -26,7 +26,7 @@ router
 
 router
   .route('/count-place')
-  .get(placeController.countPlace);
+  .get(placeController.searchByQuery, placeController.countPlace);
 
 router
   .route('/my-places')
