@@ -9,7 +9,7 @@ import QuantityChoice from "../Input/QuantityChoice";
 import axios from "axios";
 import Checkbox from "../Input/Checkbox";
 import ToggleButton from "../Button/ToggleButton";
-import { useLocation, useNavigate } from "react-router-dom";
+import { createSearchParams, useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 const MIN_PRICE = 10;
 const MAX_PRICE = 1000;
@@ -36,18 +36,25 @@ const BOOKING_OPTIONS = [
 ];
 
 export default function FilterModal ({ setFilterCriteriaNumber }) {
-  const { isFilterModalOpen, setIsFilterModalOpen } = useContext(ModalContext);
-  const [filteredPlaces, setFilteredPlaces] = useState(0);
-  const [prices, setPrices] = useState([MIN_PRICE, MAX_PRICE]);
-  const [bedrooms, setBedrooms] = useState(0);
-  const [beds, setBeds] = useState(0);
-  const [bathrooms, setBathrooms] = useState(0);
-  const [amenities, setAmenities] = useState([]);
-  const [placeType, setPlaceType] = useState('any type');
-  const [bookingOptions, setBookingOptions] = useState(BOOKING_OPTIONS);
-  const [placeTypes, setPlaceTypes] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const { isFilterModalOpen, setIsFilterModalOpen } = useContext(ModalContext);
+  const [filteredPlaces, setFilteredPlaces] = useState(0);
+  const [prices, setPrices] = useState([+searchParams.get('price[gte]') ||  MIN_PRICE, +searchParams.get('price[lte]') || MAX_PRICE]);
+  const [bedrooms, setBedrooms] = useState(+searchParams.get('bedrooms') || 0);
+  const [beds, setBeds] = useState(+searchParams.get('beds') || 0);
+  const [bathrooms, setBathrooms] = useState(+searchParams.get('bathrooms') || 0);
+  const [amenities, setAmenities] = useState([]);
+  const [placeType, setPlaceType] = useState(searchParams.get('place_type') || 'any type');
+  const [bookingOptions, setBookingOptions] = useState(BOOKING_OPTIONS.map(
+    bo => ({
+      ...bo, 
+      selected: searchParams.get(bo.param) || false
+    })
+  ));
+
+  const [placeTypes, setPlaceTypes] = useState([]);
   const [query, setQuery] = useState("");
 
   const amenitiesTracker = JSON.stringify(amenities);
@@ -56,10 +63,11 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
   useEffect(() => {
     (async () => {
       const resp = await axios.get('/amenities');
+      const selectedAmenities = searchParams.getAll(['amenities']);
       setAmenities(resp.data.data.amenitys.map(a => ({
         name: a.name,
         id: a.id,
-        selected: false
+        selected: selectedAmenities.includes(a.id)
       })));
 
       const respAvgPricesByPlaceType = await axios.get('places/average-price-by-place-type');
@@ -123,10 +131,25 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
     setBookingOptions(() => tmpBookingOptions);
   }
 
+  function removeDuplicateSearchParams(query) {
+    let queryObj = {};
+    Array.from(new URLSearchParams(query).entries()).forEach(([key, value]) => {
+      if(!queryObj[key]) queryObj[key] = value;
+      else {
+        if(!Array.isArray(queryObj[key])) queryObj[key] = [queryObj[key], value];
+        else queryObj[key] = [...queryObj[key], value];
+      } 
+    });
+
+    queryObj = { ...Object.fromEntries([...searchParams]), ...queryObj };
+    console.log(queryObj);
+    return queryObj;
+  }
+
   function handleUpdatePlacesIndexPage() {
     const options = {
       pathname: location.pathname !== '/' ? location.pathname : '/places',
-      search: `${location.search ? location.search + '&' : '?'}${query}`
+      search: `?${createSearchParams(removeDuplicateSearchParams(query))}`
     };
 
     navigate(options, { replace: true });
@@ -149,7 +172,8 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
         let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
         setQuery(queryStr);
 
-        const res = await axios.get(`places/count-place${location.search ? location.search + '&' : '?'}${queryStr}`);
+
+        const res = await axios.get(`places/count-place?${createSearchParams(removeDuplicateSearchParams(queryStr))}`);
         setFilteredPlaces(res.data.count);
       } catch (err) {
         console.error(err);

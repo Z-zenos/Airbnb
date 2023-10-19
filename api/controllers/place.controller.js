@@ -143,6 +143,7 @@ exports.searchByQuery = (req, res, next) => {
   });
 
   req.query = {...queryObj, ...query };
+  console.log(req.query);
   next();
 };
 
