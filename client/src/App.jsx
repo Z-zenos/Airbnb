@@ -9,6 +9,7 @@ import PlacePage from './pages/PlacePage';
 import { PlaceContextProvider } from './contexts/place.context';
 import { ModalContextProvider } from './contexts/modal.context';
 import { ToastContextProvider } from './contexts/toast.context';
+import UserPage from "./pages/UserPage";
 
 
 // Apply for all requests
@@ -40,6 +41,7 @@ function App() {
                 <Route index element={<IndexPage />} />
                 <Route path="/places" element={<IndexPage />} />
                 <Route path="/places/search" element={<IndexPage />} />
+                <Route path="/users/profile" element={<UserPage />} />
                 <Route path='/login' element={ <AuthPage /> } />
                 <Route path='/places/:id' element={ <PlacePage /> } />
               </Route>
