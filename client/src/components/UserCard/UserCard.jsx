@@ -5,8 +5,8 @@ import { BiSolidMedal } from "react-icons/bi";
 export default function UserCard() {
 
   return (
-    <div className="rounded-2xl w-[350px] shadow-[rgba(0,_0,_0,_0.2)_0px_6px_20px_0px] border">
-      <div className="grid grid-cols-3 py-4 px-6">
+    <div className="rounded-2xl md:w-[300px] w-[350px] shadow-[rgba(0,_0,_0,_0.2)_0px_6px_20px_0px] border">
+      <div className="grid grid-cols-3 py-4 px-6 md:px-3">
         <div className="col-span-2 flex items-center justify-center flex-col">
           <img src="https://a0.muscache.com/im/pictures/user/3816a6ef-5cc9-40ed-ae47-406646daa103.jpg?im_w=240" className="w-[100px] h-[100px] rounded-full" />
 

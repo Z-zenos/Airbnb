@@ -74,12 +74,12 @@ export default function UserPage() {
   console.log(scrollRef.current);
 
   return (
-    <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[80%] mx-auto md:px-10 mb-10 grid grid-cols-3 gap-[200px] p-10">
+    <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[200px] p-10">
       <div className=" col-span-1 relative">
-        <div className=" fixed pt-8">
+        <div className=" fixed pt-8 sm:flex sm:justify-between sm:items-center sm:relative md:block">
           <UserCard />
 
-          <div className="mt-10 border border-gray-300 py-6 px-8 rounded-3xl w-[350px]">
+          <div className="mt-10 border border-gray-300 py-6 px-8 rounded-3xl w-[350px] md:w-[300px] sm:w-[250px]">
             <p className="font-medium text-xl">Gandolfo Gabriele&lsquo;s confirmed information</p>
             <div className="text-lg mt-3">
               <p className="flex my-1 items-center gap-4">
@@ -100,7 +100,7 @@ export default function UserPage() {
       </div>
 
       <div className=" col-span-2 ">
-        <h3 className="font-bold text-4xl">About Golwen</h3>
+        <h3 className="font-bold text-4xl sm:mt-8">About Golwen</h3>
 
         <div className="py-8 border-b-[1px] border-gray-300">
           <div className="grid grid-cols-2 gap-4 mt-8 font-light ">
@@ -185,7 +185,7 @@ export default function UserPage() {
         <div className="py-8">
           <h3 className="text-2xl font-medium">Gandolfo Gabriele’s places</h3>
 
-          <div className="py-6 grid grid-cols-3 gap-6">
+          <div className="py-6 grid grid-cols-3 md:grid-cols-2 gap-6">
           { [...new Array(4).fill(0)].map((num, i) => <div key={'pl' + num + i}>{place}</div>) }
           </div>
         </div>
