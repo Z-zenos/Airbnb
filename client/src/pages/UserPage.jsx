@@ -5,15 +5,21 @@ import { PiShootingStarBold } from "react-icons/pi";
 import { LuSubtitles } from "react-icons/lu";
 import { FaMagic } from "react-icons/fa";
 import { GrMapLocation } from "react-icons/gr";
-import { BsBicycle, BsCheckLg } from "react-icons/bs";
+import { BsBicycle, BsCheckLg, BsCaretLeft, BsCaretRight } from "react-icons/bs";
 import { AiFillStar } from "react-icons/ai";
 
 import Button from "../components/Button/Button";
+import useHorizontalScroll from "../hooks/useHorizontalScroll";
 
 export default function UserPage() {
+  const scrollRef = useHorizontalScroll();
+
+  function scrollHorizontal(scrollOffset) {
+    scrollRef.current.scrollLeft += scrollOffset;
+  }
 
   const shortReviewBox = (
-    <div className="w-[315px] rounded-xl py-4 px-6 border-[1px] border-gray-300 ">
+    <div className="rounded-xl py-4 px-6 border-[1px] border-gray-300 ">
       <p 
         className=" text-[15px] font-light leading-[24px] mb-8 text-ellipsis whitespace-pre-wrap overflow-hidden" 
         style={{
@@ -45,7 +51,7 @@ export default function UserPage() {
   );
 
   const pastTrip = (
-    <div className="bg-[#e0f7f7] py-3 pb-10 px-5">
+    <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
       <p className="text-[14px]">2021</p>
       <p className="text-md font-medium">
         Hanoi,<br /> Vietnam</p>
@@ -65,10 +71,12 @@ export default function UserPage() {
     </div>
   );
 
+  console.log(scrollRef.current);
+
   return (
-    <div className="lg:w-[70%] mx-auto md:px-10 mb-10 grid grid-cols-3 gap-[200px] p-10">
+    <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[80%] mx-auto md:px-10 mb-10 grid grid-cols-3 gap-[200px] p-10">
       <div className=" col-span-1 relative">
-        <div className=" fixed">
+        <div className=" fixed pt-8">
           <UserCard />
 
           <div className="mt-10 border border-gray-300 py-6 px-8 rounded-3xl w-[350px]">
@@ -135,9 +143,24 @@ export default function UserPage() {
         </div>
 
         <div className="py-8 border-b-[1px] border-gray-300">
-          <h3 className="text-2xl font-medium">What guests are saying about Gandolfo Gabriele</h3>
+          <div className="flex justify-between items-center">
+            <h3 className="text-2xl font-medium">What guests are saying about Gandolfo Gabriele</h3>
+            <div className="flex gap-2 items-center">
+              <BsCaretLeft 
+                className="w-[40px] h-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 col-span-1 mx-auto" 
+                onClick={() => scrollHorizontal(-scrollRef.current.offsetWidth)} 
+              />
+              <BsCaretRight 
+                className="col-span-1 h-[40px] w-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-55 hover:shadow-md hover:shadow-gray-500 active:scale-100 active:shadow-none mx-auto" 
+                onClick={() => scrollHorizontal(scrollRef.current.offsetWidth)} 
+              />
+            </div>
+          </div>
 
-          <div className="grid grid-flow-col gap-3 overflow-x-scroll py-6">
+          <div 
+            className="grid auto-cols-[calc(50%-8px)] grid-flow-col gap-3 overflow-x-scroll py-6  scroll-smooth" 
+            ref={scrollRef}
+          >
             { [...new Array(6).fill(0)].map((num, i) => <div key={num + i}>{shortReviewBox}</div>) }
           </div>
           <Button label="Show all 90 reviews" className=" mt-4 " outline={true} />
@@ -154,7 +177,7 @@ export default function UserPage() {
         <div className="py-8 border-b-[1px] border-gray-300">
           <h3 className="text-2xl font-medium">Gandolfo Gabriele’s past trips</h3>
 
-          <div className="py-6 grid grid-cols-3 gap-4">
+          <div className="py-6 grid auto-cols-[calc(34%-8px)] grid-flow-col overflow-x-scroll  gap-4">
           { [...new Array(6).fill(0)].map((num, i) => <div key={'pt' + num + i}>{pastTrip}</div>) }
           </div>
         </div>
