@@ -9,6 +9,12 @@ router
   .route('/')
   .get(userController.getAllUsers);
 
-router.get('/profile', authController.protect, userController.profile);
+router
+  .route('/profile')
+  .get(authController.protect, userController.profile);
+
+router
+  .route('/profile/:id')
+  .get(userController.getUser);
 
 module.exports = router;

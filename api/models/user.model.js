@@ -122,6 +122,15 @@ userSchema.pre(/^find/, function(next) {
   next();
 });
 
+userSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'interests',
+    select: '-__v -_id -created -modified'
+  });
+
+  next();
+});
+
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 }
