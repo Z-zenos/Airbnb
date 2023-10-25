@@ -161,36 +161,41 @@ export default function PlacePage() {
             </div>
           </div>
 
-          <div className="image-container w-full mt-6 py-2 h-[480px] relative" ref={photosRef}>
+          <div className="image-container w-full mt-6 py-2 relative" ref={photosRef}>
             { place.images && (
               <div className="-m-1 h-full flex md:-m-2">
-                <div className="flex h-full w-1/2 flex-wrap">
-                  <div className="w-1/2 p-1 md:p-2">
-                    <img
-                      alt="gallery"
-                      className="block h-full w-full rounded-lg object-cover object-center"
-                      src={`http://localhost:3000/images/places/${place?.images[0]}`} />
-                  </div>
-                  <div className="w-1/2 p-1 md:p-2">
-                    <img
-                      alt="gallery"
-                      className="block h-full w-full rounded-lg object-cover object-center"
-                      src={`http://localhost:3000/images/places/${place?.images[1]}`} />
-                  </div>
-                  <div className="w-full h-3/5 p-1 md:p-2">
-                    <img
-                      alt="gallery"
-                      className="block w-full h-full rounded-lg object-cover object-center"
-                      src={`http://localhost:3000/images/places/${place?.images[2]}`} />
-                  </div>
-                </div>
-                <div className="flex w-3/5 h-full flex-wrap ">
-                  <div className="w-full h-full p-1 md:p-2">
-                    <img
-                      alt="gallery"
-                      className="block h-full w-full rounded-lg object-cover object-center"
-                      src={`http://localhost:3000/images/places/${place?.image_cover}`} />
-                  </div>
+                <div className="grid gap-[10px] grid-cols-4 w-full h-full">
+                  <img
+                    style={{ gridColumn: '1' }}
+                    alt="gallery"
+                    className="block w-full h-[230px] rounded-lg object-cover object-center"
+                    src={`http://localhost:3000/images/places/${place?.images[0]}`} 
+                  />
+                  <img
+                    style={{ gridColumn: '2' }}
+                    alt="gallery"
+                    className="block w-full h-[230px] rounded-lg object-cover object-center"
+                    src={`http://localhost:3000/images/places/${place?.images[3]}`} 
+                  />
+                  <img
+                    style={{ gridColumn: '1', gridRow: '2' }}
+                    alt="gallery"
+                    className="block w-full h-[230px] rounded-lg object-cover object-center"
+                    src={`http://localhost:3000/images/places/${place?.images[1]}`} 
+                  />
+                  <img
+                    style={{ gridColumn: '2' , gridRow: '2' }}
+                    alt="gallery"
+                    className="block w-full h-[230px] rounded-lg object-cover object-center"
+                    src={`http://localhost:3000/images/places/${place?.images[2]}`} 
+                  />
+                  <img
+                    style={{ gridColumn: '3 / span 2' , gridRow: '1 / span 2' }}
+                    alt="gallery"
+                    className="block w-full h-full rounded-lg object-cover object-center"
+                    src={`http://localhost:3000/images/places/${place?.image_cover}`} 
+                  />
+                  
                 </div>
               </div>
             )}
@@ -205,7 +210,7 @@ export default function PlacePage() {
 
           </div>
 
-          <div className="h-[1px] bg-gray-300 mt-1"></div>
+          <div className="h-[1px] bg-gray-300 mt-[60px]"></div>
 
           <div className="relative flex justify-between items-start gap-10">
             <div className="w-3/5 mt-8">
