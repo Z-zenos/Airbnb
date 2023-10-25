@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const Interest = require('./interest.model');
 
 const userSchema = new mongoose.Schema(
   {
@@ -11,6 +12,12 @@ const userSchema = new mongoose.Schema(
       trim: true,
       maxlength: [255, "Name must be less than 256 characters."],
       minlength: [4, "Name must be greater than 3 characters."]
+    },
+
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [1000, "Description must be less than 450 characters."],
     },
 
     email: {
@@ -57,11 +64,33 @@ const userSchema = new mongoose.Schema(
     passwordResetToken: String,
     passwordResetExpires: Date,
 
-    avtive: {
+    active: {
       type: Boolean,
       default: true,
       select: false
-    }
+    },
+
+    school: String,
+    address: String,
+    decade_born: String,
+    obsessed_with: String,
+    useless_skill: String,
+    time_consuming_activity: String,
+    work: String,
+    languages: [String],
+    favorite_song: String,
+    fun_fact: String,
+    biography_title: String,
+    pets: [String],
+
+    interests: [{
+      type: mongoose.Schema.ObjectId,
+      ref: Interest,
+    }],
+
+    showPastTrips: Boolean,
+    year_hosting: Number
+    
   },
   {
     toJSON: { virtuals: true },

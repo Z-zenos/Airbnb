@@ -44,7 +44,7 @@ router
   )
   // .delete(
   //   authController.protect,
-  //   placeController.deleteTour
+  //   placeController.deletePlace
   // );
 
 
