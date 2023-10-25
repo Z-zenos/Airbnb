@@ -2,15 +2,15 @@
 import { AiFillStar } from "react-icons/ai";
 import { BiSolidMedal } from "react-icons/bi";
 
-export default function UserCard() {
+export default function UserCard({ user }) {
 
   return (
     <div className="rounded-2xl md:w-[300px] w-[350px] shadow-[rgba(0,_0,_0,_0.2)_0px_6px_20px_0px] border">
       <div className="grid grid-cols-3 py-4 px-6 md:px-3">
         <div className="col-span-2 flex items-center justify-center flex-col">
-          <img src="https://a0.muscache.com/im/pictures/user/3816a6ef-5cc9-40ed-ae47-406646daa103.jpg?im_w=240" className="w-[100px] h-[100px] rounded-full" />
+          <img src={user?.avatar} className="w-[100px] h-[100px] rounded-full" />
 
-          <p className="text-3xl mt-4 font-bold text-primary">Golwen</p>
+          <p className="text-3xl mt-4 font-bold text-primary">{user?.name.split(' ')[0]}</p>
           <p className="text-[14px] font-medium mt-1 flex items-center gap-1 "><BiSolidMedal className="inline w-5 h-5" /> Superhost</p>
         </div>
 
@@ -26,7 +26,7 @@ export default function UserCard() {
           </div>
 
           <div className="pb-3">
-            <p className="font-bold text-[22px]">1</p>
+            <p className="font-bold text-[22px]">{user?.year_hosting}</p>
             <p className="text-[13px]">Year hosting</p>
           </div>
         </div>

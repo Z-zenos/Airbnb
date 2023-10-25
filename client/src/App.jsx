@@ -41,7 +41,7 @@ function App() {
                 <Route index element={<IndexPage />} />
                 <Route path="/places" element={<IndexPage />} />
                 <Route path="/places/search" element={<IndexPage />} />
-                <Route path="/users/profile" element={<UserPage />} />
+                <Route path="/users/profile/:id" element={<UserPage />} />
                 <Route path='/login' element={ <AuthPage /> } />
                 <Route path='/places/:id' element={ <PlacePage /> } />
               </Route>

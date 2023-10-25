@@ -1,18 +1,38 @@
 import UserCard from "../components/UserCard/UserCard";
-import { MdWorkOutline } from "react-icons/md";
+import { MdWorkOutline, MdOutlinePets } from "react-icons/md";
 import { LiaLanguageSolid } from "react-icons/lia";
 import { PiShootingStarBold } from "react-icons/pi";
 import { LuSubtitles } from "react-icons/lu";
 import { FaMagic } from "react-icons/fa";
 import { GrMapLocation } from "react-icons/gr";
-import { BsBicycle, BsCheckLg, BsCaretLeft, BsCaretRight } from "react-icons/bs";
-import { AiFillStar } from "react-icons/ai";
+import { BsCheckLg, BsCaretLeft, BsCaretRight } from "react-icons/bs";
+import { AiFillStar, AiOutlineHeart } from "react-icons/ai";
+import { GiLoveSong, GiSandsOfTime } from "react-icons/gi";
+import { BiTimeFive } from "react-icons/bi";
+import { IoSchoolOutline } from "react-icons/io5";
 
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
+import { useEffect, useState } from "react";
+import axios from 'axios';
+import { Link, useLocation } from "react-router-dom";
 
 export default function UserPage() {
   const scrollRef = useHorizontalScroll();
+  const [user, setUser] = useState();
+  const location = useLocation();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get(location.pathname);
+        setUser(res.data.data.user);
+      } catch(err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   function scrollHorizontal(scrollOffset) {
     scrollRef.current.scrollLeft += scrollOffset;
@@ -28,8 +48,8 @@ export default function UserPage() {
           MozBoxOrient: 'vertical'
         }}
       >
-      &quot;…A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
-      A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
+        &quot;…A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
+        A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
       </p>
       <div className="flex items-center justify-start gap-4">
         <div className="rounded-full border-[1px] border-primary p-[2px]">
@@ -43,12 +63,12 @@ export default function UserPage() {
     </div>
   );
 
-  const activity = (
-    <div className="py-2 px-5 rounded-3xl flex gap-2 justify-start items-center border border-gray-400">
-      <span><BsBicycle className="w-6 h-6" /></span>
-      <span className="font-light text-[15px]">Cycling</span>
+  const activity = user?.interests?.length > 0 && user?.interests.map(interest => (
+    <div key={interest.name} className="py-2 px-5 rounded-3xl flex gap-2 justify-start items-center border border-gray-400">
+      <span><img src={`http://localhost:3000/images/interests/${interest.iconImage}`} className="w-6 h-6" /></span>
+      <span className="text-[15px]">{ capitalizeFirstLetter(interest.name) }</span>
     </div>
-  );
+  ));
 
   const pastTrip = (
     <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
@@ -58,29 +78,29 @@ export default function UserPage() {
     </div>
   );
 
-  const place = (
-    <div className="">
-      <img className="rounded-md w-full h-[220px]" src="https://a0.muscache.com/im/pictures/miso/Hosting-13903824/original/82d996fb-d7c4-46a8-a713-febd281cd69f.jpeg?im_w=720" />
-      <div className="mt-3">
-        <div className="w-full flex justify-between items-center">
-          <span className="font-medium text-[15px]">Condo</span>
-          <span className="flex items-center gap-1">4.65 <AiFillStar className="inline " /></span>
+  const places = user?.places.length > 0 && user?.places.map(place => (
+    <Link key={place.name} to={`/places/${place.id}`} className="cursor-pointer">
+      <div >
+        <img className="rounded-md w-full h-[220px]" src={`http://localhost:3000/images/places/${place.image_cover}`} />
+        <div className="mt-3">
+          <div className="w-full flex justify-between items-center">
+            <span className="font-medium text-[15px]">{place.name}</span>
+            <span className="flex items-center gap-1">{place.average_ratings} <AiFillStar className="inline " /></span>
+          </div>
+          <p className="opacity-70">{place.location.address}</p>
         </div>
-        <p className="opacity-70">Hasfyasi, Aasdas</p>
       </div>
-    </div>
-  );
-
-  console.log(scrollRef.current);
+    </Link>
+  ));
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[200px] p-10">
       <div className=" col-span-1 relative">
         <div className=" fixed pt-8 sm:flex sm:justify-between sm:items-center sm:relative md:block">
-          <UserCard />
+          <UserCard user={user} />
 
           <div className="mt-10 border border-gray-300 py-6 px-8 rounded-3xl w-[350px] md:w-[300px] sm:w-[250px]">
-            <p className="font-medium text-xl">Gandolfo Gabriele&lsquo;s confirmed information</p>
+            <p className="font-medium text-xl">{user?.name}&lsquo;s confirmed information</p>
             <div className="text-lg mt-3">
               <p className="flex my-1 items-center gap-4">
                 <BsCheckLg />
@@ -100,33 +120,58 @@ export default function UserPage() {
       </div>
 
       <div className=" col-span-2 ">
-        <h3 className="font-bold text-4xl sm:mt-8">About Golwen</h3>
+        <h3 className="font-bold text-4xl sm:mt-8">About {user?.name}</h3>
 
-        <div className="py-8 border-b-[1px] border-gray-300">
+        <div className="pb-8 border-b-[1px] border-gray-300">
           <div className="grid grid-cols-2 gap-4 mt-8 font-light ">
             <p className="flex items-center gap-3">
               <span><MdWorkOutline className="w-6 h-6" /></span>
-              <span>My work: visual artist</span>
+              <span>My work: {user?.work}</span>
             </p>
             <p className="flex items-center gap-3">
               <span><LiaLanguageSolid className="w-6 h-6" /></span>
-              <span>Speaks English, French, Italian, and Spanish</span>
+              <span>Speaks {user?.languages?.join(', ').replace(/, ([^,]*)$/, ' and $1')}</span>
             </p>
             <p className="flex items-center gap-3">
               <span><PiShootingStarBold className="w-6 h-6" /></span>
-              <span>What makes my home unique: panoramic views and silence</span>
+              <span>My fun fact: {user?.fun_fact}</span>
             </p>
             <p className="flex items-center gap-3">
               <span><FaMagic className="w-6 h-6" /></span>
-              <span>Most useless skill: guessing the music on the radio</span>
+              <span>Most useless skill: {user?.useless_skill}</span>
             </p>
             <p className="flex items-center gap-3">
               <span><LuSubtitles className="w-6 h-6" /></span>
-              <span>My biography title: leone leone leone</span>
+              <span>My biography title: &ldquo;{user?.biography_title}&rdquo;</span>
             </p>
             <p className="flex items-center gap-3">
               <span><GrMapLocation className="w-6 h-6" /></span>
-              <span>Lives in Palermo, Italy</span>
+              <span>Lives in {user?.address}</span>
+            </p>
+
+            <p className="flex items-center gap-3">
+              <span><AiOutlineHeart className="w-6 h-6" /></span>
+              <span>I&lsquo;m obsessed with: {user?.obsessed_with}</span>
+            </p>
+            <p className="flex items-center gap-3">
+              <span><GiLoveSong className="w-6 h-6" /></span>
+              <span>Favorite song in high school: {user?.favorite_song}</span>
+            </p>
+            <p className="flex items-center gap-3">
+              <span><BiTimeFive className="w-6 h-6" /></span>
+              <span>I spend too much time: {user?.time_consuming_activity}</span>
+            </p>
+            <p className="flex items-center gap-3">
+              <span><IoSchoolOutline className="w-6 h-6" /></span>
+              <span>Where I went to school: {user?.school}</span>
+            </p>
+            <p className="flex items-center gap-3">
+              <span><GiSandsOfTime className="w-6 h-6" /></span>
+              <span>Born in the {user?.decade_born}s</span>
+            </p>
+            <p className="flex items-center gap-3">
+              <span><MdOutlinePets className="w-6 h-6" /></span>
+              <span>Pets: {user?.pets.join(', ').replace(/, ([^,]*)$/, ' and $1')}</span>
             </p>
           </div>
 
@@ -138,13 +183,13 @@ export default function UserPage() {
               MozBoxOrient: 'vertical'
             }}
           >
-            Here I am on this adventure! I&lsquo;ve always loved sharing my spaces with friends or family, so I said why not make it a business ? I am originally from a small town near Reggio Calabria but  Turin has become my city for 30 years and I am really excited about it. I live with my son  Emanuele and my super cat Whisky. I enjoy cooking and experimenting with new dishes every time, and it looks like my guests really appreciate it. When I can afford to travel, I love to travel, but I don&lsquo;t miss a good book or a show, and Turin really offers a lot. From the Jazz festival to classical music to the festival for the very young. So I think I can meet the needs of my guests by offering them friendliness and comfort .
+            {user?.description}
           </p>
         </div>
 
         <div className="py-8 border-b-[1px] border-gray-300">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl font-medium">What guests are saying about Gandolfo Gabriele</h3>
+            <h3 className="text-2xl font-medium">What guests are saying about {user?.name}</h3>
             <div className="flex gap-2 items-center">
               <BsCaretLeft 
                 className="w-[40px] h-[40px] cursor-pointer border rounded-full p-2 opacity-60 border-gray-500 hover:scale-105 hover:shadow-md hover:shadow-gray-500 col-span-1 mx-auto" 
@@ -167,26 +212,28 @@ export default function UserPage() {
         </div>
 
         <div className="py-8 border-b-[1px] border-gray-300">
-          <h3 className="text-2xl font-medium">Ask Gandolfo Gabriele about</h3>
+          <h3 className="text-2xl font-medium">Ask {user?.name} about</h3>
 
           <div className="py-6 flex justify-start flex-wrap items-center  gap-4">
-          { [...new Array(6).fill(0)].map((num, i) => <div key={'a' + num + i}>{activity}</div>) }
+            { activity }
           </div>
         </div>
 
-        <div className="py-8 border-b-[1px] border-gray-300">
-          <h3 className="text-2xl font-medium">Gandolfo Gabriele’s past trips</h3>
+        { user?.showPastTrips && (
+          <div className="py-8 border-b-[1px] border-gray-300">
+            <h3 className="text-2xl font-medium">{user?.name}’s past trips</h3>
 
-          <div className="py-6 grid auto-cols-[calc(34%-8px)] grid-flow-col overflow-x-scroll  gap-4">
-          { [...new Array(6).fill(0)].map((num, i) => <div key={'pt' + num + i}>{pastTrip}</div>) }
+            <div className="py-6 grid auto-cols-[calc(34%-8px)] grid-flow-col overflow-x-scroll  gap-4">
+              { [...new Array(6).fill(0)].map((num, i) => <div key={'pt' + num + i}>{pastTrip}</div>) }
+            </div>
           </div>
-        </div>
+        ) }
 
         <div className="py-8">
-          <h3 className="text-2xl font-medium">Gandolfo Gabriele’s places</h3>
+          <h3 className="text-2xl font-medium">{user?.name}’s places</h3>
 
           <div className="py-6 grid grid-cols-3 md:grid-cols-2 gap-6">
-          { [...new Array(4).fill(0)].map((num, i) => <div key={'pl' + num + i}>{place}</div>) }
+            { places }
           </div>
         </div>
 
