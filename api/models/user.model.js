@@ -89,7 +89,7 @@ const userSchema = new mongoose.Schema(
     }],
 
     showPastTrips: Boolean,
-    year_hosting: Number
+    year_hosting: Number,
     
   },
   {
@@ -97,6 +97,12 @@ const userSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
+
+userSchema.virtual('places', {
+  ref: 'Place',
+  foreignField: 'host',
+  localField: '_id'
+});
 
 userSchema.pre('save', async function(next) {
   if(!this.isModified('password')) return next();
@@ -126,6 +132,9 @@ userSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'interests',
     select: '-__v -_id -created -modified'
+  }).populate({
+    path: 'places',
+    select: 'image_cover location name average_ratings'
   });
 
   next();

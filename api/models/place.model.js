@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const PropertyType = require('./property_type.model');
 const Amenity = require('./amenity.model');
+const User = require('./user.model');
 const safetySchema = require('./safety.model');
 const checkinoutSchema = require('./checkinout.model');
 const ruleSchema = require('./rule.model');
@@ -177,7 +178,7 @@ const placeSchema = new mongoose.Schema(
 
     host: {
       type: mongoose.Schema.ObjectId,
-      ref: 'User',
+      ref: User,
       required: [true, 'A place must be hosted by certain host']
     },
 
@@ -219,11 +220,11 @@ placeSchema.index({ 'location.address': "text" }, {
 //   return this.duration / 7;
 // });
 
-// // Virtual populate
-// placeSchema.virtual('reviews', {
-//   ref: 'Review',
-//   foreignField: 'place',
-//   localField: '_id'
+// Virtual populate
+// placeSchema.virtual('user', {
+//   ref: 'User',
+//   foreignField: '_id',
+//   localField: 'host'
 // });
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
