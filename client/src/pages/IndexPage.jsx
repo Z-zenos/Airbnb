@@ -174,7 +174,7 @@ export default function IndexPage() {
       </div>
       
       <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
-        { (places.length > 0 && !loading) && 
+        { places.length > 0 && 
           places.map((place, i, places) =>
             <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>
               <PlaceCard place={place} />
