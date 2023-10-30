@@ -13,6 +13,7 @@ import { useNavigate, createSearchParams, useLocation, useSearchParams } from "r
 import PlaceCardSkeleton from "../components/PlaceCard/PlaceCardSkeleton";
 import Spinner from "../components/Spinner/Spinner";
 import SearchModal from "../components/Modals/SearchModal";
+import useIntersectionObserver from "../hooks/useIntersectionObserver";
 
 export default function IndexPage() {
   const { 
@@ -30,8 +31,10 @@ export default function IndexPage() {
   const [searchParams] = useSearchParams();
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
   const [loading, setLoading] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(true);
   const [filterCriteriaNumber, setFilterCriteriaNumber] = useState(0);
 
+  // Fetch property types
   useEffect(() => {
     (async () => {
       try {
@@ -55,25 +58,40 @@ export default function IndexPage() {
     })();
   }, []);
   
-  useEffect(() => {
-    setLoading(true);
-    const timer = setTimeout(() => {
+  // Fetch places
+
+  console.log(location.search);
+  const fetchPlaces = async (page = 0, limit = 12) => {
+    try {
+      setLoading(true);
+      if(!location.search) setFilterCriteriaNumber(0);
+
+      const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}`, {
+        params: {
+          page,
+          limit
+        }
+      });
+
+      if(res.data.total <= page + limit) setHasNextPage(false);
       setLoading(false);
-    }, 2000);
 
-    if(!location.search) setFilterCriteriaNumber(0);
+      return res.data.data.places;
 
-    (async () => {
-      try {
-        const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}`);
-        setPlaces(res.data.data.places);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+      return [];
+    } 
+  }
 
-      } catch (err) {
-        console.error(err);
-      } 
-    })();
+  const lastPlaceRef = useIntersectionObserver(() => {
+    void fetchPlaces(places.length).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
+  }, [hasNextPage, !loading]);
 
-    return () => clearTimeout(timer);
+  
+  useEffect(() => {
+    void fetchPlaces().then(setPlaces);
   }, [location]);
 
   function scrollHorizontal(scrollOffset) {
@@ -156,7 +174,14 @@ export default function IndexPage() {
       </div>
       
       <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
-        { (places.length > 0 && !loading) && places.map(place => <PlaceCard key={place.id} place={place} />) } 
+        { (places.length > 0 && !loading) && 
+          places.map((place, i, places) =>
+            <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>
+              <PlaceCard place={place} />
+            </div> 
+          ) 
+        }
+        
         { loading && <PlaceCardSkeleton cards={12} /> }
         { (!loading && !places.length) && <div className=" col-span-10 text-3xl opacity-70 font-bold text-center py-[250px]">No results</div> }
       </div>
