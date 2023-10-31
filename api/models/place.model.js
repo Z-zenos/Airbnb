@@ -230,13 +230,13 @@ placeSchema.index({ 'location.address': "text" }, {
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 
 placeSchema.pre(/^find/, async function(next) {
-  await Place.ensureIndexes({ 
-    "location.address": "text", 
-  }, { 
-    "name": "users_full_text", 
-    "default_language": "en",
-    "language_override": "language"
-  })
+  // await Place.ensureIndexes({ 
+  //   "location.address": "text", 
+  // }, { 
+  //   "name": "users_full_text", 
+  //   "default_language": "en",
+  //   "language_override": "language"
+  // })
   next();
 })
 

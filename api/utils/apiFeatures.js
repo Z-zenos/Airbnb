@@ -40,22 +40,9 @@ class APIFeatures {
       op => `$${op}`
     );
 
-    console.log(this.Query);
+    console.log(JSON.parse(queryStr));
 
-    this.Query = count 
-      ? this.Query.countDocuments(JSON.parse(queryStr))
-      : this.Query.find(JSON.parse(queryStr));
-      // : this.Query.aggregate([
-      //     { $match: JSON.parse(queryStr) },
-      //     {
-      //       $facet: {
-      //         count: [{ $count: "value" }],
-      //         data: [{ $sort: { _id: -1 } }]
-      //       }
-      //     },
-      //     { $unwind: "$count" },
-      //     { $set: { count: "$count.value" } }
-      //   ]);
+    this.Query = this.Query[count ? 'countDocuments' : 'find'](JSON.parse(queryStr));
 
     // For chaining methods
     return this;
@@ -77,6 +64,8 @@ class APIFeatures {
     const page = +this.queryString.page || 1,
       limit = +this.queryString.limit || 12, // number of documents per page
       skip = (page - 1) * limit;
+
+    console.log(skip, page);
 
     this.Query = this.Query.skip(skip).limit(limit);
     return this;

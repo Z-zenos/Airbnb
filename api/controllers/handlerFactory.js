@@ -86,9 +86,10 @@ exports.getAll = Model => catchErrorAsync(async (req, res, next) => {
   let filter = {};
   if (req.params.placeId) filter = { place: req.params.placeId };
 
+  const total = await new APIFeatures(Model.find(filter), req.query).filter(true).Query;
+
   const features = new APIFeatures(Model.find(filter), req.query)
     .filter()
-    .sort()
     .limitFields()
     .paginate();
 
@@ -96,8 +97,9 @@ exports.getAll = Model => catchErrorAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
-    result: docs.length,
+    total,
     data: {
+      result: docs.length,
       [`${Model.modelName.toLowerCase()}s`]: docs
     }
   });
