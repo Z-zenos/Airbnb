@@ -59,8 +59,7 @@ export default function IndexPage() {
   }, []);
   
   // Fetch places
-
-  console.log(location.search);
+  console.log(places);
   const fetchPlaces = async (page = 0, limit = 12) => {
     try {
       setLoading(true);
@@ -81,13 +80,40 @@ export default function IndexPage() {
     } catch (err) {
       console.error(err);
       setLoading(false);
-      return [];
+      return places;
     } 
   }
 
-  const lastPlaceRef = useIntersectionObserver(() => {
-    void fetchPlaces(places.length).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
-  }, [hasNextPage, !loading]);
+  /*
+    Problem: Why use void in below function ?
+      I'm using the useEffect hook, and in some cases I do not need to return anything. What is the best way to handle this situation?
+
+      // fooRef is a reference to a textfield (belonging to the same component). Sometimes the fooRef is not there,because of redirections) that's why I need to check if it exists
+
+        useEffect(() => fooRef.current && fooRef.current.focus()  , [fooRef])
+
+      When using it like this, React complains with the following error message: An effect function must not return anything besides a function, which is used for clean-up. You returned null. If your effect does not require clean up, return undefined (or nothing).
+
+    Solution:
+      - Using void to make arrow functions return nothing
+      - Sometimes you might want to call the promise, but you don't need to do anything with the response.
+      - It's about "Avoid void". Void is an operator that evaluates the given expression and returns undefined. It's often used in minified / uglified code, because void 0 is shorter than undefined. And it is used as "pure" undefined. In clean code it can be confusing and it entices to disguise problems. There are many articles in the web. (just google it. "eslint no-void") The words here are limited. :D Finally it's up to you (the developer) how to write code and for what context. (professional clean code or amateur. The freedom in JavaScript is a blessing and a curse at the same time.) – 
+        Domske                                                  <StackOverflow>
+        Jan 28, 2020 at 14:36
+
+    Ref:
+      https://github.com/typescript-eslint/typescript-eslint/blob/HEAD/packages/eslint-plugin/docs/rules/no-floating-promises.md#ignorevoid
+  */
+
+  const lastPlaceRef = useIntersectionObserver(
+    // callback
+    () => {
+      void fetchPlaces(places.length).then(newPlaces => setPlaces(places => [...places, ...newPlaces]))
+    },
+    
+    // only fetch api when has next page and loading is false
+    [hasNextPage, !loading]
+  );
 
   
   useEffect(() => {

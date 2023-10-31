@@ -40,7 +40,22 @@ class APIFeatures {
       op => `$${op}`
     );
 
-    this.Query = this.Query[count ? 'countDocuments' : 'find'](JSON.parse(queryStr));
+    console.log(this.Query);
+
+    this.Query = count 
+      ? this.Query.countDocuments(JSON.parse(queryStr))
+      : this.Query.find(JSON.parse(queryStr));
+      // : this.Query.aggregate([
+      //     { $match: JSON.parse(queryStr) },
+      //     {
+      //       $facet: {
+      //         count: [{ $count: "value" }],
+      //         data: [{ $sort: { _id: -1 } }]
+      //       }
+      //     },
+      //     { $unwind: "$count" },
+      //     { $set: { count: "$count.value" } }
+      //   ]);
 
     // For chaining methods
     return this;
