@@ -1,15 +1,14 @@
 const mongoose = require('mongoose');
 
 class APIFeatures {
-  rules = ['commercial_photography_and_filming_allowed', 'smoking_allowed', 'events_allowed', 'pets_allowed'];
-
-  constructor(Query, queryString) {
+  constructor(Query, queryString = {}) {
     this.Query = Query;
     this.queryString = queryString;
   }
 
-  filter(count = false) {
-    const queryObj = { ...this.queryString };
+  static parse(queryString) {
+    const rules = ['commercial_photography_and_filming_allowed', 'smoking_allowed', 'events_allowed', 'pets_allowed'];
+    const queryObj = { ...queryString };
 
     /*
       Exclude these special field names from our query string
@@ -28,7 +27,7 @@ class APIFeatures {
         queryObj[key] = new mongoose.Types.ObjectId(queryObj[key]);
       }
 
-      else if (this.rules.includes(key)) {
+      else if (rules.includes(key)) {
         Object.defineProperty(queryObj, `rules.${key}`, Object.getOwnPropertyDescriptor(queryObj, key));
         delete queryObj[key];
       }
@@ -40,11 +39,16 @@ class APIFeatures {
       op => `$${op}`
     );
 
-    console.log(JSON.parse(queryStr));
+    return JSON.parse(queryStr);
+  }
 
-    this.Query = this.Query[count ? 'countDocuments' : 'find'](JSON.parse(queryStr));
+  filter(parser) {
+    this.Query = this.Query.find(parser);
+    return this;
+  }
 
-    // For chaining methods
+  count(parser) {
+    this.Query = this.Query.countDocuments(parser);
     return this;
   }
 
@@ -64,8 +68,6 @@ class APIFeatures {
     const page = +this.queryString.page || 1,
       limit = +this.queryString.limit || 12, // number of documents per page
       skip = (page - 1) * limit;
-
-    console.log(skip, page);
 
     this.Query = this.Query.skip(skip).limit(limit);
     return this;

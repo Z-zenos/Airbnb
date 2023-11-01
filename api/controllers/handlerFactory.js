@@ -86,14 +86,17 @@ exports.getAll = Model => catchErrorAsync(async (req, res, next) => {
   let filter = {};
   if (req.params.placeId) filter = { place: req.params.placeId };
 
-  const total = await new APIFeatures(Model.find(filter), req.query).filter(true).Query;
+  const parser = APIFeatures.parse(req.query);
+  
+  const total = await new APIFeatures(Model.find(filter))
+    .count(parser)
+    .Query;
 
-  const features = new APIFeatures(Model.find(filter), req.query)
-    .filter()
+  const docs = await new APIFeatures(Model.find(filter), req.query)
+    .filter(parser)
     .limitFields()
-    .paginate();
-
-  const docs = await features.Query;
+    .paginate()
+    .Query;
 
   res.status(200).json({
     status: 'success',

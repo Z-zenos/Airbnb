@@ -222,7 +222,7 @@ placeSchema.index({ 'location.address': "text" }, {
 
 // Virtual populate
 // placeSchema.virtual('user', {
-//   ref: 'User',
+//   ref: User,
 //   foreignField: '_id',
 //   localField: 'host'
 // });
@@ -272,6 +272,10 @@ placeSchema.pre(/^find/, function(next) {
     path: 'views',
     select: '-__v'
   });
+  // .populate({
+  //   path: 'host',
+  //   select: 'name'
+  // });
 
   next();
 });

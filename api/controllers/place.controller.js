@@ -147,8 +147,7 @@ exports.searchByQuery = (req, res, next) => {
 };
 
 exports.countPlace = catchErrorAsync(async (req, res, next) => {
-  const features = new APIFeatures(Place.find(), req.query)
-    .filter(true);
+  const features = new APIFeatures(Place.find()).count(APIFeatures.parse(req.query));
 
   const docs = await features.Query;
 
