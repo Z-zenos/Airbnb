@@ -34,6 +34,7 @@ export default function IndexPage() {
   const [hasNextPage, setHasNextPage] = useState(true);
   const [filterCriteriaNumber, setFilterCriteriaNumber] = useState(0);
   const [nextPage, setNextPage] = useState(1);
+  const [isURLChanged, setIsURLChanged] = useState(true);
 
   // Fetch property types
   useEffect(() => {
@@ -71,6 +72,7 @@ export default function IndexPage() {
       else setNextPage(page + 1);
       
       setLoading(false);
+      setIsURLChanged(false);
 
       return res.data.data.places;
 
@@ -85,12 +87,14 @@ export default function IndexPage() {
     void fetchPlaces(nextPage).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
   }, [hasNextPage, !loading]);
 
-  console.log(hasNextPage, loading, places.length);
   useEffect(() => {
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    setIsURLChanged(true);
     void fetchPlaces().then(setPlaces);
     setHasNextPage(true);
     setNextPage(1);
+    setTimeout(() => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 500);
   }, [JSON.stringify(location)]);
 
   function scrollHorizontal(scrollOffset) {
@@ -173,7 +177,7 @@ export default function IndexPage() {
       </div>
       
       <div className=" lg:px-20 md:px-10 grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
-        { places.length > 0 && 
+        { (places.length > 0 && !isURLChanged) &&
           places.map((place, i, places) =>
             <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>
               <PlaceCard place={place} />
