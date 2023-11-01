@@ -67,7 +67,7 @@ export default function IndexPage() {
 
       const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}${location.search ? '&' : '?'}page=${page}&limit=${limit}`);
 
-      if(res.data.total <= page + limit) setHasNextPage(false);
+      if(res.data.total <= places.length) setHasNextPage(false);
       else setNextPage(page + 1);
       
       setLoading(false);
@@ -83,7 +83,7 @@ export default function IndexPage() {
 
   const lastPlaceRef = useIntersectionObserver(() => {
     void fetchPlaces(nextPage).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
-  }, [hasNextPage, !loading]);
+  }, [hasNextPage, !loading, location]);
 
   
   useEffect(() => {

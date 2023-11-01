@@ -158,7 +158,9 @@ exports.countPlace = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.getPlacesOfUser = catchErrorAsync(async (req, res, next) => {
-  const places = await Place.find({ host: new mongoose.Types.ObjectId(req.params.id) }).select('name image_cover location.address average_ratings');
+  const places = await Place
+    .find({ host: new mongoose.Types.ObjectId(req.params.id) })
+    .select('name image_cover location.address average_ratings');
 
   res.status(200).json({
     status: 'success',
