@@ -4,8 +4,8 @@ import { BiSolidAward, BiShieldQuarter } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { CiShare1 } from "react-icons/ci";
 import { CgMenuGridO } from "react-icons/cg";
-import { GiDesk } from "react-icons/gi";
-import { BsCurrencyDollar, BsCalendarWeek } from "react-icons/bs";
+import { GiDesk, GiBlackBook } from "react-icons/gi";
+import { BsCurrencyDollar, BsCalendarWeek, BsHouses } from "react-icons/bs";
 import { MdVerifiedUser } from "react-icons/md";
 
 import Input from "../components/Input/Input";
@@ -225,7 +225,7 @@ export default function PlacePage() {
                   <span>{place.bathrooms} bathrooms</span>
                 </div>
 
-                <Link to={`/users/profile/${place?.host?.id}`} className="rounded w-14 h-14">
+                <Link to={`/users/profile/${place?.host?.id}`} className="w-12 h-12  border-primary rounded-full border-[1px] p-[2px]">
                   <img src={place.host?.avatar} className="rounded-full w-full h-full" />
                 </Link>
               </div>
@@ -328,14 +328,14 @@ export default function PlacePage() {
                   ranges={[selectionRange]}
                   direction="horizontal"
                   rangeColors={["#ff385c"]}
-                  className={"my-8 text-black " + (width < 1000 ? 'w-full text-[16px] [&_.rdrMonth]:w-full' : '')}
+                  className={"my-8 text-black " + (width < 1000 ? 'w-full text-[16px] [&_.rdrMonth]:w-full ' : '')}
                 />
                 </div>
               </div>
 
             </div>
 
-            <div ref={purchaseCardRef} className="rounded-md shadow-sm shadow-gray-400 py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
+            <div ref={purchaseCardRef} className="rounded-xl shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px] py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
               <div className="flex justify-between items-center">
                 <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{priceAfterDiscount}</span> night</p>
                 <div>
@@ -481,7 +481,7 @@ export default function PlacePage() {
           <h3 className="text-2xl font-medium">Things to know</h3>
           <div className="grid grid-cols-3">
             <div className="my-2">
-              <p className="text-lg">House rules</p>
+              <p className="text-lg flex items-center gap-2"><BsHouses /> House rules</p>
               <div className="font-light text-[15px]">
                 <p>Check-in after {new Date(place?.checkinout?.checkin_date).toLocaleDateString('en-US')}</p>
                 <p>Checkout before {new Date(place?.checkinout?.checkout_date).toLocaleDateString('en-US')}</p>
@@ -492,7 +492,7 @@ export default function PlacePage() {
               </div>
             </div>
             <div className="my-2">
-              <p className="text-lg">Safety & property</p>
+              <p className="text-lg flex items-center gap-2"><GiBlackBook /> Safety & property</p>
               <div className=" text-[15px]">
                 {place.safety && Object.keys(place?.safety).map(sp =>  (
                   <p className={`${sp === '_id' ? 'hidden' : ''} font-light ${place.safety[sp] ? '' : 'line-through'}`} key={sp}>{capitalizeFirstLetter(sp.replace(/_/g, ' '))}</p>
@@ -500,7 +500,7 @@ export default function PlacePage() {
               </div>
             </div>
             <div className="my-2">
-              <p className="text-lg">Cancellation policy</p>
+              <p className="text-lg flex items-center gap-2"><BsCalendarWeek /> Cancellation policy</p>
               <p className="font-light text-[15px]">{place.rules?.cancellation_policy?.description}</p>
             </div>
           </div>
