@@ -81,14 +81,18 @@ export default function IndexPage() {
     } 
   }
 
+  console.log(hasNextPage, loading);
   const lastPlaceRef = useIntersectionObserver(() => {
+    console.log('last Place: ', location);
     void fetchPlaces(nextPage).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
-  }, [hasNextPage, !loading, location]);
+  }, [hasNextPage, !loading]);
 
   
   useEffect(() => {
     void fetchPlaces().then(setPlaces);
-  }, [location]);
+    setHasNextPage(true);
+    setNextPage(1);
+  }, [JSON.stringify(location)]);
 
   function scrollHorizontal(scrollOffset) {
     scrollRef.current.scrollLeft += scrollOffset;

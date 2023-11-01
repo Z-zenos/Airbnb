@@ -142,7 +142,6 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
     });
 
     queryObj = { ...Object.fromEntries([...searchParams]), ...queryObj };
-    console.log(queryObj);
     return queryObj;
   }
 
