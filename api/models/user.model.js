@@ -1,9 +1,7 @@
-const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Interest = require('./interest.model');
-const Place = require('./place.model');
 
 const userSchema = new mongoose.Schema(
   {

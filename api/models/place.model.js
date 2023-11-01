@@ -270,7 +270,7 @@ placeSchema.pre(/^find/, function(next) {
     select: '-__v'
   }).populate({
     path: 'host',
-    select: 'avatar'
+    select: 'avatar name description'
   });
 
   next();

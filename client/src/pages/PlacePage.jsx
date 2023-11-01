@@ -1,11 +1,12 @@
 import Button from "../components/Button/Button";
 import { AiFillStar, AiOutlineRight } from "react-icons/ai";
-import { BiSolidAward } from "react-icons/bi";
+import { BiSolidAward, BiShieldQuarter } from "react-icons/bi";
 import { AiOutlineHeart } from "react-icons/ai";
 import { CiShare1 } from "react-icons/ci";
 import { CgMenuGridO } from "react-icons/cg";
 import { GiDesk } from "react-icons/gi";
-import { BsCurrencyDollar } from "react-icons/bs";
+import { BsCurrencyDollar, BsCalendarWeek } from "react-icons/bs";
+import { MdVerifiedUser } from "react-icons/md";
 
 import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
@@ -128,19 +129,19 @@ export default function PlacePage() {
 
           <h2 className="font-bold text-2xl mb-1">{place?.name}</h2>
           <div className="flex justify-between items-center">
-            <div className="text-sm">
-              <span className="font-medium"><AiFillStar className="inline" /> {place.average_ratings}</span>
-              <span className="mx-2 font-medium">·</span>
-              <span className="underline font-medium">205 reviews</span>
-              <span className="mx-2 font-medium">·</span>
+            <div className="text-[15px]">
+              <span className="font-light"><AiFillStar className="inline" /> {place.average_ratings}</span>
+              <span className="mx-2 font-light">·</span>
+              <span className="underline font-light">205 reviews</span>
+              <span className="mx-2 font-light">·</span>
               <span><BiSolidAward className="inline" /> Superhost</span>
-              <span className="mx-2 font-medium">·</span>
-              <span className="underline font-medium">{place.location?.address}</span>
+              <span className="mx-2 font-light">·</span>
+              <span className="underline font-light">{place.location?.address}</span>
             </div>
             <div className="gap-1 flex">
               <Button 
                 label="Share" 
-                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-medium text-sm" 
+                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-light text-sm" 
                 iconClassName="translate-y-[2px]"
                 outline={true}
                 small={true}
@@ -150,7 +151,7 @@ export default function PlacePage() {
 
               <Button 
                 label="Heart" 
-                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-medium text-sm" 
+                className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-light text-sm" 
                 iconClassName="translate-y-[2px]" 
                 outline={true}
                 small={true}
@@ -191,7 +192,7 @@ export default function PlacePage() {
                   <img
                     style={{ gridColumn: '3 / span 2' , gridRow: '1 / span 2' }}
                     alt="gallery"
-                    className="block w-full h-full rounded-lg object-cover object-center"
+                    className="block w-full h-full max-h-[470px] rounded-lg object-cover object-center"
                     src={`http://localhost:3000/images/places/${place?.image_cover}`} 
                   />
                   
@@ -231,7 +232,7 @@ export default function PlacePage() {
               <div className="h-[1px] bg-gray-300 mt-1"></div>
 
               <div className="gap-2 pt-8">
-                <div className="flex justify-start gap-8 px-6 mb-8">
+                <div className="flex justify-start items-center gap-8 px-6 mb-6">
                   <span><GiDesk className="text-3xl" /></span>
                   <div>
                     <p className="font-medium">Dedicated workspace</p>
@@ -242,10 +243,10 @@ export default function PlacePage() {
                 
                 </div>
 
-                <div className="flex justify-start gap-8 px-6 mb-8">
-                  <span><GiDesk className="text-3xl" /></span>
+                <div className="flex justify-start items-center gap-8 px-6 mb-6">
+                  <span><BiSolidAward className="text-3xl" /></span>
                   <div>
-                    <p className="font-medium">Daleep is a Superhost</p>
+                    <p className="font-medium">{place?.host?.name} is a Superhost</p>
                     <p className=" text-gray-600 text-sm font-light">
                       Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.
                     </p>
@@ -253,10 +254,10 @@ export default function PlacePage() {
                 
                 </div>
 
-                <div className="flex justify-start gap-8 px-6 mb-8">
-                  <span><GiDesk className="text-3xl" /></span>
+                <div className="flex justify-start items-center gap-8 px-6 mb-6">
+                  <span><BsCalendarWeek className="text-2xl" /></span>
                   <div>
-                    <p className="font-medium">Dedicated workspace</p>
+                    <p className="font-medium">{place.rules?.cancellation_policy?.description}</p>
                   </div>
                 
                 </div>
@@ -285,8 +286,8 @@ export default function PlacePage() {
 
               <div className="py-8 px-2" ref={amenitiesRef}>
                 <h3 className="font-medium text-2xl">What this place offers</h3>
-                <div className="mt-4">
-                  { amenities.length && amenities.slice(0, 6).map(amenity => amenity.src && (
+                <div className="mt-4 xl:grid xl:grid-cols-2">
+                  { amenities.length && amenities.slice(0, width > 1000 ? 12 : 6).map(amenity => amenity.src && (
                     <div className="flex gap-4 items-center mb-4" key={amenity.name}>
                       <span>
                         <img 
@@ -311,7 +312,7 @@ export default function PlacePage() {
                   </div> */}
                 </div>
 
-                <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary" label="Show all 10 amenities" onClick={() => setOpen(true)} />
+                <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary " label={`Show all ${place?.amenities?.length} amenities`} onClick={() => setOpen(true)} />
               </div>
 
               <div className="h-[1px] bg-gray-300"></div>
@@ -408,7 +409,7 @@ export default function PlacePage() {
               </div>
             </div>
             
-            <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px] hover:text-primary" label="Show all 90 reviews" />
+            <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px] hover:text-primary " label="Show all 90 reviews" />
             
           </div>
 
@@ -427,13 +428,61 @@ export default function PlacePage() {
           </div>
         </div>
 
+        {/* HOST */}
+        <div className="h-[1px] bg-gray-300 mt-1"></div>
+        <div className="py-8 px-8">
+          <div className="grid grid-cols-2 gap-10">
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center justify-start gap-4">
+                <Link to={`/users/profile/${place?.host?.id}`} className="rounded w-14 h-14">
+                  <img src={place?.host?.avatar} className="rounded-full w-full h-full" />
+                </Link>
+
+                <div>
+                  <p className="text-2xl font-medium">Hosted by {place?.host?.name}</p>
+                  <p className="font-light opacity-60">Joined in July, 2018</p>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center font-light mt-4">
+                <p className="flex items-center justify-center gap-2">
+                  <AiFillStar className="w-5 h-5" /> 33 Reviews
+                </p>
+                <p className="flex items-center justify-center gap-2">
+                  <MdVerifiedUser className="w-5 h-5" /> Identity verified
+                </p>
+                <p className="flex items-center justify-center gap-2">
+                  <BiSolidAward className="w-5 h-5" /> Superhost
+                </p>
+              </div>
+
+              <div className="font-light my-4">
+                { place?.host?.description }
+              </div>
+
+              <div>
+                <p className="font-medium">{place?.host?.name} is a <span className="underline">Superhost</span></p>
+                <p className="font-light">Superhosts are experienced, highly rated hosts who are committed to providing great stays for guests.</p>
+              </div>
+            </div>
+            <div className="py-8">
+              <Button label="Contact Host" outline={true} className="ml-8 hover:bg-gray-100" />
+              <div className="flex justify-start items-center gap-2 mt-6">
+                <span><BiShieldQuarter className="w-8 h-8 text-primary" /></span>
+                <p className="font-light text-[14px]">To protect your payment, never transfer money or communicate outside of the Airbnb website or app.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* THINKS TO KNOW */}
         <div className="h-[1px] bg-gray-300 mt-1"></div>
         <div className="py-8 px-8">
           <h3 className="text-2xl font-medium">Things to know</h3>
           <div className="grid grid-cols-3">
             <div className="my-2">
               <p className="text-lg">House rules</p>
-              <div className="font-light">
+              <div className="font-light text-[15px]">
                 <p>Check-in after {new Date(place?.checkinout?.checkin_date).toLocaleDateString('en-US')}</p>
                 <p>Checkout before {new Date(place?.checkinout?.checkout_date).toLocaleDateString('en-US')}</p>
                 <p>{place.guests} guests max</p>
@@ -444,13 +493,15 @@ export default function PlacePage() {
             </div>
             <div className="my-2">
               <p className="text-lg">Safety & property</p>
-              {place.safety && Object.keys(place?.safety).map(sp =>  (
-                <p className={`${sp === '_id' ? 'hidden' : ''} font-light ${place.safety[sp] ? '' : 'line-through'}`} key={sp}>{capitalizeFirstLetter(sp.replace(/_/g, ' '))}</p>
-              ))}
+              <div className=" text-[15px]">
+                {place.safety && Object.keys(place?.safety).map(sp =>  (
+                  <p className={`${sp === '_id' ? 'hidden' : ''} font-light ${place.safety[sp] ? '' : 'line-through'}`} key={sp}>{capitalizeFirstLetter(sp.replace(/_/g, ' '))}</p>
+                ))}
+              </div>
             </div>
             <div className="my-2">
               <p className="text-lg">Cancellation policy</p>
-              <p className="font-light">{place.rules?.cancellation_policy?.description}</p>
+              <p className="font-light text-[15px]">{place.rules?.cancellation_policy?.description}</p>
             </div>
           </div>
         </div>
