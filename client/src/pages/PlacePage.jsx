@@ -19,7 +19,7 @@ import { PlaceContext } from "../contexts/place.context";
 import axios from "axios";
 import Modal from "../components/Modals/Modal";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { ModalContext } from "../contexts/modal.context";
 import ImageModal from "../components/Modals/ImageModal";
 
@@ -224,9 +224,9 @@ export default function PlacePage() {
                   <span>{place.bathrooms} bathrooms</span>
                 </div>
 
-                <div className="rounded w-14 h-14">
-                  <img src="https://a0.muscache.com/im/pictures/user/d87628a6-3c1a-4e2e-a4ae-7743ab5f6ece.jpg?im_w=240" className="rounded-full w-full h-full" />
-                </div>
+                <Link to={`/users/profile/${place?.host?.id}`} className="rounded w-14 h-14">
+                  <img src={place.host?.avatar} className="rounded-full w-full h-full" />
+                </Link>
               </div>
               <div className="h-[1px] bg-gray-300 mt-1"></div>
 

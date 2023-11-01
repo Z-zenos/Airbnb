@@ -22,13 +22,14 @@ export default function IndexPage() {
     isFilterModalOpen, 
     isSearchModalOpen,
   } = useContext(ModalContext);
-  const [propertyTypeList, setPropertyTypeList] = useState([]);
-  const [propertyType, setPropertyType] = useState(0);
   const scrollRef = useHorizontalScroll();
-  const [places, setPlaces] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  
+  const [propertyTypeList, setPropertyTypeList] = useState([]);
+  const [places, setPlaces] = useState([]);
+  const [propertyType, setPropertyType] = useState(0);
   const [isHideScrollBtn, setIsHideScrollBtn] = useState(-1);
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
@@ -92,6 +93,9 @@ export default function IndexPage() {
     void fetchPlaces().then(setPlaces);
     setHasNextPage(true);
     setNextPage(1);
+
+    if(!searchParams.get('property_type')) setPropertyType(0);
+
     setTimeout(() => {
       window.scrollTo({top: 0, behavior: 'smooth'});
     }, 500);

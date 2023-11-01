@@ -1,4 +1,4 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '../contexts/user.context';
 import { ModalContext } from '../contexts/modal.context';
@@ -17,6 +17,7 @@ export default function Header() {
   const {user} = useContext(UserContext);
   const { setIsSearchModalOpen } = useContext(ModalContext);
   const [searchParams] = useSearchParams();
+  const location = useLocation();
 
   const time = () => {
     const checkin = +searchParams.get('checkin');
@@ -47,7 +48,8 @@ export default function Header() {
         <span className='font-bold text-2xl'>airbnb</span>
       </Link>
 
-      <div 
+      { !location.pathname.includes('users') && 
+          <div 
         className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
         onClick={() => setIsSearchModalOpen(true)}
       >
@@ -61,7 +63,8 @@ export default function Header() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
           </svg>
         </button>
-      </div>
+          </div>
+      }
 
       <div className='flex items-center gap-2 relative'>
         <div 
