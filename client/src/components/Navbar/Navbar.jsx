@@ -8,8 +8,6 @@ export default function Navbar({ children, className }) {
     setVisible(currentScrollPos > 600);
   }
 
-  
-
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);

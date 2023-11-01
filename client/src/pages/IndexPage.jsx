@@ -67,7 +67,7 @@ export default function IndexPage() {
 
       const res = await axios.get(`${location.pathname !== '/' ? location.pathname : 'places'}${location.search ? location.search : ''}${location.search ? '&' : '?'}page=${page}&limit=${limit}`);
 
-      if(res.data.total <= places.length) setHasNextPage(false);
+      if(res.data.total <= limit * page) setHasNextPage(false);
       else setNextPage(page + 1);
       
       setLoading(false);
@@ -81,14 +81,13 @@ export default function IndexPage() {
     } 
   }
 
-  console.log(hasNextPage, loading);
   const lastPlaceRef = useIntersectionObserver(() => {
-    console.log('last Place: ', location);
     void fetchPlaces(nextPage).then(newPlaces => setPlaces(places => [...places, ...newPlaces]));
   }, [hasNextPage, !loading]);
 
-  
+  console.log(hasNextPage, loading, places.length);
   useEffect(() => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
     void fetchPlaces().then(setPlaces);
     setHasNextPage(true);
     setNextPage(1);
@@ -124,8 +123,8 @@ export default function IndexPage() {
   }
 
   return (
-    <div className="lg:px-20 md:px-10 mb-10">
-      <div className="grid grid-cols-10 items-center gap-6">
+    <div className="mb-10">
+      <div className="lg:px-20 md:px-10 grid grid-cols-10 items-center gap-6 sticky top-[67px] bg-white shadow-md z-10">
         <div className="mt-4 grid grid-cols-12 items-center lg:col-span-9 md:col-span-8">
           { isHideScrollBtn !== -1 && 
             <BsCaretLeft 
@@ -173,7 +172,7 @@ export default function IndexPage() {
         </div>
       </div>
       
-      <div className="grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
+      <div className=" lg:px-20 md:px-10 grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
         { places.length > 0 && 
           places.map((place, i, places) =>
             <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>

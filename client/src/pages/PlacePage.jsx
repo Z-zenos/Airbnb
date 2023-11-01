@@ -79,7 +79,6 @@ export default function PlacePage() {
     }[ev.target.textContent]);
   }
 
-
   return (
     <>
       <Navbar className="flex justify-between items-center w-full">
