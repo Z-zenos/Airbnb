@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Interest = require('./interest.model');
+const Place = require('./place.model');
 
 const userSchema = new mongoose.Schema(
   {
@@ -98,11 +99,17 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual('places', {
-  ref: 'Place',
-  foreignField: 'host',
-  localField: '_id'
-});
+// userSchema.virtual('places', {
+//   ref: 'Place',
+//   foreignField: 'host',
+//   localField: '_id'
+// });
+
+// userSchema.virtual('places').get(async function() {
+//   const places = await Place.find({ host: new mongoose.Types.ObjectId(this._id) });
+//   console.log(places);
+//   return places;
+// });
 
 userSchema.pre('save', async function(next) {
   if(!this.isModified('password')) return next();
@@ -132,9 +139,6 @@ userSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'interests',
     select: '-__v -_id -created -modified'
-  }).populate({
-    path: 'places',
-    select: 'image_cover location name average_ratings'
   });
 
   next();

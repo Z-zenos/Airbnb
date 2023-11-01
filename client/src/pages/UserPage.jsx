@@ -22,12 +22,16 @@ export default function UserPage() {
   const scrollRef = useHorizontalScroll();
   const [user, setUser] = useState();
   const location = useLocation();
+  const [places, setPlaces] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(location.pathname);
         setUser(res.data.data.user);
+
+        const resPlaces = await axios.get(`/users/${res.data.data.user.id}/places`);
+        setPlaces(resPlaces.data.data.places);
       } catch(err) {
         console.error(err);
       }
@@ -78,7 +82,7 @@ export default function UserPage() {
     </div>
   );
 
-  const places = user?.places.length > 0 && user?.places.map(place => (
+  const placeCardList = places.length > 0 && places.map(place => (
     <Link key={place.name} to={`/places/${place.id}`} className="cursor-pointer">
       <div >
         <img className="rounded-md w-full h-[220px]" src={`http://localhost:3000/images/places/${place.image_cover}`} />
@@ -233,7 +237,7 @@ export default function UserPage() {
           <h3 className="text-2xl font-medium">{user?.name}’s places</h3>
 
           <div className="py-6 grid grid-cols-3 md:grid-cols-2 gap-6">
-            { places }
+            { placeCardList }
           </div>
         </div>
 

@@ -4,20 +4,9 @@ import {FaLocationDot } from "react-icons/fa6";
 import {BsCalendarHeart} from "react-icons/bs";
 import Carousel from "../Carousel/Carousel";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import "./PlaceCard.css";
 
 export default function PlaceCard({place}) {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    (async () => {
-      const res = await axios.get(`/users/profile/${place.host}`);
-      setUser(res.data.data.user);
-    })();
-  }, []);
-
   if(!place.name) return;
 
   return (
@@ -25,9 +14,9 @@ export default function PlaceCard({place}) {
       <div className="relative rounded-lg w-[270px] h-[260px]">
         <Carousel slides={[place.image_cover, ...place.images.slice(0, 4)]} imageClassName="h-[260px] object-cover aspect-video rounded-lg" />
 
-        <Link to={`/users/profile/${user?.id}`} className=" book-container absolute flex items-center justify-center shadow-[rgba(0,_0,_0,_0.16)_0px_3px_6px,_rgba(0,_0,_0,_0.23)_0px_3px_6px] left-3 bottom-3 rounded-md">
+        <Link to={`/users/profile/${place?.host?.id}`} className=" book-container absolute flex items-center justify-center shadow-[rgba(0,_0,_0,_0.16)_0px_3px_6px,_rgba(0,_0,_0,_0.23)_0px_3px_6px] left-3 bottom-3 rounded-md">
           <div className="book">
-            <img src={user?.avatar} className="rounded-full w-12 h-12" alt="avatar user" />
+            <img src={place?.host?.avatar} className="rounded-full w-12 h-12" alt="avatar host" />
           </div>
         </Link>
       </div>

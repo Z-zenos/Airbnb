@@ -178,7 +178,7 @@ const placeSchema = new mongoose.Schema(
 
     host: {
       type: mongoose.Schema.ObjectId,
-      ref: User,
+      ref: 'User',
       required: [true, 'A place must be hosted by certain host']
     },
 
@@ -216,9 +216,6 @@ placeSchema.index({ 'location.address': "text" }, {
 });
 // placeSchema.index({ startLocation: '2dsphere' });
 
-// placeSchema.virtual('durationWeeks').get(function() {
-//   return this.duration / 7;
-// });
 
 // Virtual populate
 // placeSchema.virtual('user', {
@@ -271,11 +268,10 @@ placeSchema.pre(/^find/, function(next) {
   }).populate({
     path: 'views',
     select: '-__v'
+  }).populate({
+    path: 'host',
+    select: 'avatar'
   });
-  // .populate({
-  //   path: 'host',
-  //   select: 'name'
-  // });
 
   next();
 });
