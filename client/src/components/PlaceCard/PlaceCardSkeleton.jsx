@@ -2,12 +2,12 @@
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-export default function PlaceCardSkeleton({cards}) {
+export default function PlaceCardSkeleton({className, cards}) {
   return (
     <>
       { [...Array(cards).keys()].map(card => (
-        <div key={card} className="w-[270px] my-6 cursor-pointer">
-          <div className="rounded-lg w-[270px] h-[260px]">
+        <div key={card} className={`w-[270px] my-6 cursor-pointer ${className}`}>
+          <div className="rounded-lg w-full h-[260px]">
             <Skeleton className="h-[260px] w-full rounded-lg" />
           </div>
 

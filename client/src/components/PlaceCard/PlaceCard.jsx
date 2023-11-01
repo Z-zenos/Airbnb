@@ -6,12 +6,12 @@ import Carousel from "../Carousel/Carousel";
 import { Link } from "react-router-dom";
 import "./PlaceCard.css";
 
-export default function PlaceCard({place}) {
+export default function PlaceCard({place, className}) {
   if(!place.name) return;
 
   return (
-    <div className="w-[270px] my-6 cursor-pointer">
-      <div className="relative rounded-lg w-[270px] h-[260px]">
+    <div className={`w-[270px] my-6 cursor-pointer ${className}`}>
+      <div className="relative rounded-lg w-full h-[260px]">
         <Carousel slides={[place.image_cover, ...place.images.slice(0, 4)]} imageClassName="h-[260px] object-cover aspect-video rounded-lg" />
 
         <Link to={`/users/profile/${place?.host?.id}`} className=" book-container absolute flex items-center justify-center shadow-[rgba(0,_0,_0,_0.16)_0px_3px_6px,_rgba(0,_0,_0,_0.23)_0px_3px_6px] left-3 bottom-3 rounded-md">

@@ -1,7 +1,9 @@
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import { Icon } from 'leaflet';
+import { Link } from 'react-router-dom';
+import { AiFillStar } from 'react-icons/ai';
 
 const url = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const attribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
@@ -18,25 +20,46 @@ function ChangeView({ center, zoom }) {
   return null;
 }
 
-export default function Map({ country, center = [0,0] }) {
+export default function Map({ 
+  locations = [{
+    address: '',
+    price: 0,
+    id: '',
+    image_cover: '',
+    coordinate: [0, 0],
+    name: '',
+    rating: 0,
+  }], 
+  className 
+}) {
 
   return (
     <MapContainer 
-      center={ center || [51, -0.09]} 
-      zoom={center ? 4 : 2} 
-      // scrollWheelZoom={false} 
-      className="h-[35vh] rounded-lg"
+      center={ locations[0].coordinate || [51, -0.09]} 
+      zoom={locations[0].coordinate ? 4 : 2} 
+      className={className}
     >
-      <ChangeView center={center} zoom={4} />
+      <ChangeView center={locations[0].coordinate} zoom={4} />
       <TileLayer
         url={url}
         attribution={attribution}
       />
-      {center && (
-        <Marker position={center} icon={customIcon} >
-          <Popup>{country}</Popup>
+      {locations.map((location, i) => (
+        <Marker key={i} position={location.coordinate} title={location.address}  icon={customIcon} >
+          <Popup className=''>
+            <Link target="_blank" to={`/places/${location.id}`} className=' cursor-pointer'>
+              <img className='w-full max-h-[200px] rounded-tl-xl rounded-tr-xl' src={`http://localhost:3000/images/places/${location.image_cover}`} />
+              <div className='px-4 py-3'>
+                <p style={{ fontWeight: '600', fontSize: '18px', color: '#000', margin: '6px 0', display: 'flex', justifyContent: 'space-between' }}>{location.name} <span className='font-light flex items-center gap-1 '><AiFillStar className='text-yellow-500' /> {location.rating}</span></p>
+                <p style={{ margin: '4px 0', color: 'black', opacity: '70%' }}>{location.address}</p>
+              </div>
+            </Link>
+          </Popup>
+          <Tooltip direction="bottom" offset={[0, 0]} opacity={1} permanent>
+            <span style={{ fontWeight: '700' }}>$ {location.price}</span>
+          </Tooltip>
         </Marker>
-      )}
+      ))}
     </MapContainer>
   );
 }

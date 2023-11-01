@@ -2,7 +2,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import { CgFilters } from "react-icons/cg";
-
+import { SlMap } from "react-icons/sl";
 import {BsCaretLeft, BsCaretRight} from "react-icons/bs";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import PlaceCard from "../components/PlaceCard/PlaceCard";
@@ -14,6 +14,8 @@ import PlaceCardSkeleton from "../components/PlaceCard/PlaceCardSkeleton";
 import Spinner from "../components/Spinner/Spinner";
 import SearchModal from "../components/Modals/SearchModal";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
+import Button from "../components/Button/Button";
+import Map from "../components/Map";
 
 export default function IndexPage() {
   const { 
@@ -36,6 +38,7 @@ export default function IndexPage() {
   const [filterCriteriaNumber, setFilterCriteriaNumber] = useState(0);
   const [nextPage, setNextPage] = useState(1);
   const [isURLChanged, setIsURLChanged] = useState(true);
+  const [isShowMap, setIsShowMap] = useState(false);
 
   // Fetch property types
   useEffect(() => {
@@ -131,7 +134,7 @@ export default function IndexPage() {
   }
 
   return (
-    <div className="mb-10">
+    <div className="relative mb-10">
       <div className="lg:px-20 md:px-10 grid grid-cols-10 items-center gap-6 sticky top-[67px] bg-white shadow-md z-10">
         <div className="mt-4 grid grid-cols-12 items-center lg:col-span-9 md:col-span-8">
           { isHideScrollBtn !== -1 && 
@@ -180,22 +183,45 @@ export default function IndexPage() {
         </div>
       </div>
       
-      <div className=" lg:px-20 md:px-10 grid 2xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 md:gap-5">
-        { (places.length > 0 && !isURLChanged) &&
-          places.map((place, i, places) =>
-            <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>
-              <PlaceCard place={place} />
-            </div> 
-          ) 
-        }
-        
-        { loading && <PlaceCardSkeleton cards={12} /> }
-        { (!loading && !places.length) && <div className=" col-span-10 text-3xl opacity-70 font-bold text-center py-[250px]">No results</div> }
+      <div className={`h-[75vh] ${isShowMap ? 'grid grid-cols-10 gap-4' : ''}`}>
+        <div className={`lg:px-20 md:px-10 grid  md:gap-5 ${isShowMap ? 'col-span-6 2xl:grid-cols-3 overflow-y-scroll md:grid-cols-2' : '2xl:grid-cols-6 md:grid-cols-3 lg:grid-cols-4'}`}>
+          { (places.length > 0 && !isURLChanged) &&
+            places.map((place, i, places) =>
+              <div ref={places.length - 1 === i ? lastPlaceRef : null} key={place.id}>
+                <PlaceCard className={`${isShowMap ? '2xl:w-[320px] md:w-[240px]' : ''}`} place={place} />
+              </div> 
+            ) 
+          }
+          
+          { loading && <PlaceCardSkeleton className={`${isShowMap ? '2xl:w-[320px] md:w-[240px]' : ''}`} cards={12} /> }
+          { (!loading && !places.length) && <div className=" col-span-10 text-3xl opacity-70 font-bold text-center py-[250px]">No results</div> }
+        </div>
+
+        { isShowMap && (
+          <div className="col-span-4 h-full border-l pl-1 border-l-primary">
+            <Map 
+              locations={places?.map(place => ({
+                address: place.location.address,
+                price: place.price,
+                id: place.id,
+                image_cover: place.image_cover,
+                coordinate: place.location.coordinates,
+                name: place.name,
+                rating: place.average_ratings,
+              }))} 
+              className="h-full" 
+            />
+          </div>
+        )}
       </div>
 
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
       { isFilterModalOpen && <FilterModal setFilterCriteriaNumber={setFilterCriteriaNumber} /> }
       { isSearchModalOpen && <SearchModal /> }
+
+      <Button outline={false} className="fixed top-[85%] z-40 left-1/2 -translate-x-1/2 hover:text-primary hover:bg-white shadow-[rgba(0,_0,_0,_0.19)_0px_10px_20px,_rgba(0,_0,_0,_0.23)_0px_6px_6px] hover:scale-105" label="Show map" onClick={() => setIsShowMap(!isShowMap)}>
+        <SlMap className="mr-2" />
+      </Button>
     </div>
   );
 }

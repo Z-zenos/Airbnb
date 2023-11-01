@@ -241,7 +241,12 @@ export default function CreatePlaceModal() {
           onChange={value => setCustomValue('location', value)}
         />
 
-        <Map country={location?.country} center={location?.coordinates.length ? location.coordinates : [0,0]} />
+        <Map 
+          className="h-[35vh]" 
+          locations={[{
+            coordinate: location?.coordinates.length ? location.coordinates : [0,0]
+          }]} 
+        />
       </div>
     );
   }

@@ -27,3 +27,13 @@
 }
 
 .tox-notification { display: none !important }
+
+.leaflet-popup-content {
+  margin: 0;
+  width: 320px !important;
+  height: 280px;
+}
+
+.leaflet-popup-content-wrapper {
+  padding: 0;
+}
