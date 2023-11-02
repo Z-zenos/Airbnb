@@ -14,7 +14,7 @@ class APIFeatures {
       Exclude these special field names from our query string
       before filtering. Because these special fields will have their own handler function.
     */
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ['page', 'sort', 'limit', 'fields', 'currency'];
     excludedFields.forEach(el => delete queryObj[el]);
 
     Object.keys(queryObj).forEach(key => {

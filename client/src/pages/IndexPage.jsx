@@ -16,6 +16,7 @@ import SearchModal from "../components/Modals/SearchModal";
 import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import Button from "../components/Button/Button";
 import Map from "../components/Map";
+import IntlModal from "../components/Modals/IntlModal";
 
 export default function IndexPage() {
   const { 
@@ -23,6 +24,7 @@ export default function IndexPage() {
     isCreatePlaceModalOpen,
     isFilterModalOpen, 
     isSearchModalOpen,
+    isIntlModalOpen
   } = useContext(ModalContext);
   const scrollRef = useHorizontalScroll();
   const navigate = useNavigate();
@@ -218,6 +220,7 @@ export default function IndexPage() {
       { isCreatePlaceModalOpen && <CreatePlaceModal /> }
       { isFilterModalOpen && <FilterModal setFilterCriteriaNumber={setFilterCriteriaNumber} /> }
       { isSearchModalOpen && <SearchModal /> }
+      { isIntlModalOpen && <IntlModal /> }
 
       <Button outline={false} className="fixed top-[85%] z-40 left-1/2 -translate-x-1/2 hover:text-primary hover:bg-white shadow-[rgba(0,_0,_0,_0.19)_0px_10px_20px,_rgba(0,_0,_0,_0.23)_0px_6px_6px] hover:scale-105" label="Show map" onClick={() => setIsShowMap(!isShowMap)}>
         <SlMap className="mr-2" />

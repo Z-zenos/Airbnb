@@ -10,3 +10,14 @@ exports.getAllCountries = (req, res, next) => {
     }
   });
 };
+
+exports.getAllCurrencies = (req, res, next) => {
+  const currencies = countries.map(country => country.currency);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      currencies
+    }
+  });
+};

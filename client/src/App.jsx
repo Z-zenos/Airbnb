@@ -10,6 +10,7 @@ import { PlaceContextProvider } from './contexts/place.context';
 import { ModalContextProvider } from './contexts/modal.context';
 import { ToastContextProvider } from './contexts/toast.context';
 import UserPage from "./pages/UserPage";
+import { IntlContextProvider } from "./contexts/intl.context";
 
 
 // Apply for all requests
@@ -34,20 +35,22 @@ function App() {
   return (
     <PlaceContextProvider>
       <UserContextProvider>
-        <ModalContextProvider>
-          <ToastContextProvider>
-            <Routes>
-              <Route path='/' element={ <MainLayout /> } >
-                <Route index element={<IndexPage />} />
-                <Route path="/places" element={<IndexPage />} />
-                <Route path="/places/search" element={<IndexPage />} />
-                <Route path="/users/profile/:id" element={<UserPage />} />
-                <Route path='/login' element={ <AuthPage /> } />
-                <Route path='/places/:id' element={ <PlacePage /> } />
-              </Route>
-            </Routes>
-          </ToastContextProvider>
-        </ModalContextProvider>
+        <IntlContextProvider>
+          <ModalContextProvider>
+            <ToastContextProvider>
+              <Routes>
+                <Route path='/' element={ <MainLayout /> } >
+                  <Route index element={<IndexPage />} />
+                  <Route path="/places" element={<IndexPage />} />
+                  <Route path="/places/search" element={<IndexPage />} />
+                  <Route path="/users/profile/:id" element={<UserPage />} />
+                  <Route path='/login' element={ <AuthPage /> } />
+                  <Route path='/places/:id' element={ <PlacePage /> } />
+                </Route>
+              </Routes>
+            </ToastContextProvider>
+          </ModalContextProvider>
+        </IntlContextProvider>
       </UserContextProvider>
     </PlaceContextProvider>
   );

@@ -9,6 +9,7 @@ export function ModalContextProvider({ children }) {
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [isIntlModalOpen, setIsIntlModalOpen] = useState(false);
   
   return (
     <ModalContext.Provider value={{
@@ -16,7 +17,8 @@ export function ModalContextProvider({ children }) {
       setIsOpen, setIsCreatePlaceModalOpen,
       isFilterModalOpen, setIsFilterModalOpen,
       isImageModalOpen, setIsImageModalOpen,
-      isSearchModalOpen, setIsSearchModalOpen
+      isSearchModalOpen, setIsSearchModalOpen,
+      isIntlModalOpen, setIsIntlModalOpen,
     }}>
       { children }
     </ModalContext.Provider>

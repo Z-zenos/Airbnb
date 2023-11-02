@@ -1,11 +1,15 @@
 
-import { BiWorld, BiDollar } from "react-icons/bi";
+import { BiWorld } from "react-icons/bi";
 import { AiFillFacebook, AiOutlineTwitter, AiOutlineInstagram, AiOutlineCopyrightCircle } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
+import { useContext } from "react";
+import { IntlContext } from "../../contexts/intl.context";
 
 export default function Footer() {
   const location = useLocation();
+  const { currency } = useContext(IntlContext);
+
   return (
     <footer className={`z-10 bg-white border border-t-1 border-gray-primary ${location.pathname === '/' || location.pathname === '/places' ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
       <div className="flex justify-center items-center">
@@ -15,8 +19,8 @@ export default function Footer() {
         </span>
 
         <span className=" ml-8 mr-10 flex items-center">
-          <BiDollar className="inline mr-1" />
-          USD
+          { currency.symbol }
+          { currency.code }
         </span>
 
         <span className="flex gap-2 items-center text-xl">

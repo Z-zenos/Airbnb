@@ -5,10 +5,13 @@ import {BsCalendarHeart} from "react-icons/bs";
 import Carousel from "../Carousel/Carousel";
 import { Link } from "react-router-dom";
 import "./PlaceCard.css";
+import { useContext } from "react";
+import { IntlContext } from "../../contexts/intl.context";
 
 export default function PlaceCard({place, className}) {
+  const { currency } = useContext(IntlContext);
+  
   if(!place.name) return;
-
   return (
     <div className={`w-[270px] my-6 cursor-pointer ${className}`}>
       <div className="relative rounded-lg w-full h-[260px]">
@@ -33,7 +36,7 @@ export default function PlaceCard({place, className}) {
           </p>
           <p className="text-sm font-light mt-2 flex justify-between items-center">
             <span className="flex items-center">
-              <span className="line-through">${place.price}</span> 
+              <span className="line-through">{currency.symbol}{place.price}</span> 
               <span className="font-bold mx-2 text-xl text-primary">
                 {place.price -  Math.trunc(place.price * place.price_discount / 100)}
               </span> 
