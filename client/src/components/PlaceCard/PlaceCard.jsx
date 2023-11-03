@@ -9,7 +9,7 @@ import { useContext } from "react";
 import { IntlContext } from "../../contexts/intl.context";
 
 export default function PlaceCard({place, className}) {
-  const { currency, formatCurrency } = useContext(IntlContext);
+  const { formatCurrency } = useContext(IntlContext);
   
   if(!place.name) return;
   return (
