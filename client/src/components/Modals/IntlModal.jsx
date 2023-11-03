@@ -1,46 +1,27 @@
 
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import Modal from "./Modal";
 import { ModalContext } from "../../contexts/modal.context";
-import axios from "axios";
 import Input from "../Input/Input";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { IntlContext } from "../../contexts/intl.context";
 
 export default function IntlModal () {
   const { isIntlModalOpen, setIsIntlModalOpen } = useContext(ModalContext);
-  const [currencies, setCurrencies] = useState([]);
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { setCurrency } = useContext(IntlContext);
+  const { currency, setCurrency, currencies } = useContext(IntlContext);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get('/resources/currencies');
-        const filteredCurrencies = [];
-        res.data.data.currencies.forEach(currency => {
-          if(!filteredCurrencies.filter(c => c.name === currency.name).length)
-            filteredCurrencies.push(currency);
-        });
-        setCurrencies([...filteredCurrencies.sort((a, b) => a.name > b.name)]);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, []);
-
-
-  function handleSelectCurrency(currency) {
+  function handleSelectCurrency(selectedCurrency) {
     if(searchParams.get('currency')) {
-      searchParams.set('currency', currency.code);
+      searchParams.set('currency', selectedCurrency.code);
       setSearchParams(searchParams);
     }
     else {
-      navigate(`${location.pathname}${location.search || ''}${location.search ? '&' : '?'}currency=${currency.code}`);
+      navigate(`${location.pathname}${location.search || ''}${location.search ? '&' : '?'}currency=${selectedCurrency.code}`);
     }
-    setCurrency(() => currency);
+    setCurrency(() => ({ ...selectedCurrency, previousCode: currency.code }));
     setIsIntlModalOpen(false);
   }
 

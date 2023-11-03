@@ -9,7 +9,7 @@ import { useContext } from "react";
 import { IntlContext } from "../../contexts/intl.context";
 
 export default function PlaceCard({place, className}) {
-  const { currency } = useContext(IntlContext);
+  const { currency, formatCurrency } = useContext(IntlContext);
   
   if(!place.name) return;
   return (
@@ -34,12 +34,21 @@ export default function PlaceCard({place, className}) {
             <span><BsCalendarHeart className="text-green-500 mr-2" /></span>
             <span className="opacity-50 ">Nov 12 - 17</span>
           </p>
-          <p className="text-sm font-light mt-2 flex justify-between items-center">
+          <p className="text-sm font-light mt-2 flex justify-between items-center flex-wrap">
             <span className="flex items-center">
-              <span className="line-through">{currency.symbol}{place.price}</span> 
-              <span className="font-bold mx-2 text-xl text-primary">
-                {place.price -  Math.trunc(place.price * place.price_discount / 100)}
-              </span> 
+              { place.price_diff === place.price 
+                ? <span className="font-bold mx-2 text-xl text-primary">
+                    {formatCurrency(place.price)}
+                  </span>
+                : (
+                  <>
+                    <span className="line-through">{formatCurrency(place.price)}</span> 
+                    <span className="font-bold mx-2 text-xl text-primary">
+                      {formatCurrency(place.price_diff)}                  
+                    </span> 
+                  </>
+                )
+              }
               / night
             </span> 
             <span className="font-light flex text-lg items-center">
@@ -49,7 +58,6 @@ export default function PlaceCard({place, className}) {
           </p>
         </div>
       </Link>
-
     </div>
   );
 }

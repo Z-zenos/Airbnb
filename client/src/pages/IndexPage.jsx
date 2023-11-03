@@ -17,6 +17,7 @@ import useIntersectionObserver from "../hooks/useIntersectionObserver";
 import Button from "../components/Button/Button";
 import Map from "../components/Map";
 import IntlModal from "../components/Modals/IntlModal";
+import { IntlContext } from "../contexts/intl.context";
 
 export default function IndexPage() {
   const { 
@@ -41,6 +42,7 @@ export default function IndexPage() {
   const [nextPage, setNextPage] = useState(1);
   const [isURLChanged, setIsURLChanged] = useState(true);
   const [isShowMap, setIsShowMap] = useState(false);
+  const { exchangeRate } = useContext(IntlContext);
 
   // Fetch property types
   useEffect(() => {
@@ -80,7 +82,12 @@ export default function IndexPage() {
       setLoading(false);
       setIsURLChanged(false);
 
-      return res.data.data.places;
+      return res.data.data.places.map(place => ({ 
+        ...place, 
+        price: exchangeRate(place.price), 
+        price_discount: exchangeRate(place.price_discount),
+        price_diff: exchangeRate(place.price -  Math.trunc(place.price * place.price_discount))
+      }));
 
     } catch (err) {
       console.error(err);

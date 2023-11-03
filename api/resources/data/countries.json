@@ -43,7 +43,10 @@
     "currency": {
       "code": "DZD",
       "name": "Algerian dinar",
-      "symbol": "د.ج"
+      "symbol": "د.ج",
+      "rate": 135.78514786212,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0073645756973025
     },
     "language": {
       "code": "ar",
@@ -60,8 +63,11 @@
     "region": "OC",
     "currency": {
       "code": "USD",
-      "name": "United State Dollar",
-      "symbol": "$"
+      "name": "United States dollar",
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -79,7 +85,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "ca",
@@ -151,7 +160,10 @@
     "currency": {
       "code": "ARS",
       "name": "Argentine peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 349.99999999999,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0028571428571429
     },
     "language": {
       "code": "es",
@@ -169,7 +181,10 @@
     "currency": {
       "code": "AMD",
       "name": "Armenian dram",
-      "symbol": null
+      "symbol": null,
+      "rate": 402.82911982939,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.00248244218398
     },
     "language": {
       "code": "hy",
@@ -205,7 +220,10 @@
     "currency": {
       "code": "AUD",
       "name": "Australian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.5540443226267,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.64348229033118
     },
     "language": {
       "code": "en",
@@ -223,7 +241,10 @@
     "currency": {
       "code": "AZN",
       "name": "Azerbaijani manat",
-      "symbol": null
+      "symbol": null,
+      "rate": 1.6987961401536,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.58865214981568
     },
     "language": {
       "code": "az",
@@ -259,7 +280,10 @@
     "currency": {
       "code": "BHD",
       "name": "Bahraini dinar",
-      "symbol": ".د.ب"
+      "symbol": ".د.ب",
+      "rate": 0.376081,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 2.65900165124
     },
     "language": {
       "code": "ar",
@@ -277,7 +301,10 @@
     "currency": {
       "code": "BDT",
       "name": "Bangladeshi taka",
-      "symbol": "৳"
+      "symbol": "৳",
+      "rate": 110.45268806972,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0090536501870265
     },
     "language": {
       "code": "bn",
@@ -313,7 +340,10 @@
     "currency": {
       "code": "BYN",
       "name": "New Belarusian ruble",
-      "symbol": "Br"
+      "symbol": "Br",
+      "rate": 2.8417772583198,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.35189246344777
     },
     "language": {
       "code": "be",
@@ -331,7 +361,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "nl",
@@ -367,7 +400,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -421,7 +457,10 @@
     "currency": {
       "code": "BOB",
       "name": "Bolivian boliviano",
-      "symbol": "Bs."
+      "symbol": "Bs.",
+      "rate": 6.8599999999998,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.14577259475219
     },
     "language": {
       "code": "es",
@@ -475,7 +514,10 @@
     "currency": {
       "code": "BRL",
       "name": "Brazilian real",
-      "symbol": "R$"
+      "symbol": "R$",
+      "rate": 4.9707983861996,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.20117492650201
     },
     "language": {
       "code": "pt",
@@ -493,7 +535,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -511,7 +556,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -529,7 +577,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -565,7 +616,10 @@
     "currency": {
       "code": "BGN",
       "name": "Bulgarian lev",
-      "symbol": "лв"
+      "symbol": "лв",
+      "rate": 1.8354142999731,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.54483611684548
     },
     "language": {
       "code": "bg",
@@ -583,7 +637,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -637,7 +694,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "en",
@@ -655,7 +715,10 @@
     "currency": {
       "code": "CAD",
       "name": "Canadian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.3796768569154,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.72480740326089
     },
     "language": {
       "code": "en",
@@ -712,7 +775,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -730,7 +796,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -748,7 +817,10 @@
     "currency": {
       "code": "CLP",
       "name": "Chilean peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 895.13666597264,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0011171478479361
     },
     "language": {
       "code": "es",
@@ -768,7 +840,10 @@
     "currency": {
       "code": "CNY",
       "name": "Chinese yuan",
-      "symbol": "¥"
+      "symbol": "¥",
+      "rate": 7.317348209926,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.13666152973881
     },
     "language": {
       "code": "zh",
@@ -786,7 +861,10 @@
     "currency": {
       "code": "COP",
       "name": "Colombian peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 4107.7844311376,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.00024344023323616
     },
     "language": {
       "code": "es",
@@ -822,7 +900,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -858,7 +939,10 @@
     "currency": {
       "code": "NZD",
       "name": "New Zealand dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.6953890385371,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.5898351217741
     },
     "language": {
       "code": "en",
@@ -876,7 +960,10 @@
     "currency": {
       "code": "CRC",
       "name": "Costa Rican colón",
-      "symbol": "₡"
+      "symbol": "₡",
+      "rate": 534.06126651126,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.001872444348066
     },
     "language": {
       "code": "es",
@@ -948,7 +1035,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "tr",
@@ -966,7 +1056,10 @@
     "currency": {
       "code": "CZK",
       "name": "Czech koruna",
-      "symbol": "Kč"
+      "symbol": "Kč",
+      "rate": 23.12451045568,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.043244158699774
     },
     "language": {
       "code": "cs",
@@ -984,7 +1077,10 @@
     "currency": {
       "code": "DKK",
       "name": "Danish krone",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 7.0069562799959,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.14271531889744
     },
     "language": {
       "code": "da",
@@ -1038,7 +1134,10 @@
     "currency": {
       "code": "DOP",
       "name": "Dominican peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 56.619175299265,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.017661860928112
     },
     "language": {
       "code": "es",
@@ -1056,7 +1155,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "es",
@@ -1074,7 +1176,10 @@
     "currency": {
       "code": "EGP",
       "name": "Egyptian pound",
-      "symbol": "£"
+      "symbol": "£",
+      "rate": 30.89104413983,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.032371841996452
     },
     "language": {
       "code": "ar",
@@ -1092,7 +1197,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "es",
@@ -1110,7 +1218,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "es",
@@ -1148,7 +1259,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "et",
@@ -1202,7 +1316,10 @@
     "currency": {
       "code": "DKK",
       "name": "Danish krone",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 7.0069562799959,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.14271531889744
     },
     "language": {
       "code": "fo",
@@ -1238,7 +1355,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fi",
@@ -1259,7 +1379,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -1277,7 +1400,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -1313,7 +1439,10 @@
     "currency": {
       "code": "XAF",
       "name": "Central African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -1349,7 +1478,10 @@
     "currency": {
       "code": "GEL",
       "name": "Georgian Lari",
-      "symbol": "ლ"
+      "symbol": "ლ",
+      "rate": 2.6990585345886,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.37049956019291
     },
     "language": {
       "code": "ka",
@@ -1367,7 +1499,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "de",
@@ -1421,7 +1556,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "el",
@@ -1439,7 +1577,10 @@
     "currency": {
       "code": "DKK",
       "name": "Danish krone",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 7.0069562799959,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.14271531889744
     },
     "language": {
       "code": "kl",
@@ -1475,7 +1616,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -1493,7 +1637,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -1547,7 +1694,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "pt",
@@ -1583,7 +1733,10 @@
     "currency": {
       "code": "HTG",
       "name": "Haitian gourde",
-      "symbol": "G"
+      "symbol": "G",
+      "rate": 132.61163734776,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.007540816326531
     },
     "language": {
       "code": "fr",
@@ -1601,7 +1754,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -1637,7 +1793,10 @@
     "currency": {
       "code": "HKD",
       "name": "Hong Kong dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 7.8240357595278,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.1278112767803
     },
     "language": {
       "code": "en",
@@ -1655,7 +1814,10 @@
     "currency": {
       "code": "HUF",
       "name": "Hungarian forint",
-      "symbol": "Ft"
+      "symbol": "Ft",
+      "rate": 358.39932777356,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0027901838047861
     },
     "language": {
       "code": "hu",
@@ -1673,7 +1835,10 @@
     "currency": {
       "code": "ISK",
       "name": "Icelandic króna",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 138.75147591655,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0072071305432559
     },
     "language": {
       "code": "is",
@@ -1691,7 +1856,10 @@
     "currency": {
       "code": "INR",
       "name": "Indian rupee",
-      "symbol": "₹"
+      "symbol": "₹",
+      "rate": 83.237467322557,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.012013820604667
     },
     "language": {
       "code": "hi",
@@ -1709,7 +1877,10 @@
     "currency": {
       "code": "IDR",
       "name": "Indonesian rupiah",
-      "symbol": "Rp"
+      "symbol": "Rp",
+      "rate": 15835.332737426,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.000063149920281533
     },
     "language": {
       "code": "id",
@@ -1727,7 +1898,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -1745,7 +1919,10 @@
     "currency": {
       "code": "IRR",
       "name": "Iranian rial",
-      "symbol": "﷼"
+      "symbol": "﷼",
+      "rate": 41982.195776994,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.000023819621186846
     },
     "language": {
       "code": "fa",
@@ -1763,7 +1940,10 @@
     "currency": {
       "code": "IQD",
       "name": "Iraqi dinar",
-      "symbol": "ع.د"
+      "symbol": "ع.د",
+      "rate": 1309.4273541306,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.00076369261482547
     },
     "language": {
       "code": "ar",
@@ -1781,7 +1961,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "ga",
@@ -1799,7 +1982,10 @@
     "currency": {
       "code": "ILS",
       "name": "Israeli new shekel",
-      "symbol": "₪"
+      "symbol": "₪",
+      "rate": 3.9647181106212,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.25222474135578
     },
     "language": {
       "code": "he",
@@ -1817,7 +2003,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "it",
@@ -1853,7 +2042,10 @@
     "currency": {
       "code": "JPY",
       "name": "Japanese yen",
-      "symbol": "¥"
+      "symbol": "¥",
+      "rate": 150.26556989138,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0066548844204488
     },
     "language": {
       "code": "ja",
@@ -1871,7 +2063,10 @@
     "currency": {
       "code": "JOD",
       "name": "Jordanian dinar",
-      "symbol": "د.ا"
+      "symbol": "د.ا",
+      "rate": 0.70918715150064,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.4100650271004
     },
     "language": {
       "code": "ar",
@@ -1889,7 +2084,10 @@
     "currency": {
       "code": "KZT",
       "name": "Kazakhstani tenge",
-      "symbol": null
+      "symbol": null,
+      "rate": 466.74259974261,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0021425085272942
     },
     "language": {
       "code": "kk",
@@ -1925,7 +2123,10 @@
     "currency": {
       "code": "AUD",
       "name": "Australian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.5540443226267,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.64348229033118
     },
     "language": {
       "code": "en",
@@ -1943,7 +2144,10 @@
     "currency": {
       "code": "KWD",
       "name": "Kuwaiti dinar",
-      "symbol": "د.ك"
+      "symbol": "د.ك",
+      "rate": 0.30939977853064,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 3.2320643691119
     },
     "language": {
       "code": "ar",
@@ -1961,7 +2165,10 @@
     "currency": {
       "code": "KGS",
       "name": "Kyrgyzstani som",
-      "symbol": "с"
+      "symbol": "с",
+      "rate": 89.280896110289,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.011200604424542
     },
     "language": {
       "code": "ky",
@@ -1997,7 +2204,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "lv",
@@ -2015,7 +2225,10 @@
     "currency": {
       "code": "LBP",
       "name": "Lebanese pound",
-      "symbol": "ل.ل"
+      "symbol": "ل.ل",
+      "rate": 15034.603202122,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.000066513228620417
     },
     "language": {
       "code": "ar",
@@ -2069,7 +2282,10 @@
     "currency": {
       "code": "LYD",
       "name": "Libyan dinar",
-      "symbol": "ل.د"
+      "symbol": "ل.د",
+      "rate": 4.8876534724186,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.20459715600606
     },
     "language": {
       "code": "ar",
@@ -2087,7 +2303,10 @@
     "currency": {
       "code": "CHF",
       "name": "Swiss franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 0.90347814084875,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.1068336407792
     },
     "language": {
       "code": "de",
@@ -2105,7 +2324,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "lt",
@@ -2123,7 +2345,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -2213,7 +2438,10 @@
     "currency": {
       "code": "MYR",
       "name": "Malaysian ringgit",
-      "symbol": "RM"
+      "symbol": "RM",
+      "rate": 4.7542285923432,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.21033906565
     },
     "language": {
       "code": null,
@@ -2249,7 +2477,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -2267,7 +2498,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "mt",
@@ -2285,7 +2519,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -2303,7 +2540,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -2357,7 +2597,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -2375,7 +2618,10 @@
     "currency": {
       "code": "MXN",
       "name": "Mexican peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 17.60292760019,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.05680873220141
     },
     "language": {
       "code": "es",
@@ -2393,7 +2639,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -2411,7 +2660,10 @@
     "currency": {
       "code": "MDL",
       "name": "Moldovan leu",
-      "symbol": "L"
+      "symbol": "L",
+      "rate": 18.10098088924,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.055245624870774
     },
     "language": {
       "code": "ro",
@@ -2429,7 +2681,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -2465,7 +2720,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "sr",
@@ -2501,7 +2759,10 @@
     "currency": {
       "code": "MAD",
       "name": "Moroccan dirham",
-      "symbol": "د.م."
+      "symbol": "د.م.",
+      "rate": 10.27710824533,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.097303636015939
     },
     "language": {
       "code": "ar",
@@ -2573,7 +2834,10 @@
     "currency": {
       "code": "AUD",
       "name": "Australian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.5540443226267,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.64348229033118
     },
     "language": {
       "code": "en",
@@ -2591,7 +2855,10 @@
     "currency": {
       "code": "NPR",
       "name": "Nepalese rupee",
-      "symbol": "₨"
+      "symbol": "₨",
+      "rate": 133.17315864023,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0075090206631016
     },
     "language": {
       "code": "ne",
@@ -2609,7 +2876,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "nl",
@@ -2645,7 +2915,10 @@
     "currency": {
       "code": "NZD",
       "name": "New Zealand dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.6953890385371,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.5898351217741
     },
     "language": {
       "code": "en",
@@ -2681,7 +2954,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -2699,7 +2975,10 @@
     "currency": {
       "code": "NGN",
       "name": "Nigerian naira",
-      "symbol": "₦"
+      "symbol": "₦",
+      "rate": 806.773,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0012395060320561
     },
     "language": {
       "code": "en",
@@ -2717,7 +2996,10 @@
     "currency": {
       "code": "NZD",
       "name": "New Zealand dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.6953890385371,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.5898351217741
     },
     "language": {
       "code": "en",
@@ -2735,7 +3017,10 @@
     "currency": {
       "code": "AUD",
       "name": "Australian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.5540443226267,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.64348229033118
     },
     "language": {
       "code": "en",
@@ -2771,7 +3056,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -2789,7 +3077,10 @@
     "currency": {
       "code": "NOK",
       "name": "Norwegian krone",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 11.147112612722,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.089709329648174
     },
     "language": {
       "code": "no",
@@ -2807,7 +3098,10 @@
     "currency": {
       "code": "OMR",
       "name": "Omani rial",
-      "symbol": "ر.ع."
+      "symbol": "ر.ع.",
+      "rate": 0.38487461520829,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 2.5982487815124
     },
     "language": {
       "code": "ar",
@@ -2825,7 +3119,10 @@
     "currency": {
       "code": "PKR",
       "name": "Pakistani rupee",
-      "symbol": "₨"
+      "symbol": "₨",
+      "rate": 281.47417993405,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0035527237355636
     },
     "language": {
       "code": "en",
@@ -2843,7 +3140,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -2861,7 +3161,10 @@
     "currency": {
       "code": "ILS",
       "name": "Israeli new sheqel",
-      "symbol": "₪"
+      "symbol": "₪",
+      "rate": 3.9647181106212,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.25222474135578
     },
     "language": {
       "code": "ar",
@@ -2879,7 +3182,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "es",
@@ -2915,7 +3221,10 @@
     "currency": {
       "code": "PYG",
       "name": "Paraguayan guaraní",
-      "symbol": "₲"
+      "symbol": "₲",
+      "rate": 7456.5217391301,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.00013411078717202
     },
     "language": {
       "code": "es",
@@ -2933,7 +3242,10 @@
     "currency": {
       "code": "PEN",
       "name": "Peruvian sol",
-      "symbol": "S/."
+      "symbol": "S/.",
+      "rate": 3.8014042270868,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.26306068501595
     },
     "language": {
       "code": "es",
@@ -2951,7 +3263,10 @@
     "currency": {
       "code": "PHP",
       "name": "Philippine peso",
-      "symbol": "₱"
+      "symbol": "₱",
+      "rate": 56.625225688026,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.01765997376345
     },
     "language": {
       "code": "en",
@@ -2969,7 +3284,10 @@
     "currency": {
       "code": "PLN",
       "name": "Polish złoty",
-      "symbol": "zł"
+      "symbol": "zł",
+      "rate": 4.1752162629642,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.23950855165764
     },
     "language": {
       "code": "pl",
@@ -2987,7 +3305,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "pt",
@@ -3005,7 +3326,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "es",
@@ -3023,7 +3347,10 @@
     "currency": {
       "code": "QAR",
       "name": "Qatari riyal",
-      "symbol": "ر.ق"
+      "symbol": "ر.ق",
+      "rate": 3.6472350990167,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.27418029626596
     },
     "language": {
       "code": "ar",
@@ -3041,7 +3368,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "sq",
@@ -3059,7 +3389,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -3077,7 +3410,10 @@
     "currency": {
       "code": "RON",
       "name": "Romanian leu",
-      "symbol": "lei"
+      "symbol": "lei",
+      "rate": 4.661914354792,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.21450415513792
     },
     "language": {
       "code": "ro",
@@ -3095,7 +3431,10 @@
     "currency": {
       "code": "RUB",
       "name": "Russian ruble",
-      "symbol": "₽"
+      "symbol": "₽",
+      "rate": 93.299376025902,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.010718185293355
     },
     "language": {
       "code": "ru",
@@ -3131,7 +3470,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -3203,7 +3545,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "en",
@@ -3221,7 +3566,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "fr",
@@ -3275,7 +3623,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "it",
@@ -3311,7 +3662,10 @@
     "currency": {
       "code": "SAR",
       "name": "Saudi riyal",
-      "symbol": "ر.س"
+      "symbol": "ر.س",
+      "rate": 3.7509319934549,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.2666004080439
     },
     "language": {
       "code": "ar",
@@ -3329,7 +3683,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -3347,7 +3704,10 @@
     "currency": {
       "code": "RSD",
       "name": "Serbian dinar",
-      "symbol": "дин."
+      "symbol": "дин.",
+      "rate": 110.2826718834,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0090676076569607
     },
     "language": {
       "code": "sr",
@@ -3401,7 +3761,10 @@
     "currency": {
       "code": "SGD",
       "name": "Singapore dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.3638340818226,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.73322702030119
     },
     "language": {
       "code": "en",
@@ -3419,7 +3782,10 @@
     "currency": {
       "code": "SGD",
       "name": "Singapore dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.3638340818226,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.73322702030119
     },
     "language": {
       "code": "en",
@@ -3437,7 +3803,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "sk",
@@ -3455,7 +3824,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "sl",
@@ -3509,7 +3881,10 @@
     "currency": {
       "code": "ZAR",
       "name": "South African rand",
-      "symbol": "R"
+      "symbol": "R",
+      "rate": 18.38452258476,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.054393580001308
     },
     "language": {
       "code": "en",
@@ -3529,7 +3904,10 @@
     "currency": {
       "code": "KRW",
       "name": "South Korean won",
-      "symbol": "₩"
+      "symbol": "₩",
+      "rate": 1336.3098717225,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0007483294265506
     },
     "language": {
       "code": "ko",
@@ -3547,7 +3925,10 @@
     "currency": {
       "code": "EUR",
       "name": "Euro",
-      "symbol": "€"
+      "symbol": "€",
+      "rate": 0.94057248738271,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.0631822782555
     },
     "language": {
       "code": "es",
@@ -3565,7 +3946,10 @@
     "currency": {
       "code": "LKR",
       "name": "Sri Lankan rupee",
-      "symbol": "Rs"
+      "symbol": "Rs",
+      "rate": 326.74283231972,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0030605109005773
     },
     "language": {
       "code": "si",
@@ -3639,7 +4023,10 @@
     "currency": {
       "code": "SEK",
       "name": "Swedish krona",
-      "symbol": "kr"
+      "symbol": "kr",
+      "rate": 11.099604793846,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.090093297786101
     },
     "language": {
       "code": "sv",
@@ -3657,7 +4044,10 @@
     "currency": {
       "code": "CHF",
       "name": "Swiss franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 0.90347814084875,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.1068336407792
     },
     "language": {
       "code": "de",
@@ -3693,7 +4083,10 @@
     "currency": {
       "code": "TWD",
       "name": "New Taiwan dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 32.352650764542,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.030909368362978
     },
     "language": {
       "code": "zh",
@@ -3711,7 +4104,10 @@
     "currency": {
       "code": "TJS",
       "name": "Tajikistani somoni",
-      "symbol": "ЅМ"
+      "symbol": "ЅМ",
+      "rate": 10.948196226415,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.09133924706129
     },
     "language": {
       "code": "tg",
@@ -3747,7 +4143,10 @@
     "currency": {
       "code": "THB",
       "name": "Thai baht",
-      "symbol": "฿"
+      "symbol": "฿",
+      "rate": 35.964851363663,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.027804925144508
     },
     "language": {
       "code": "th",
@@ -3765,7 +4164,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "pt",
@@ -3783,7 +4185,10 @@
     "currency": {
       "code": "XOF",
       "name": "West African CFA franc",
-      "symbol": "Fr"
+      "symbol": "Fr",
+      "rate": 615.76910911151,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.0016239853302204
     },
     "language": {
       "code": "fr",
@@ -3801,7 +4206,10 @@
     "currency": {
       "code": "NZD",
       "name": "New Zealand dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.6953890385371,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.5898351217741
     },
     "language": {
       "code": "en",
@@ -3855,7 +4263,10 @@
     "currency": {
       "code": "TND",
       "name": "Tunisian dinar",
-      "symbol": "د.ت"
+      "symbol": "د.ت",
+      "rate": 3.1714974206894,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.31530847021235
     },
     "language": {
       "code": "ar",
@@ -3873,7 +4284,10 @@
     "currency": {
       "code": "TRY",
       "name": "Turkish lira",
-      "symbol": null
+      "symbol": null,
+      "rate": 28.350205723858,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.035273112644768
     },
     "language": {
       "code": "tr",
@@ -3891,7 +4305,10 @@
     "currency": {
       "code": "TMT",
       "name": "Turkmenistan manat",
-      "symbol": "m"
+      "symbol": "m",
+      "rate": 3.4985095648315,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.28583600572439
     },
     "language": {
       "code": "tk",
@@ -3909,7 +4326,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -3927,7 +4347,10 @@
     "currency": {
       "code": "AUD",
       "name": "Australian dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1.5540443226267,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.64348229033118
     },
     "language": {
       "code": "en",
@@ -3963,7 +4386,10 @@
     "currency": {
       "code": "UAH",
       "name": "Ukrainian hryvnia",
-      "symbol": "₴"
+      "symbol": "₴",
+      "rate": 36.269033786473,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.027571729809162
     },
     "language": {
       "code": "uk",
@@ -3981,7 +4407,10 @@
     "currency": {
       "code": "AED",
       "name": "United Arab Emirates dirham",
-      "symbol": "د.إ"
+      "symbol": "د.إ",
+      "rate": 3.672040346455,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.27232816245208
     },
     "language": {
       "code": "ar",
@@ -3999,7 +4428,10 @@
     "currency": {
       "code": "GBP",
       "name": "British pound",
-      "symbol": "£"
+      "symbol": "£",
+      "rate": 0.8200728436871,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1.2194038708853
     },
     "language": {
       "code": "en",
@@ -4017,7 +4449,10 @@
     "currency": {
       "code": "USD",
       "name": "United States dollar",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 1,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 1
     },
     "language": {
       "code": "en",
@@ -4037,7 +4472,10 @@
     "currency": {
       "code": "UYU",
       "name": "Uruguayan peso",
-      "symbol": "$"
+      "symbol": "$",
+      "rate": 39.98601072511,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.025008746355686
     },
     "language": {
       "code": "es",
@@ -4055,7 +4493,10 @@
     "currency": {
       "code": "UZS",
       "name": "Uzbekistani so'm",
-      "symbol": null
+      "symbol": null,
+      "rate": 12229.269937616,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.000081771030086113
     },
     "language": {
       "code": "uz",
@@ -4109,7 +4550,10 @@
     "currency": {
       "code": "VND",
       "name": "Vietnamese đồng",
-      "symbol": "₫"
+      "symbol": "₫",
+      "rate": 24567.898600641,
+      "date": "Thu, 2 Nov 2023 23:55:01 GMT",
+      "inverse_rate": 0.000040703521951768
     },
     "language": {
       "code": "vi",
