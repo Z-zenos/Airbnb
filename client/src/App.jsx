@@ -11,6 +11,7 @@ import { ModalContextProvider } from './contexts/modal.context';
 import { ToastContextProvider } from './contexts/toast.context';
 import UserPage from "./pages/UserPage";
 import { IntlContextProvider } from "./contexts/intl.context";
+import AccountSettingPage from "./pages/AccountSettingPage";
 
 
 // Apply for all requests
@@ -43,6 +44,7 @@ function App() {
                   <Route index element={<IndexPage />} />
                   <Route path="/places" element={<IndexPage />} />
                   <Route path="/places/search" element={<IndexPage />} />
+                  <Route path="/account-settings" element={<AccountSettingPage />} />
                   <Route path="/users/profile/:id" element={<UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />
                   <Route path='/places/:id' element={ <PlacePage /> } />

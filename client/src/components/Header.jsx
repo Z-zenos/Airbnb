@@ -7,6 +7,8 @@ const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
+const HIDE_SEARCH_URLS = ['users', 'account-settings'];
+
 export default function Header() {
   const { setIsCreatePlaceModalOpen, setIsIntlModalOpen } = useContext(ModalContext);
   const [userBox, setUserBox] = useState(false);
@@ -25,14 +27,14 @@ export default function Header() {
     else if(checkin) return `After ${MONTHS[new Date(checkin).getMonth()].slice(0, 3)}, ${new Date(checkin).getDate()}`;
     else if(checkout) return `Before ${MONTHS[new Date(checkout).getMonth()].slice(0, 3)} - ${new Date(checkout).getDate()}`;
     else return '';
-  }
+  };
 
   const guests = () => {
     const adults = +searchParams.get('adults') || 0;
     const children = +searchParams.get('children') || 0;
 
     return adults + children ? adults + children + ' guest(s)' : 'Add guests';
-  }
+  };
   
   return (
     <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] sticky top-0 bg-white z-10">
@@ -44,7 +46,7 @@ export default function Header() {
         <span className='font-bold text-2xl'>airbnb</span>
       </Link>
 
-      { !location.pathname.includes('users') && 
+      { HIDE_SEARCH_URLS.every(hsu => location.pathname.includes(hsu)).length > 0 && 
           <div 
         className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
         onClick={() => setIsSearchModalOpen(true)}
