@@ -7,12 +7,14 @@ const Button = ({
   small,
   children,
   className,
-  iconClassName
+  iconClassName,
+  style
 }) => {
   return ( 
     <button
       disabled={disabled}
       onClick={onClick}
+      style={style}
       className={`
         rounded-lg
         transition

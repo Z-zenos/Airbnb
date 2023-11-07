@@ -37,7 +37,7 @@ export default function Header() {
   };
   
   return (
-    <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] sticky top-0 bg-white z-10">
+    <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] sticky top-0 bg-white z-20">
       <Link to={'/'} className="ab__logo flex gap-1 items-center text-primary font-bold">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
@@ -90,11 +90,11 @@ export default function Header() {
 
         </div>
 
-        { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm z-50'>
+        { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm z-[60]'>
           <ul>
             {user.email ? (
               <>
-                <Link to={'/profile'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Account</Link>
+                <Link to={'/account-settings'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block' onClick={() => setUserBox(false)}>Account</Link>
                 <li 
                   className='px-4 py-2 hover:bg-gray-100 cursor-pointer' 
                   onClick={() => {

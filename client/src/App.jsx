@@ -1,5 +1,5 @@
 
-import {Route, Routes} from "react-router-dom";
+import {Route, Routes, useSearchParams} from "react-router-dom";
 import IndexPage from './pages/IndexPage';
 import AuthPage from './pages/AuthPage';
 import MainLayout from './layouts/MainLayout';
@@ -12,6 +12,7 @@ import { ToastContextProvider } from './contexts/toast.context';
 import UserPage from "./pages/UserPage";
 import { IntlContextProvider } from "./contexts/intl.context";
 import AccountSettingPage from "./pages/AccountSettingPage";
+import UserEditPage from "./pages/UserEditPage";
 
 
 // Apply for all requests
@@ -32,6 +33,7 @@ axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1";
 axios.defaults.withCredentials = true; // every requests will be sent to server with cookie
 
 function App() {
+  const [searchParams] = useSearchParams();
 
   return (
     <PlaceContextProvider>
@@ -45,7 +47,7 @@ function App() {
                   <Route path="/places" element={<IndexPage />} />
                   <Route path="/places/search" element={<IndexPage />} />
                   <Route path="/account-settings" element={<AccountSettingPage />} />
-                  <Route path="/users/profile/:id" element={<UserPage />} />
+                  <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />
                   <Route path='/places/:id' element={ <PlacePage /> } />
                 </Route>

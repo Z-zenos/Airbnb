@@ -3,13 +3,16 @@ import { MdSecurity, MdOutlinePayment } from "react-icons/md";
 import { GrNotification } from "react-icons/gr";
 import { TbLockSquareRounded } from "react-icons/tb";
 import { GiSettingsKnobs } from "react-icons/gi";
+import { useContext } from "react";
+import { UserContext } from "../contexts/user.context";
+import { Link } from "react-router-dom";
 
 const settings = [
   {
     icon: <BsFilePerson size={32} />,
     title: 'Profile',
     description: 'Custom your account with fun things',
-    link: '',
+    link: '/users/profile/',
   },
   {
     icon: <BsPersonVcard size={32} />,
@@ -49,29 +52,32 @@ const settings = [
   }
 ];
 
-const SettingCard = ({setting}) => (
-  <div className="py-5 px-4 flex justify-start flex-col items-start shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px] rounded-lg bg-white cursor-pointer min-h-[160px]">
+const SettingCard = ({ setting, user }) => (
+  <Link to={`${setting.link}${user?._id}`} className="py-5 px-4 flex justify-start flex-col items-start shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px] rounded-lg bg-white cursor-pointer min-h-[160px]">
     {setting.icon}
     <p className="font-medium text-[16px] mt-6">{setting.title}</p>
     <p className="font-light opacity-60 text-[14px]">{setting.description}</p>
-  </div>
+  </Link>
 );
 
 export default function AccountSettingPage() {
+  const { user } = useContext(UserContext);
+
+  console.log(user);
 
   return (
     <div className="2xl:w-[70%] md:w-[80%] sm:block mx-auto md:px-10 mb-10 p-10">
       <div className="font-light mb-10">
         <h3 className="font-bold text-3xl mb-2">Account</h3>
         <p>
-          <span className="font-medium text-xl">Zenos, </span>
-          <span>hoanganhtuanbk2001@gmail.com</span>
+          <span className="font-medium text-xl">{user?.name}, </span>
+          <span>{user?.email}</span>
         </p>
       </div>
 
       <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-5">
         { settings.map(setting => <div key={setting.title}>
-            <SettingCard setting={setting} />
+            <SettingCard setting={setting} user={user} />
           </div>
         )}
       </div>

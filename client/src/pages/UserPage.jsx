@@ -14,15 +14,17 @@ import { IoSchoolOutline } from "react-icons/io5";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import { Link, useLocation } from "react-router-dom";
+import { UserContext } from "../contexts/user.context";
 
 export default function UserPage() {
   const scrollRef = useHorizontalScroll();
   const [user, setUser] = useState();
   const location = useLocation();
   const [places, setPlaces] = useState([]);
+  const { user: loggedUser } = useContext(UserContext);
 
   useEffect(() => {
     (async () => {
@@ -125,6 +127,13 @@ export default function UserPage() {
 
       <div className=" col-span-2 ">
         <h3 className="font-bold text-4xl sm:mt-8">About {user?.name}</h3>
+
+        <Link to={'?editMode=true'}>
+          { (loggedUser?._id === user?.id) && 
+            <Button label="Edit profile" outline={true} className="mt-4 hover:bg-gray-100">
+            </Button>
+          }
+        </Link>
 
         <div className="pb-8 border-b-[1px] border-gray-300">
           <div className="grid grid-cols-2 gap-4 mt-8 font-light ">
