@@ -1,4 +1,6 @@
 const fs = require("fs");
+const catchErrorAsync = require("../utils/catchErrorAsync");
+const Interest = require("../models/interest.model");
 
 const countries = JSON.parse(fs.readFileSync(`${__dirname}/../resources/data/countries.json`, 'utf-8'));
 // const exchangeRateList = JSON.parse(fs.readFileSync(`${__dirname}/../resources/data/exchange_rate.json`, 'utf-8'));
@@ -22,6 +24,17 @@ exports.getAllCurrencies = (req, res, next) => {
     }
   });
 };
+
+exports.getAllInterests =  catchErrorAsync(async (req, res, next) => {
+  const interests = await Interest.find({});
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      interests
+    }
+  });
+});
 
 // countries.forEach(country => {
 //   if(country.currency.code === 'USD') {

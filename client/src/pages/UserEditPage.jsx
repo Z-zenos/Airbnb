@@ -1,23 +1,25 @@
-import UserCard from "../components/UserCard/UserCard";
 import { MdWorkOutline, MdOutlinePets } from "react-icons/md";
 import { LiaLanguageSolid } from "react-icons/lia";
 import { PiShootingStarBold } from "react-icons/pi";
 import { LuSubtitles } from "react-icons/lu";
 import { FaMagic } from "react-icons/fa";
 import { GrMapLocation } from "react-icons/gr";
-import { BsCheckLg, BsCaretLeft, BsCaretRight, BsFillCameraFill } from "react-icons/bs";
-import { AiFillStar, AiOutlineHeart, AiOutlineRight, AiOutlineDown } from "react-icons/ai";
+import { BsFillCameraFill } from "react-icons/bs";
+import { AiOutlineHeart, AiOutlineRight, AiOutlineDown } from "react-icons/ai";
 import { GiLoveSong, GiSandsOfTime } from "react-icons/gi";
 import { BiTimeFive } from "react-icons/bi";
 import { IoSchoolOutline } from "react-icons/io5";
+import { FcCheckmark } from "react-icons/fc";
 
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
-import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import { useEffect, useState } from "react";
 import axios from 'axios';
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Input from "../components/Input/Input";
+import Modal from "../components/Modals/Modal";
+
+const MAX_INTERESTS = 7;
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -25,7 +27,7 @@ const arrow = (on) => {
   return on 
     ? <AiOutlineDown className={className} size={20} />
     : <AiOutlineRight className={className} size={20} />
-}
+};
 
 const Editor = ({ setEdits, editProperty, edits, label, content, title, description, icon  }) => {
   return (
@@ -54,10 +56,8 @@ const Editor = ({ setEdits, editProperty, edits, label, content, title, descript
 }
 
 export default function UserEditPage() {
-  const scrollRef = useHorizontalScroll();
   const [user, setUser] = useState();
   const location = useLocation();
-  const [places, setPlaces] = useState([]);
   const [edits, setEdits] = useState({
     work: false,
     fun_fact: false,
@@ -68,58 +68,36 @@ export default function UserEditPage() {
     time_consuming_activity: false,
     school: false,
     pets: false,
-
   });
+
+  const [isInterestsModalOpen, setIsInterestsModalOpen] = useState(false);
+  const [interests, setInterests] = useState([]);
+  const [interestInput, setInterestInput] = useState('');
+  const searchInterests = interests.length > 0 ? interests.filter(interest => interest.name.includes(interestInput)) : [];
+  const [selectedInterests, setSelectedInterests] = useState([]);
+
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(location.pathname);
         setUser(res.data.data.user);
-
-        const resPlaces = await axios.get(`/users/${res.data.data.user.id}/places`);
-        setPlaces(resPlaces.data.data.places);
       } catch(err) {
         console.error(err);
       }
     })();
   }, []);
 
-  function scrollHorizontal(scrollOffset) {
-    scrollRef.current.scrollLeft += scrollOffset;
-  }
-
-  const shortReviewBox = (
-    <div className="rounded-xl py-4 px-6 border-[1px] border-gray-300 ">
-      <p 
-        className=" text-[15px] font-light leading-[24px] mb-8 text-ellipsis whitespace-pre-wrap overflow-hidden" 
-        style={{
-          'display': '-webkit-box',
-          WebkitLineClamp: '4',
-          MozBoxOrient: 'vertical'
-        }}
-      >
-        &quot;…A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
-        A great host and a great guy! Friendly and inviting. Helped with recommandations of things to see and where to have good restaurant experiences
-      </p>
-      <div className="flex items-center justify-start gap-4">
-        <div className="rounded-full border-[1px] border-primary p-[2px]">
-          <img src="https://a0.muscache.com/im/pictures/user/511e7e29-7a53-4d33-b817-8d9c4351c264.jpg?im_w=240" className="rounded-full w-[40px] h-[40px]" alt="review user" />
-        </div>
-        <div>
-          <p className="font-medium">Josef</p>
-          <p className="opacity-60 text-[15px]">May 2023</p>
-        </div>
-      </div>
-    </div>
-  );
-
-  const activity = user?.interests?.length > 0 && user?.interests.map(interest => (
-    <div key={interest.name} className="py-2 px-5 rounded-3xl flex gap-2 justify-start items-center border border-gray-400">
-      <span><img src={`http://localhost:3000/images/interests/${interest.iconImage}`} className="w-6 h-6" /></span>
-      <span className="text-[15px]">{ capitalizeFirstLetter(interest.name) }</span>
-    </div>
-  ));
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await axios.get("/resources/interests");
+        setInterests(res.data.data.interests);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, []);
 
   const pastTrip = (
     <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
@@ -129,20 +107,7 @@ export default function UserEditPage() {
     </div>
   );
 
-  const placeCardList = places.length > 0 && places.map(place => (
-    <Link key={place.name} to={`/places/${place.id}`} className="cursor-pointer">
-      <div >
-        <img className="rounded-md w-full h-[220px]" src={`http://localhost:3000/images/places/${place.image_cover}`} />
-        <div className="mt-3">
-          <div className="w-full flex justify-between items-center">
-            <span className="font-medium text-[15px]">{place.name}</span>
-            <span className="flex items-center gap-1">{place.average_ratings} <AiFillStar className="inline " /></span>
-          </div>
-          <p className="opacity-70">{place.location.address}</p>
-        </div>
-      </div>
-    </Link>
-  ));
+  console.log(selectedInterests);
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[50px] p-10">
@@ -292,22 +257,87 @@ export default function UserEditPage() {
           
         </div>
 
-        <div className="">
+        <div className="border-b-[1px] border-b-gray-300 pb-8">
           <h3 className="text-2xl font-medium">About you</h3>
-          <p className="opacity-60 mt-2">Tell us a little bit about yourself, so your future hosts or guests can get to know you.</p>
-          <p 
-            className="text-[15px] font-light leading-[24px] mt-6 text-ellipsis whitespace-pre-wrap overflow-hidden"
-            style={{
-              'display': '-webkit-box',
-              WebkitLineClamp: '5',
-              MozBoxOrient: 'vertical'
-            }}
-          >
-            {user?.description}
-          </p>
+          <p className="opacity-60 my-2">Tell us a little bit about yourself, so your future hosts or guests can get to know you.</p>
+          <textarea 
+            className="w-full border-gray-primary border h-[160px] py-3 px-5 rounded-md outline-none" 
+            value={user?.description}
+            spellCheck={false} 
+          />
+          
         </div>
-        
 
+        <div className="border-b-[1px] border-b-gray-300 py-8">
+          <h3 className="text-2xl font-medium">What you’re into</h3>
+          <p className="opacity-60 my-3">Find common ground with other guests and Hosts by adding interests to your profile.</p>
+          
+          <div 
+            className="border-[1px] border-dashed border-gray-primary w-[100px] text-3xl text-center py-1 px-8 opacity-60 hover:opacity-80 hover:border-gray-700 cursor-pointer transition-all rounded-3xl"
+            onClick={() => setIsInterestsModalOpen(true)}
+          >
+            +
+          </div>
+
+          <Modal
+            isOpen={isInterestsModalOpen} 
+            onSubmit={() => setIsInterestsModalOpen(false)} 
+            onClose={() => setIsInterestsModalOpen(false)} 
+            actionLabel={"Save"} 
+            footer={
+              <div className="text-right border-l-[1px] border-l-gray-400 pl-10">
+                <p className="font-medium">{selectedInterests.length} / {MAX_INTERESTS} selected</p>
+                <p className={`font-light ${selectedInterests.length !== MAX_INTERESTS ? 'opacity-70' : 'opacity-100'}  text-[13px]`}>
+                  {selectedInterests.length === MAX_INTERESTS 
+                    ? <span className="flex items-center gap-2 justify-end"><FcCheckmark size={20} /> You&lsquo;ve selected 7 items.</span> 
+                    : 'Your selections will appear here'}
+                </p>
+              </div>
+            }
+            footerClassName="border-t border-t-gray-300 grid grid-cols-2 items-center"
+          >
+            <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
+              <h3 className="text-2xl font-medium">What are you into?</h3>
+              <p className="opacity-60 my-3">Pick up to 7 interests or sports you enjoy that you want to show on your profile.</p>
+              <Input 
+                label="Interest" 
+                className="rounded-lg mb-4 mr-5"
+                value={interestInput} 
+                onChange={(ev => setInterestInput(ev.target.value))}  
+              />
+              <div className="flex flex-wrap gap-3 pr-5">
+                { interests?.length > 0 && searchInterests.map(interest => (
+                    <div 
+                      key={interest.name} 
+                      className={`
+                        py-[6px] px-5 rounded-3xl flex gap-2 justify-start items-center border hover:border-gray-primary 
+                        cursor-pointer transition-all 
+                        ${selectedInterests.filter(si => si.name === interest.name).length > 0 
+                          ? ' border-black border-[2px]' 
+                          : 'border-gray-300'
+                        }
+                      `}
+                      onClick={() => {
+                        setSelectedInterests(prev => 
+                          prev.filter(i => i.name === interest.name).length > 0
+                            ? prev.filter(i => i.name !== interest.name)
+                            : (
+                              selectedInterests.length === MAX_INTERESTS
+                                ? prev
+                                : [...prev, interest] 
+                            )
+                          )
+                      }}
+                    >
+                      <span><img src={`http://localhost:3000/images/interests/${interest.iconImage}`} className="w-5 h-5" /></span>
+                      <span className="text-[15px] font-light">{ capitalizeFirstLetter(interest.name) }</span>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </Modal>
+        </div>
       </div>
 
     </div>

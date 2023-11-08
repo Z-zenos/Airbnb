@@ -6,7 +6,7 @@ export default function Modal({
   isOpen, onClose, children, title, body,
   secondaryAction, secondaryActionLabel, disabled,
   actionLabel, onSubmit, footer,
-  optionBtn,
+  optionBtn, footerClassName
 }) {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -74,9 +74,9 @@ export default function Modal({
 
           {/* FOOTER */}
           { (actionLabel || secondaryAction) && (
-            <div className="flex flex-col gap-2 p-6">
+            <div className={`flex flex-col gap-2 p-6 ${footerClassName}`}>
               <div className="flex flex-row items-center gap-4 w-full">
-                {secondaryAction && secondaryActionLabel && (
+                {secondaryActionLabel && (
                   <Button 
                     label={secondaryActionLabel}
                     onClick={handleSecondaryAction}
