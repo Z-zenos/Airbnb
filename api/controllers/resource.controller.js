@@ -25,6 +25,16 @@ exports.getAllCurrencies = (req, res, next) => {
   });
 };
 
+exports.getAllLanguages = (req, res, next) => {
+  const languages = [...new Set(countries.map(country => country.language.name))];
+  res.status(200).json({
+    status: 'success',
+    data: {
+      languages
+    }
+  });
+}
+
 exports.getAllInterests =  catchErrorAsync(async (req, res, next) => {
   const interests = await Interest.find({});
 

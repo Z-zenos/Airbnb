@@ -18,6 +18,8 @@ import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import Input from "../components/Input/Input";
 import Modal from "../components/Modals/Modal";
+import Checkbox from "../components/Input/Checkbox";
+import ToggleButton from "../components/Button/ToggleButton";
 
 const MAX_INTERESTS = 7;
 
@@ -29,7 +31,9 @@ const arrow = (on) => {
     : <AiOutlineRight className={className} size={20} />
 };
 
-const Editor = ({ setEdits, editProperty, edits, label, content, title, description, icon  }) => {
+const Editor = ({ 
+  setEdits, editProperty, edits, label, content, title, description, icon  
+}) => {
   return (
     <div className="py-3 px-2 border-b-[1px] border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-lg [&_.arrow-right]:hover:right-3">
       <div 
@@ -76,12 +80,25 @@ export default function UserEditPage() {
   const searchInterests = interests.length > 0 ? interests.filter(interest => interest.name.includes(interestInput)) : [];
   const [selectedInterests, setSelectedInterests] = useState([]);
 
+  const [languageInput, setLanguageInput] = useState('');
+  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
+  const [languages, setLanguages] = useState([]);
+  const searchLanguages = languages.length > 0 ? languages.filter(language => language.toLowerCase().startsWith(languageInput.toLowerCase())) : [];
+  const [selectedLanguages, setSelectedLanguages] = useState([]);
+
+  const [showDecadeBorn, setShowDecadeBorn] = useState(false);
+
+  const [addressInput, setAddressInput] = useState('');
+  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState('');
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(location.pathname);
         setUser(res.data.data.user);
+        setSelectedLanguages(res.data.data.user.languages);
       } catch(err) {
         console.error(err);
       }
@@ -91,28 +108,39 @@ export default function UserEditPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("/resources/interests");
-        setInterests(res.data.data.interests);
+        const resInterests = await axios.get("/resources/interests");
+        setInterests(resInterests.data.data.interests);
+
+        const resLanguages = await axios.get("/resources/languages");
+        setLanguages(resLanguages.data.data.languages);
       } catch (err) {
         console.error(err);
       }
     })();
   }, []);
 
-  const pastTrip = (
-    <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
-      <p className="text-[14px]">2021</p>
-      <p className="text-md font-medium">
-        Hanoi,<br /> Vietnam</p>
-    </div>
-  );
+  useEffect(() => {
+    (async () => {
+      try {
+        
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [addressInput]);
 
-  console.log(selectedInterests);
+  // const pastTrip = (
+  //   <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
+  //     <p className="text-[14px]">2021</p>
+  //     <p className="text-md font-medium">
+  //       Hanoi,<br /> Vietnam</p>
+  //   </div>
+  // );
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[50px] p-10">
       <div className=" col-span-1 relative">
-        <div className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 relative">
+        <div className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 sticky top-[100px]">
           <img src={user?.avatar} className=" rounded-full" />
           <Button 
             label="Edit" 
@@ -127,10 +155,13 @@ export default function UserEditPage() {
         </div>
       </div>
 
-      <div className="col-span-2">
-        <h3 className="font-bold text-4xl sm:mt-8">
-          Your profile
-        </h3>
+      <div className="col-span-2 relative">
+        <div className="flex justify-between items-center sticky top-[80px] bg-white z-10 py-4">
+          <h3 className="font-bold text-4xl  ">
+            Your profile
+          </h3>
+          <Button label="Save"></Button>
+        </div>
 
         <p className="opacity-60 my-6">
           The information you share will be used across Airbnb to help other guests and Hosts get to know you.
@@ -150,10 +181,47 @@ export default function UserEditPage() {
               icon={<MdWorkOutline className="w-6 h-6" />}
             />
 
-            <p className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg">
+            <div 
+              className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg"
+              onClick={() => setIsLanguageModalOpen(true)}
+            >
               <span><LiaLanguageSolid className="w-6 h-6" /></span>
               <span>Speaks {user?.languages?.join(', ').replace(/, ([^,]*)$/, ' and $1')}</span>
-            </p>
+
+              <Modal
+                isOpen={isLanguageModalOpen} 
+                onSubmit={() => setIsLanguageModalOpen(false)} 
+                onClose={() => setIsLanguageModalOpen(false)} 
+                actionLabel={"Save"} 
+              >
+                <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
+                  <h3 className="text-2xl font-medium">Languages you speak</h3>
+                  <Input 
+                    label="Search for a language" 
+                    className="rounded-lg mb-4 mr-5 mt-4"
+                    value={languageInput} 
+                    onChange={(ev => setLanguageInput(ev.target.value))}  
+                  />
+                  <div className="grid grid-cols-3">
+                    { languages.length > 0 && searchLanguages.map(language => (
+                        <div className="flex justify-between items-center" key={language}>
+                          <Checkbox 
+                            key={language} 
+                            label={language} 
+                            checked={selectedLanguages.filter(l => l === language).length > 0} 
+                            onChange={() => setSelectedLanguages(prev => 
+                              prev.filter(l => l === language).length > 0
+                                ? prev.filter(l => l !== language)
+                                : [...prev, language]
+                            )} 
+                          />
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </Modal>
+            </div>
 
             <Editor 
               setEdits={setEdits} 
@@ -188,10 +256,33 @@ export default function UserEditPage() {
               icon={<LuSubtitles className="w-6 h-6" />}
             />
 
-            <p className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg">
+            <div className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg" onClick={() => setIsAddressModalOpen(true)}>
               <span><GrMapLocation className="w-6 h-6" /></span>
               <span>Lives in {user?.address}</span>
-            </p>
+
+              <Modal
+                isOpen={isAddressModalOpen} 
+                onSubmit={() => setIsAddressModalOpen(false)} 
+                onClose={() => setIsAddressModalOpen(false)} 
+                actionLabel={"Save"} 
+              >
+                <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[400px] px-4">
+                  <h3 className="text-2xl font-medium">Where you live</h3>
+                  <Input 
+                    label="Search for your city" 
+                    className="rounded-lg mb-4 mr-5 mt-4"
+                    value={addressInput} 
+                    onChange={(ev => setAddressInput(ev.target.value))}  
+                  />
+                  { addresses.length > 0 && addresses.map(addr => (
+                      <div className="py-3 border-b border-b-gray-300" onClick={() => setSelectedAddress(addr)} key={addr}>
+                        {addr}
+                      </div>
+                    ))
+                  }
+                </div>
+              </Modal>
+            </div>
 
             <Editor 
               setEdits={setEdits} 
@@ -237,10 +328,13 @@ export default function UserEditPage() {
               icon={<IoSchoolOutline className="w-6 h-6" />}
             />
 
-            <p className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg">
-              <span><GiSandsOfTime className="w-6 h-6" /></span>
-              <span>Born in the {user?.decade_born}s</span>
-            </p>
+            <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 relative hover:bg-gray-100 hover:rounded-lg">
+              <p className="flex items-center gap-3 py-3 px-2 ">
+                <span><GiSandsOfTime className="w-6 h-6" /></span>
+                <span>Born in the {user?.decade_born}s. Show the decade I was born?</span>
+              </p>
+              <ToggleButton selected={showDecadeBorn} onClick={() => setShowDecadeBorn(!showDecadeBorn)} />
+            </div>
 
             <Editor 
               setEdits={setEdits} 
@@ -314,7 +408,10 @@ export default function UserEditPage() {
                         cursor-pointer transition-all 
                         ${selectedInterests.filter(si => si.name === interest.name).length > 0 
                           ? ' border-black border-[2px]' 
-                          : 'border-gray-300'
+                          : (selectedInterests.length === MAX_INTERESTS 
+                            ? 'opacity-40' 
+                            : 'border-gray-300'
+                            )
                         }
                       `}
                       onClick={() => {
