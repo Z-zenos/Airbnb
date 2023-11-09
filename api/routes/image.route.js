@@ -2,6 +2,7 @@ const express = require('express');
 
 const imageController = require('../controllers/image.controller');
 const placeController = require('../controllers/place.controller');
+const userController = require('../controllers/user.controller');
 
 const router = express.Router();
 
@@ -27,6 +28,14 @@ router
     imageController.uploadPlaceImages, 
     imageController.resizePlaceImages,
     placeController.updatePlace
+  );
+
+router
+  .route('/user/:id/avatar')
+  .patch(
+    imageController.uploadUserAvatar,
+    imageController.resizeUserAvatar,
+    userController.updateMe
   );
 
 module.exports = router;

@@ -13,7 +13,7 @@ import { FcCheckmark } from "react-icons/fc";
 
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import { useLocation } from "react-router-dom";
 import Input from "../components/Input/Input";
@@ -73,6 +73,7 @@ export default function UserEditPage() {
     school: false,
     pets: false,
   });
+  const inputFileRef = useRef(null); 
 
   const [isInterestsModalOpen, setIsInterestsModalOpen] = useState(false);
   const [interests, setInterests] = useState([]);
@@ -139,6 +140,35 @@ export default function UserEditPage() {
   //   </div>
   // );
 
+  // const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
+  const [avatar, setAvatar] = useState({});
+
+  useEffect(() => {
+    (async () => {
+      if(Object.keys(avatar).length === 0 && avatar.constructor === Object) return;
+      try {
+        const formData = new FormData();
+        formData.append("avatar", avatar);
+  
+        const res = await axios.patch(
+          `/images/user/${user?.id}/avatar`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }
+        );
+  
+        const updatedUser = res.data.data.user;
+        console.log(updatedUser);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [JSON.stringify(avatar)]);
+  
+
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[50px] p-10">
       <div className=" col-span-1 relative">
@@ -146,13 +176,24 @@ export default function UserEditPage() {
           <img src={user?.avatar} className=" rounded-full" />
           <Button 
             label="Edit" 
-            className="bg-white shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px]  absolute -bottom-4 left-1/2 -translate-x-1/2" 
+            className="bg-white shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px]  absolute -bottom-4 left-1/2 -translate-x-1/2 active:scale-95" 
             style={{ 
               padding: '4px 20px',
               color: 'black',
               borderColor: 'gray'
-            }} >
-              <BsFillCameraFill />
+            }}
+            onClick={() => inputFileRef.current.click()}
+          >
+            <input 
+              type='file' 
+              id='file' 
+              ref={inputFileRef} 
+              accept="image/*" 
+              hidden 
+              multiple={true}
+              onChange={ev => setAvatar(() => ev.target.files[0])}  
+            />
+            <BsFillCameraFill />
           </Button>
         </div>
       </div>

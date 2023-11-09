@@ -17,10 +17,12 @@ router
 
 router
   .route('/profile/:id')
-  .get(userController.getUser);
+  .get(userController.getUser)
+  // .patch(userController);
 
 router
   .route('/:id/places')
   .get(placeController.getPlacesOfUser);
 
+router
 module.exports = router;

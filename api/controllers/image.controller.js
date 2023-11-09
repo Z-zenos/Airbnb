@@ -26,6 +26,10 @@ exports.uploadPlaceImages = upload.fields([
   { name: 'images', maxCount: 5 }
 ]);
 
+exports.uploadUserAvatar = upload.fields([
+  { name: 'avatar', maxCount: 1 }
+]);
+
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
   const image_cover = req.files?.image_cover[0];
   const images = req.files?.images;
@@ -56,6 +60,22 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
       req.body.images.push(filename);
     })
   );
+
+  next();
+});
+
+exports.resizeUserAvatar = catchErrorAsync(async (req, res, next) => {
+  const [avatar] = req.files?.avatar;
+
+  if(!avatar) return next();
+
+  // 1) Cover avatar
+  req.body.avatar = `user-${req.params.id}-${Date.now()}-avatar.jpeg`;
+  await sharp(avatar.buffer)
+    .resize(512, 512)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`resources/images/users/avatars/${req.body.avatar}`);
 
   next();
 });
