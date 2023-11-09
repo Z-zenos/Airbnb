@@ -8,5 +8,6 @@ router.get('/countries', resourceController.getAllCountries);
 router.get('/currencies', resourceController.getAllCurrencies);
 router.get('/interests', resourceController.getAllInterests);
 router.get('/languages', resourceController.getAllLanguages);
+router.get('/cities', resourceController.getCitiesByKeyword);
 
 module.exports = router;

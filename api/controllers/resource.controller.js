@@ -3,6 +3,7 @@ const catchErrorAsync = require("../utils/catchErrorAsync");
 const Interest = require("../models/interest.model");
 
 const countries = JSON.parse(fs.readFileSync(`${__dirname}/../resources/data/countries.json`, 'utf-8'));
+const cities = JSON.parse(fs.readFileSync(`${__dirname}/../resources/data/worldcities.json`, 'utf-8'));
 // const exchangeRateList = JSON.parse(fs.readFileSync(`${__dirname}/../resources/data/exchange_rate.json`, 'utf-8'));
 
 exports.getAllCountries = (req, res, next) => {
@@ -31,6 +32,24 @@ exports.getAllLanguages = (req, res, next) => {
     status: 'success',
     data: {
       languages
+    }
+  });
+}
+
+exports.getCitiesByKeyword = (req, res, next) => {
+  const { keyword } = req.query;
+  const filteredCities = cities
+    .filter(city => city.city.toLowerCase().startsWith(keyword.trim().toLowerCase()))
+    .map(city => ({ 
+      name: city.city,
+      local_name: city.admin_name,
+      country: city.country 
+    }));
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      cities: filteredCities
     }
   });
 }
