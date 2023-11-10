@@ -57,7 +57,9 @@ const Editor = ({
       }
     </div>
   );
-}
+};
+
+
 
 export default function UserEditPage() {
   const {user, setUser} = useContext(UserContext);

@@ -70,17 +70,41 @@ const userSchema = new mongoose.Schema(
       select: false
     },
 
-    school: String,
+    school: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
     address: String,
     decade_born: String,
-    obsessed_with: String,
-    useless_skill: String,
-    time_consuming_activity: String,
-    work: String,
+    obsessed_with: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
+    useless_skill: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
+    time_consuming_activity: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
+    work: {
+      type: String,
+      maxlength: [20, 'Work name must be less than 20 characters.']
+    },
     languages: [String],
-    favorite_song: String,
-    fun_fact: String,
-    biography_title: String,
+    favorite_song: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
+    fun_fact: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
+    biography_title: {
+      type: String,
+      maxlength: [40, 'Work name must be less than 40 characters.']
+    },
     pets: [String],
 
     interests: [{
