@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Interest = require('./interest.model');
+const AppError = require('../utils/appError');
 
 const userSchema = new mongoose.Schema(
   {
@@ -127,12 +128,11 @@ userSchema.pre('save', function(next) {
   next();
 });
 
-// userSchema.pre('findOneAndUpdate', function(next) {
-//   if(this._update.interests)
-//     this._update.interests = this._update.interests.map(id => new mongoose.Types.ObjectId(id));
-//   console.log(this._update);
-//   next();
-// });
+userSchema.pre('findOneAndUpdate', function(next) {
+  if(this._update.interests)
+    if(this._update.interests.length > 10) return next(new AppError("The user is trying to select more than 10 interests. ", 400));
+  next();
+});
 
 // Select all users are currently active
 userSchema.pre(/^find/, function(next) {
