@@ -33,14 +33,14 @@ export default function InterestSelectModal() {
     try {
       const res = await axios.patch(`/users/me`, { interests: selectedInterests.map(si => si._id) });
       setUser(res.data.data.user);
-      setIsInterestSelectModalOpen(false)
+      setIsInterestSelectModalOpen(false);
     } catch (err) {
       console.error(err);
     }
   }
 
   const bodyContent = (
-    <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
+    <div className="no-scrollbar overflow-y-auto text-left w-full h-[600px] px-4">
       <h3 className="text-2xl font-medium">What are you into?</h3>
       <p className="opacity-60 my-3">Pick up to {MAX_INTERESTS} interests or sports you enjoy that you want to show on your profile.</p>
       <Input

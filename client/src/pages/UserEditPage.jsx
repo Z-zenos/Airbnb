@@ -9,7 +9,6 @@ import { AiOutlineHeart, AiOutlineRight, AiOutlineDown } from "react-icons/ai";
 import { GiLoveSong, GiSandsOfTime } from "react-icons/gi";
 import { BiTimeFive } from "react-icons/bi";
 import { IoSchoolOutline } from "react-icons/io5";
-import { FcCheckmark } from "react-icons/fc";
 
 import Button from "../components/Button/Button";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -21,6 +20,7 @@ import ToggleButton from "../components/Button/ToggleButton";
 import { UserContext } from "../contexts/user.context";
 import { ModalContext } from "../contexts/modal.context";
 import InterestSelectModal from "../components/Modals/InterestSelectModal";
+import SearchAddressModal from "../components/Modals/SearchAddressModal";
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -73,7 +73,10 @@ export default function UserEditPage() {
   });
   const inputFileRef = useRef(null); 
 
-  const {isInterestSelectModalOpen, setIsInterestSelectModalOpen} = useContext(ModalContext);
+  const {
+    isInterestSelectModalOpen, setIsInterestSelectModalOpen,
+    isSearchAddressModalOpen, setIsSearchAddressModalOpen
+  } = useContext(ModalContext);
 
   const [languageInput, setLanguageInput] = useState('');
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
@@ -83,10 +86,6 @@ export default function UserEditPage() {
 
   const [showDecadeBorn, setShowDecadeBorn] = useState(false);
 
-  const [addressInput, setAddressInput] = useState('');
-  const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
-  const [addresses, setAddresses] = useState([]);
-  const [selectedAddress, setSelectedAddress] = useState('');
 
   useEffect(() => {
     (async () => {
@@ -98,18 +97,6 @@ export default function UserEditPage() {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        if(!addressInput) return;
-        const res = await axios.get(`/resources/cities?keyword=${addressInput}`);
-        setAddresses(res.data.data.cities)
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [addressInput]);
 
   // const pastTrip = (
   //   <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
@@ -273,41 +260,13 @@ export default function UserEditPage() {
               icon={<LuSubtitles className="w-6 h-6" />}
             />
 
-            <div className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg" onClick={() => setIsAddressModalOpen(true)}>
-              <span><GrMapLocation className="w-6 h-6" /></span>
-              <span>Lives in {user?.address}</span>
+            <div className="" onClick={() => setIsSearchAddressModalOpen(true)}>
+              <div className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg">
+                <span><GrMapLocation className="w-6 h-6" /></span>
+                <span>Lives in {user?.address}</span>
+              </div>
 
-              <Modal
-                isOpen={isAddressModalOpen} 
-                onSubmit={() => setIsAddressModalOpen(false)} 
-                onClose={() => setIsAddressModalOpen(false)} 
-                actionLabel={"Save"} 
-              >
-                <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[400px] px-4 relative">
-                  <h3 className="text-2xl font-medium">Where you live</h3>
-                  <Input 
-                    label="Search for your city" 
-                    className="rounded-lg w-full mb-4 mr-5 mt-4 sticky bg-white -top-[0px] shadow-[rgba(0,_0,_0,_0.35)_0px_5px_15px] z-10"
-                    value={addressInput} 
-                    onChange={(ev => setAddressInput(ev.target.value))}  
-                  />
-                  { addresses?.length > 0 && addresses.map((addr, i) => (
-                      <div 
-                        className={`py-3 border-b border-b-gray-300 px-3 rounded-md hover:bg-gray-100 ${selectedAddress === addr.name && 'bg-gray-100 flex justify-between items-center'}`} onClick={() => {
-                          setSelectedAddress(addr.name);
-                        }} 
-                        key={addr.name + i}
-                      >
-                        <div>
-                          <span className="font-medium">{addr.name}, </span>
-                          <span className="opacity-70">{addr.local_name}, {addr.country}</span>
-                        </div>
-                        { selectedAddress === addr.name && <FcCheckmark />}
-                      </div>
-                    ))
-                  }
-                </div>
-              </Modal>
+              { isSearchAddressModalOpen && <SearchAddressModal /> }
             </div>
 
             <Editor 
@@ -354,8 +313,8 @@ export default function UserEditPage() {
               icon={<IoSchoolOutline className="w-6 h-6" />}
             />
 
-            <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 relative hover:bg-gray-100 hover:rounded-lg">
-              <p className="flex items-center gap-3 py-3 px-2 ">
+            <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 relative hover:bg-gray-100 hover:rounded-lg pr-6">
+              <p className="flex basis-60 items-center gap-3 py-3 px-2 ">
                 <span><GiSandsOfTime className="w-6 h-6" /></span>
                 <span>Born in the {user?.decade_born}s. Show the decade I was born?</span>
               </p>
@@ -373,8 +332,6 @@ export default function UserEditPage() {
               icon={<MdOutlinePets className="w-6 h-6" />}
             />
           </div>
-
-          
         </div>
 
         <div className="border-b-[1px] border-b-gray-300 pb-8">

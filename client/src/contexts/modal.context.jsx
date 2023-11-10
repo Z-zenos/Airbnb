@@ -11,6 +11,7 @@ export function ModalContextProvider({ children }) {
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isIntlModalOpen, setIsIntlModalOpen] = useState(false);
   const [isInterestSelectModalOpen, setIsInterestSelectModalOpen] = useState(false);
+  const [isSearchAddressModalOpen, setIsSearchAddressModalOpen] = useState(false);
   
   return (
     <ModalContext.Provider value={{
@@ -20,7 +21,8 @@ export function ModalContextProvider({ children }) {
       isImageModalOpen, setIsImageModalOpen,
       isSearchModalOpen, setIsSearchModalOpen,
       isIntlModalOpen, setIsIntlModalOpen,
-      isInterestSelectModalOpen, setIsInterestSelectModalOpen
+      isInterestSelectModalOpen, setIsInterestSelectModalOpen,
+      isSearchAddressModalOpen, setIsSearchAddressModalOpen,
     }}>
       { children }
     </ModalContext.Provider>
