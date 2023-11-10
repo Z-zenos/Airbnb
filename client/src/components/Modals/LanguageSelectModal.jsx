@@ -6,6 +6,8 @@ import Input from "../Input/Input";
 import axios from "axios";
 import { UserContext } from "../../contexts/user.context";
 import Checkbox from "../Input/Checkbox";
+import { ToastContext } from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
 
 export default function LanguageSelectModal () {
   const { isLanguageSelectModalOpen, setIsLanguageSelectModalOpen } = useContext(ModalContext);
@@ -15,6 +17,8 @@ export default function LanguageSelectModal () {
   const [languages, setLanguages] = useState([]);
   const searchLanguages = languages.length > 0 ? languages.filter(language => language.toLowerCase().startsWith(languageInput.toLowerCase())) : [];
   const [selectedLanguages, setSelectedLanguages] = useState(user?.languages || []);
+  const { openToast } = useContext(ToastContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -29,7 +33,10 @@ export default function LanguageSelectModal () {
 
   async function handleUpdateLanguages() {
     try {
+      setIsLoading(true);
       const res = await axios.patch(`/users/me`, { languages: selectedLanguages });
+      openToast(<Toast title="Success" content="Update languages successfully" type="success" />);
+      setIsLoading(false);
       setUser(res.data.data.user);
       setIsLanguageSelectModalOpen(false);
     } catch (err) {
@@ -73,6 +80,7 @@ export default function LanguageSelectModal () {
       onSubmit={async () => await handleUpdateLanguages()}
       title="Language Selector"
       body={bodyContent}
+      isLoading={isLoading}
       actionLabel="Save"
     />
   );

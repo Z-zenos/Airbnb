@@ -6,17 +6,20 @@ import Input from "../Input/Input";
 import { FcCheckmark } from "react-icons/fc";
 import axios from "axios";
 import { UserContext } from "../../contexts/user.context";
+import { ToastContext } from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
 
 const MAX_INTERESTS = 10;
 
 export default function InterestSelectModal() {
   const { user, setUser } = useContext(UserContext);
   const { isInterestSelectModalOpen, setIsInterestSelectModalOpen } = useContext(ModalContext);
-
+  const { openToast } = useContext(ToastContext);
   const [interests, setInterests] = useState([]);
   const [interestInput, setInterestInput] = useState('');
   const searchInterests = interests.length > 0 ? interests.filter(interest => interest.name.includes(interestInput)) : [];
   const [selectedInterests, setSelectedInterests] = useState(user?.interests || []);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +34,10 @@ export default function InterestSelectModal() {
 
   async function handleSaveInterests() {
     try {
+      setIsLoading(true);
       const res = await axios.patch(`/users/me`, { interests: selectedInterests.map(si => si._id) });
+      openToast(<Toast title="Success" content="Update interests successfully" type="success" />);
+      setIsLoading(false);
       setUser(res.data.data.user);
       setIsInterestSelectModalOpen(false);
     } catch (err) {
@@ -93,6 +99,7 @@ export default function InterestSelectModal() {
       actionLabel={"Save"} 
       title="Interests Selector"
       body={bodyContent}
+      isLoading={isLoading}
       footer={
         <div className="text-right border-l-[1px] border-l-gray-400 pl-10">
           <p className="font-medium">{selectedInterests.length} / {MAX_INTERESTS} selected</p>

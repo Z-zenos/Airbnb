@@ -6,7 +6,7 @@ export default function Modal({
   isOpen, onClose, children, title, body,
   secondaryAction, secondaryActionLabel, disabled,
   actionLabel, onSubmit, footer,
-  optionBtn, footerClassName
+  optionBtn, footerClassName, isLoading
 }) {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -85,6 +85,7 @@ export default function Modal({
                 )}
                 
                 <Button
+                  isLoading={isLoading}
                   disabled={disabled}
                   label={actionLabel}
                   onClick={handleSubmit}

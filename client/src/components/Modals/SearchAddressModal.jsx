@@ -6,6 +6,8 @@ import Input from "../Input/Input";
 import axios from "axios";
 import { FcCheckmark } from "react-icons/fc";
 import { UserContext } from "../../contexts/user.context";
+import { ToastContext } from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
 
 export default function SearchAddressModal () {
   const { isSearchAddressModalOpen, setIsSearchAddressModalOpen } = useContext(ModalContext);
@@ -14,6 +16,8 @@ export default function SearchAddressModal () {
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
   const [realSelectedAddress, setRealSelectedAddress] = useState('');
+  const { openToast } = useContext(ToastContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -29,14 +33,16 @@ export default function SearchAddressModal () {
 
   async function handleUpdateAddress() {
     try {
+      setIsLoading(true);
       const res = await axios.patch(`/users/me`, { address: realSelectedAddress });
+      openToast(<Toast title="Success" content="Update address successfully" type="success" />);
+      setIsLoading(false);
       setUser(res.data.data.user);
       setIsSearchAddressModalOpen(false);
     } catch (err) {
       console.error(err);
     }
   }
-
 
   const bodyContent = (
     <div className="no-scrollbar overflow-y-auto text-left w-full max-h-[400px] px-4 relative">
@@ -74,6 +80,7 @@ export default function SearchAddressModal () {
       title="Address Selector"
       body={bodyContent}
       actionLabel="Save"
+      isLoading={isLoading}
     />
   );
 }

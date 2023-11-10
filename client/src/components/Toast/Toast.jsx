@@ -28,7 +28,6 @@ export default function Toast({ title, content, type }) {
   const toast = toastType[type];
   return (
     <div className={`flex items-center gap-3 p-4 rounded-lg shadow-lg pr-10`} style={{ backgroundColor: toast.background, border: `1px solid ${toast.color}`  }}>
-
       <div style={{ color: toast.color }}>
         { toast.icon }
       </div>

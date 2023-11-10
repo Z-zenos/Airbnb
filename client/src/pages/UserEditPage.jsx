@@ -20,6 +20,8 @@ import { ModalContext } from "../contexts/modal.context";
 import InterestSelectModal from "../components/Modals/InterestSelectModal";
 import SearchAddressModal from "../components/Modals/SearchAddressModal";
 import LanguageSelectModal from "../components/Modals/LanguageSelectModal";
+import { ToastContext } from "../contexts/toast.context";
+import Toast from "../components/Toast/Toast";
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -71,6 +73,7 @@ export default function UserEditPage() {
     pets: false,
   });
   const inputFileRef = useRef(null); 
+  const wrapperAvatarRef = useRef(null);
 
   const {
     isInterestSelectModalOpen, setIsInterestSelectModalOpen,
@@ -78,7 +81,9 @@ export default function UserEditPage() {
     isLanguageSelectModalOpen, setIsLanguageSelectModalOpen,
   } = useContext(ModalContext);
 
+  const { openToast } = useContext(ToastContext);
   const [showDecadeBorn, setShowDecadeBorn] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // const pastTrip = (
   //   <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
@@ -90,6 +95,7 @@ export default function UserEditPage() {
 
   async function handleChangeAvatar(ev) {
     try {
+      setIsLoading(true);
       const avatar = ev.target.files[0];
       if(Object.keys(avatar).length === 0 && avatar.constructor === Object) return;
       const formData = new FormData();
@@ -104,19 +110,25 @@ export default function UserEditPage() {
           }
         }
       );
+      openToast(<Toast title="Success" content="Update avatar successfully" type="success" />);
 
       const updatedUser = res.data.data.user;
       setUser(updatedUser);
+      setIsLoading(false);
     } catch (err) {
       console.error(err);
+      openToast(<Toast title="Fail" content={err.message} type="error" />);
     }
   }
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[50px] p-10">
       <div className=" col-span-1 relative">
-        <div className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 sticky top-[100px]">
+        <div ref={wrapperAvatarRef} className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 sticky top-[100px]">
           <img src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} className="w-full h-full rounded-full" />
+          { isLoading && 
+            <div className="absolute w-full h-full bg-transperent border-4 animate-spin border-gray-200 top-0 left-0 rounded-[50%] border-l-primary"></div> 
+          }
           <Button 
             label="Edit" 
             className="bg-white shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px]  absolute -bottom-4 left-1/2 -translate-x-1/2 active:scale-95" 
@@ -147,6 +159,7 @@ export default function UserEditPage() {
             Your profile
           </h3>
           <Button label="Save"></Button>
+          
         </div>
 
         <p className="opacity-60 my-6">
