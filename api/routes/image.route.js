@@ -1,6 +1,7 @@
 const express = require('express');
 
 const imageController = require('../controllers/image.controller');
+const authController = require('../controllers/auth.controller');
 const placeController = require('../controllers/place.controller');
 const userController = require('../controllers/user.controller');
 
@@ -30,9 +31,13 @@ router
     placeController.updatePlace
   );
 
+
+// Change user avatar
 router
   .route('/user/:id/avatar')
   .patch(
+    authController.protect,
+    imageController.deleteUserAvatar,
     imageController.uploadUserAvatar,
     imageController.resizeUserAvatar,
     userController.updateMe

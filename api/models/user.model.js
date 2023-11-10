@@ -142,6 +142,11 @@ userSchema.pre(/^find/, function(next) {
   next();
 });
 
+// userSchema.post(/^find/, function(doc, next) {
+//   doc.avatar = `http://localhost:3000/images/users/avatars/${doc.avatar}`;
+//   next();
+// });
+
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 }

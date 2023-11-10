@@ -12,8 +12,8 @@ router
   .get(userController.getAllUsers);
 
 router
-  .route('/profile')
-  .get(authController.protect, userController.profile);
+  .route('/me')
+  .get(authController.protect, userController.me);
 
 router
   .route('/profile/:id')

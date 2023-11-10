@@ -13,13 +13,13 @@ import { FcCheckmark } from "react-icons/fc";
 
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from 'axios';
-import { useLocation } from "react-router-dom";
 import Input from "../components/Input/Input";
 import Modal from "../components/Modals/Modal";
 import Checkbox from "../components/Input/Checkbox";
 import ToggleButton from "../components/Button/ToggleButton";
+import { UserContext } from "../contexts/user.context";
 
 const MAX_INTERESTS = 7;
 
@@ -60,8 +60,7 @@ const Editor = ({
 }
 
 export default function UserEditPage() {
-  const [user, setUser] = useState();
-  const location = useLocation();
+  const {user, setUser} = useContext(UserContext);
   const [edits, setEdits] = useState({
     work: false,
     fun_fact: false,
@@ -85,7 +84,7 @@ export default function UserEditPage() {
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
   const [languages, setLanguages] = useState([]);
   const searchLanguages = languages.length > 0 ? languages.filter(language => language.toLowerCase().startsWith(languageInput.toLowerCase())) : [];
-  const [selectedLanguages, setSelectedLanguages] = useState([]);
+  const [selectedLanguages, setSelectedLanguages] = useState(user?.languages || []);
 
   const [showDecadeBorn, setShowDecadeBorn] = useState(false);
 
@@ -93,18 +92,6 @@ export default function UserEditPage() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const [addresses, setAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState('');
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(location.pathname);
-        setUser(res.data.data.user);
-        setSelectedLanguages(res.data.data.user.languages);
-      } catch(err) {
-        console.error(err);
-      }
-    })();
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -140,40 +127,37 @@ export default function UserEditPage() {
   //   </div>
   // );
 
-  // const [avatarUrl, setAvatarUrl] = useState(user?.avatar || '');
-  const [avatar, setAvatar] = useState({});
+  console.log(user);
 
-  useEffect(() => {
-    (async () => {
+  async function handleChangeAvatar(ev) {
+    try {
+      const avatar = ev.target.files[0];
       if(Object.keys(avatar).length === 0 && avatar.constructor === Object) return;
-      try {
-        const formData = new FormData();
-        formData.append("avatar", avatar);
-  
-        const res = await axios.patch(
-          `/images/user/${user?.id}/avatar`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
+      const formData = new FormData();
+      formData.append("avatar", avatar);
+
+      const res = await axios.patch(
+        `/images/user/${user?.id}/avatar`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
           }
-        );
-  
-        const updatedUser = res.data.data.user;
-        console.log(updatedUser);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, [JSON.stringify(avatar)]);
-  
+        }
+      );
+
+      const updatedUser = res.data.data.user;
+      setUser(updatedUser);
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[50px] p-10">
       <div className=" col-span-1 relative">
         <div className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 sticky top-[100px]">
-          <img src={user?.avatar} className=" rounded-full" />
+          <img src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} className="w-full h-full rounded-full" />
           <Button 
             label="Edit" 
             className="bg-white shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px]  absolute -bottom-4 left-1/2 -translate-x-1/2 active:scale-95" 
@@ -191,7 +175,7 @@ export default function UserEditPage() {
               accept="image/*" 
               hidden 
               multiple={true}
-              onChange={ev => setAvatar(() => ev.target.files[0])}  
+              onChange={async (ev) => await handleChangeAvatar(ev)}  
             />
             <BsFillCameraFill />
           </Button>

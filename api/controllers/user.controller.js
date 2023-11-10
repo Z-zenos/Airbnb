@@ -15,17 +15,12 @@ const filterObj = (obj, ...allowedFields) => {
   return newObj;
 };
 
-exports.profile = (req, res, next) => {
+exports.me = (req, res, next) => {
   const user = req.user;
   res.status(200).json({
     status: 'success',
     data: {
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar
-      }
+      user
     }
   });
 };
@@ -39,7 +34,7 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
   }
 
   // 2) Filtered out unwanted fields names that are not allowed to be updated
-  const filteredBody = filterObj(req.body, 'name', 'email');
+  const filteredBody = filterObj(req.body, 'name', 'email', 'avatar');
   //                                          |______|_____> allowed fields.
   /* 
     filteredBody: we don't want to update everything in the body because
@@ -54,7 +49,6 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
   /* 
     We not use save() method here because we're not dealing with password, but only
     with non-sensitive data like name, email -> we now use findByIdAndUpdate.
-
   */
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,

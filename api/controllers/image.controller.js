@@ -5,6 +5,8 @@ const sharp = require('sharp');
 const AppError = require("../utils/appError");
 const catchErrorAsync = require("../utils/catchErrorAsync");
 
+
+
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -72,12 +74,25 @@ exports.resizeUserAvatar = catchErrorAsync(async (req, res, next) => {
   // 1) Cover avatar
   req.body.avatar = `user-${req.params.id}-${Date.now()}-avatar.jpeg`;
   await sharp(avatar.buffer)
-    .resize(512, 512)
+    .resize(2000, 1333)
     .toFormat('jpeg')
     .jpeg({ quality: 90 })
     .toFile(`resources/images/users/avatars/${req.body.avatar}`);
 
   next();
+});
+
+exports.deleteUserAvatar = catchErrorAsync(async (req, res, next) => {
+  const user = req.user;  
+
+  const imagePath = `${__dirname}/../resources/images/users/avatars/${user.avatar}`;
+
+  let exists = await fs.access(imagePath).then(() => true).catch(() => false);
+  if(exists) await fs.unlink(imagePath);
+  user.avatar = undefined;
+
+  next();
+  
 });
 
 exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {

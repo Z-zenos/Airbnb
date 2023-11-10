@@ -80,7 +80,7 @@ export default function Header() {
           </svg>
 
           <div className='border-[1px] border-primary rounded-full p-1'>
-            <img className='rounded-full w-[30px] h-[30px]' src={user?.avatar} />
+            <img className='rounded-full w-[30px] h-[30px]' src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} />
 
           </div>
 

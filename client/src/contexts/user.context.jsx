@@ -11,7 +11,7 @@ export function UserContextProvider({ children }) {
     (async () => {
       try {
         // https://blog.bitsrc.io/api-call-in-react-using-axios-handling-complicated-scenarios-befff1655abc
-        const res = await axios.get('/users/profile');
+        const res = await axios.get('/users/me');
         const user = res.data.data.user;
         setUser(user);
       } catch(err) {
