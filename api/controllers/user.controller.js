@@ -36,8 +36,10 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(
     req.body, 
-    'name', 'email', 'avatar', 
-    'interests', 'address', 'languages'
+    'name', 'email', 'avatar', 'interests', 'address', 'languages',
+    'school', 'obsessed_with', 'useless_skill', 'time_consuming_activity',
+    'work', 'favorite_song', 'fun_fact', 'biography_title',
+    'pets', 'description'
   );
   /* 
     filteredBody: we don't want to update everything in the body because

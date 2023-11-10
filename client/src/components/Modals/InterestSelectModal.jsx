@@ -37,11 +37,12 @@ export default function InterestSelectModal() {
       setIsLoading(true);
       const res = await axios.patch(`/users/me`, { interests: selectedInterests.map(si => si._id) });
       openToast(<Toast title="Success" content="Update interests successfully" type="success" />);
-      setIsLoading(false);
       setUser(res.data.data.user);
       setIsInterestSelectModalOpen(false);
-    } catch (err) {
-      console.error(err);
+    } catch (err) {        
+      openToast(<Toast title="Fail" content={err.response.data.message} type="error" />);
+    } finally {
+      setIsLoading(false);
     }
   }
 

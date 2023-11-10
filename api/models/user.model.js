@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
     description: {
       type: String,
       trim: true,
-      maxlength: [1000, "Description must be less than 450 characters."],
+      maxlength: [1000, "Description must be less than 1000 characters."],
     },
 
     email: {
@@ -72,38 +72,46 @@ const userSchema = new mongoose.Schema(
 
     school: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'School must be less than 100 characters.']
     },
     address: String,
     decade_born: String,
     obsessed_with: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Obsessed with must be less than 100 characters.']
     },
     useless_skill: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Useless skill must be less than 100 characters.']
     },
     time_consuming_activity: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Time-consuming activity must be less than 100 characters.']
     },
     work: {
       type: String,
-      maxlength: [20, 'Work name must be less than 20 characters.']
+      trim: true,
+      maxlength: [ 100, 'Work name must be less than 100 characters.']
     },
     languages: [String],
     favorite_song: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Favorite song must be less than 100 characters.']
     },
     fun_fact: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Fun fact must be less than 100 characters.']
     },
     biography_title: {
       type: String,
-      maxlength: [40, 'Work name must be less than 40 characters.']
+      trim: true,
+      maxlength: [100, 'Biography title must be less than 100 characters.']
     },
     pets: [String],
 

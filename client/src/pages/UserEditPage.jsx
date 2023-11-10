@@ -11,7 +11,7 @@ import { BiTimeFive } from "react-icons/bi";
 import { IoSchoolOutline } from "react-icons/io5";
 
 import Button from "../components/Button/Button";
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import Input from "../components/Input/Input";
 import ToggleButton from "../components/Button/ToggleButton";
@@ -22,6 +22,9 @@ import SearchAddressModal from "../components/Modals/SearchAddressModal";
 import LanguageSelectModal from "../components/Modals/LanguageSelectModal";
 import { ToastContext } from "../contexts/toast.context";
 import Toast from "../components/Toast/Toast";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import useYupValidationResolver from "../hooks/useYupValidationResolver";
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -32,7 +35,8 @@ const arrow = (on) => {
 };
 
 const Editor = ({ 
-  setEdits, editProperty, edits, label, content, title, description, icon  
+  setEdits, editProperty, edits, label, content, title, 
+  description, icon, register, onEditorChange, errors  
 }) => {
   return (
     <div className="py-3 px-2 border-b-[1px] border-b-gray-300 cursor-pointer hover:bg-gray-100 hover:rounded-lg [&_.arrow-right]:hover:right-3">
@@ -52,17 +56,59 @@ const Editor = ({
         <div className="px-3">
           <h3 className="text-xl mt-2 font-medium">{title}</h3>
           <p className="opacity-70 mt-2 mb-4">{description}</p>
-          <Input label={label} value={content} className="rounded-md" />
+
+          <Input 
+            label={label} 
+            value={content} 
+            className="rounded-md" 
+            type="text"
+            name={editProperty}
+            errors={errors}
+            {...register(editProperty, { onChange: onEditorChange })}
+          />
         </div>
       }
     </div>
   );
 };
 
+const userBasicInfoFormSchema = yup.object({
+  work: yup.string().max(100, "Name must be less than 100 characters."),
+  fun_fact: yup.string().max(100, "Name must be less than 100 characters."),
+  useless_skill: yup.string().max(100, "Name must be less than 100 characters."),
+  biography_title: yup.string().max(100, "Name must be less than 100 characters."),
+  obsessed_with: yup.string().max(100, "Name must be less than 100 characters."),
+  favorite_song: yup.string().max(100, "Name must be less than 100 characters."),
+  time_consuming_activity: yup.string().max(100, "Name must be less than 100 characters."),
+  school: yup.string().max(100, "Name must be less than 100 characters."),
+  pets: yup.string().max(100, "Name must be less than 100 characters."),
+  description: yup.string().max(1000, "Name must be less than 1000 characters."),
+});
 
 
 export default function UserEditPage() {
   const {user, setUser} = useContext(UserContext);
+
+  const resolver = useYupValidationResolver(userBasicInfoFormSchema);
+  const [formData, setFormData] = useState({});
+
+  useEffect(() => {
+    setFormData({
+      work: user?.work,
+      fun_fact: user?.fun_fact,
+      useless_skill: user?.useless_skill,
+      biography_title: user?.biography_title,
+      obsessed_with: user?.obsessed_with,
+      favorite_song: user?.favorite_song,
+      time_consuming_activity: user?.time_consuming_activity,
+      school: user?.school,
+      pets: user?.pets.join(', '),
+      description: user?.description
+    });
+  }, [JSON.stringify(user)]);
+
+  const { register, trigger, handleSubmit, formState: {errors} } = useForm({ mode: "all", resolver });
+
   const [edits, setEdits] = useState({
     work: false,
     fun_fact: false,
@@ -85,6 +131,7 @@ export default function UserEditPage() {
 
   const { openToast } = useContext(ToastContext);
   const [showDecadeBorn, setShowDecadeBorn] = useState(false);
+  const [isAvatarLoading, setIsAvatarLoading] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   // const pastTrip = (
@@ -95,9 +142,41 @@ export default function UserEditPage() {
   //   </div>
   // );
 
+  function handleFormDataChange(ev) {
+    const { name, value } = ev.target;
+    setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
+  }
+  
+  async function handleSubmitForm(ev) {
+    trigger();
+    ev.preventDefault();
+    if(Object.keys(errors).length === 0 && errors.constructor === Object) {
+      try {
+        setIsLoading(true);
+        const config = {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        };
+        
+        const res = await axios.patch(`/users/me`, {...formData, pets: formData.pets.split(', ')}, config);
+
+        openToast(<Toast title="Success" content="Update info successfully" type="success" />)
+
+        const loggedUser = res.data.data.user;
+        setUser(loggedUser);
+        
+      } catch (err) {
+        openToast(<Toast title="Fail" content={err.response.data.message} type="error" />);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
+
   async function handleChangeAvatar(ev) {
     try {
-      setIsLoading(true);
+      setIsAvatarLoading(true);
       const avatar = ev.target.files[0];
       if(Object.keys(avatar).length === 0 && avatar.constructor === Object) return;
       const formData = new FormData();
@@ -117,10 +196,9 @@ export default function UserEditPage() {
       const updatedUser = res.data.data.user;
       setUser(updatedUser);
     } catch (err) {
-      console.error(err);
-      openToast(<Toast title="Fail" content={err.message} type="error" />);
+      openToast(<Toast title="Fail" content={err.response.data.message} type="error" />);
     } finally {
-      setIsLoading(false);
+      setIsAvatarLoading(false);
     }
   }
 
@@ -129,7 +207,7 @@ export default function UserEditPage() {
       <div className=" col-span-1 relative">
         <div ref={wrapperAvatarRef} className="w-[200px] h-[200px] rounded-full border-primary border-[2px] p-1 mx-auto mt-10 sticky top-[100px]">
           <img src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} className="w-full h-full rounded-full" />
-          { isLoading && 
+          { isAvatarLoading && 
             <div className="absolute w-full h-full bg-transperent border-4 animate-spin border-gray-200 top-0 left-0 rounded-[50%] border-l-primary"></div> 
           }
           <Button 
@@ -161,7 +239,7 @@ export default function UserEditPage() {
           <h3 className="font-bold text-4xl  ">
             Your profile
           </h3>
-          <Button label="Save"></Button>
+          <Button label="Save" isLoading={isLoading} onClick={async (ev) => await handleSubmitForm(ev)}></Button>
           
         </div>
 
@@ -169,7 +247,7 @@ export default function UserEditPage() {
           The information you share will be used across Airbnb to help other guests and Hosts get to know you.
         </p>
 
-        <div className="pb-8">
+        <form onSubmit={handleSubmit(handleSubmitForm)}>
           <div className="grid xl:grid-cols-2 md:grid-cols-1 gap-2 mt-8 font-light ">
             
             <Editor 
@@ -179,8 +257,11 @@ export default function UserEditPage() {
               title="What do you do for work?" 
               description="Tell us what your profession is. If you don’t have a traditional job, tell us your life’s calling. Example: Nurse, parent to four kids, or retired surfer." 
               label="My work:"
-              content={user?.work}
+              content={formData?.work}
               icon={<MdWorkOutline className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <div>
@@ -202,8 +283,11 @@ export default function UserEditPage() {
               title="What’s a fun fact about you?" 
               description="Share something unique or unexpected about you. Example: I was in a music video or I’m a juggler." 
               label="My fun fact:"
-              content={user?.fun_fact}
+              content={formData?.fun_fact}
               icon={<PiShootingStarBold className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <Editor 
@@ -213,8 +297,11 @@ export default function UserEditPage() {
               title="What’s your most useless skill?" 
               description="Share a surprising but pointless talent you have. Example: Shuffling cards with one hand." 
               label="My most useless skill:"
-              content={user?.useless_skill}
+              content={formData?.useless_skill}
               icon={<FaMagic className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <Editor 
@@ -224,8 +311,11 @@ export default function UserEditPage() {
               title="What would your biography title be?" 
               description="If someone wrote a book about your life, what would they call it? Example: Born to Roam or Chronicles of a Dog Mom." 
               label="My biography title would be:"
-              content={user?.biography_title}
+              content={formData?.biography_title}
               icon={<LuSubtitles className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <div className="" onClick={() => setIsSearchAddressModalOpen(true)}>
@@ -244,8 +334,11 @@ export default function UserEditPage() {
               title="What are you obsessed with?" 
               description="Share whatever you can’t get enough of—in a good way. Example: Baking rosemary focaccia." 
               label="I'm obsessed with:"
-              content={user?.obsessed_with}
+              content={formData?.obsessed_with}
               icon={<AiOutlineHeart className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <Editor 
@@ -255,8 +348,11 @@ export default function UserEditPage() {
               title="What was your favorite song in high school?" 
               description="However embarrassing, share the tune you listened to on repeat as a teenager." 
               label="My favorite in high school:"
-              content={user?.favorite_song}
+              content={formData?.favorite_song}
               icon={<GiLoveSong className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <Editor 
@@ -266,8 +362,11 @@ export default function UserEditPage() {
               title="What do you spend too much time doing?" 
               description="Share an activity or hobby you spend lots of free time on. Example: Watching cat videos or playing chess." 
               label="I spend too much time:"
-              content={user?.time_consuming_activity}
+              content={formData?.time_consuming_activity}
               icon={<BiTimeFive className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <Editor 
@@ -277,8 +376,11 @@ export default function UserEditPage() {
               title="Where did you go to school?" 
               description="Whether it’s home school, high school, or trade school, name the school that made you who you are." 
               label="Where I went to school:"
-              content={user?.school}
+              content={formData?.school}
               icon={<IoSchoolOutline className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
 
             <div className="flex justify-between items-center border-b-[1px] border-b-gray-300 relative hover:bg-gray-100 hover:rounded-lg pr-6">
@@ -296,24 +398,28 @@ export default function UserEditPage() {
               title="Do you have any pets in your life?" 
               description="Share any pets you have and their names. Example: My calico cat Whiskers, or Leonardo my speedy turtle." 
               label="Pets:"
-              content={user?.pets.join(', ').replace(/, ([^,]*)$/, ' and $1')}
+              content={formData?.pets}
               icon={<MdOutlinePets className="w-6 h-6" />}
+              register={register}
+              onEditorChange={handleFormDataChange}
+              errors={errors}
             />
           </div>
-        </div>
 
-        <div className="border-b-[1px] border-b-gray-300 pb-8">
-          <h3 className="text-2xl font-medium">About you</h3>
-          <p className="opacity-60 my-2">Tell us a little bit about yourself, so your future hosts or guests can get to know you.</p>
-          <textarea 
-            className="w-full border-gray-primary border h-[160px] py-3 px-5 rounded-md outline-none" 
-            value={user?.description}
-            spellCheck={false} 
-          />
-          
-        </div>
+          <div className="border-b-[1px] border-b-gray-300 py-10">
+            <h3 className="text-2xl font-medium">About you</h3>
+            <p className="opacity-60 my-2">Tell us a little bit about yourself, so your future hosts or guests can get to know you.</p>
+            <textarea 
+              className="w-full border-gray-primary mt-4 border h-[160px] py-3 px-5 rounded-md outline-none" 
+              value={formData?.description}
+              spellCheck={false} 
+              name="description"
+              {...register('description', { onChange: handleFormDataChange })}
+            />
+          </div>
+        </form>
 
-        <div className="border-b-[1px] border-b-gray-300 py-8">
+        <div className=" py-8">
           <h3 className="text-2xl font-medium">What you’re into</h3>
           <p className="opacity-60 my-3">Find common ground with other guests and Hosts by adding interests to your profile.</p>
           
