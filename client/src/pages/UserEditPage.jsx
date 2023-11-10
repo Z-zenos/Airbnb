@@ -11,16 +11,15 @@ import { BiTimeFive } from "react-icons/bi";
 import { IoSchoolOutline } from "react-icons/io5";
 
 import Button from "../components/Button/Button";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import axios from 'axios';
 import Input from "../components/Input/Input";
-import Modal from "../components/Modals/Modal";
-import Checkbox from "../components/Input/Checkbox";
 import ToggleButton from "../components/Button/ToggleButton";
 import { UserContext } from "../contexts/user.context";
 import { ModalContext } from "../contexts/modal.context";
 import InterestSelectModal from "../components/Modals/InterestSelectModal";
 import SearchAddressModal from "../components/Modals/SearchAddressModal";
+import LanguageSelectModal from "../components/Modals/LanguageSelectModal";
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -75,28 +74,11 @@ export default function UserEditPage() {
 
   const {
     isInterestSelectModalOpen, setIsInterestSelectModalOpen,
-    isSearchAddressModalOpen, setIsSearchAddressModalOpen
+    isSearchAddressModalOpen, setIsSearchAddressModalOpen,
+    isLanguageSelectModalOpen, setIsLanguageSelectModalOpen,
   } = useContext(ModalContext);
 
-  const [languageInput, setLanguageInput] = useState('');
-  const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
-  const [languages, setLanguages] = useState([]);
-  const searchLanguages = languages.length > 0 ? languages.filter(language => language.toLowerCase().startsWith(languageInput.toLowerCase())) : [];
-  const [selectedLanguages, setSelectedLanguages] = useState(user?.languages || []);
-
   const [showDecadeBorn, setShowDecadeBorn] = useState(false);
-
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const resLanguages = await axios.get("/resources/languages");
-        setLanguages(resLanguages.data.data.languages);
-      } catch (err) {
-        console.error(err);
-      }
-    })();
-  }, []);
 
   // const pastTrip = (
   //   <div className="bg-[#e0f7f7] py-3 pb-10 px-5 rounded-lg">
@@ -185,46 +167,16 @@ export default function UserEditPage() {
               icon={<MdWorkOutline className="w-6 h-6" />}
             />
 
-            <div 
-              className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg"
-              onClick={() => setIsLanguageModalOpen(true)}
-            >
-              <span><LiaLanguageSolid className="w-6 h-6" /></span>
-              <span>Speaks {user?.languages?.join(', ').replace(/, ([^,]*)$/, ' and $1')}</span>
-
-              <Modal
-                isOpen={isLanguageModalOpen} 
-                onSubmit={() => setIsLanguageModalOpen(false)} 
-                onClose={() => setIsLanguageModalOpen(false)} 
-                actionLabel={"Save"} 
+            <div>
+              <div 
+                className="flex items-center gap-3 py-3 px-2 border-b-[1px] border-b-gray-300 relative cursor-pointer hover:bg-gray-100 hover:rounded-lg"
+                onClick={() => setIsLanguageSelectModalOpen(true)}
               >
-                <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
-                  <h3 className="text-2xl font-medium">Languages you speak</h3>
-                  <Input 
-                    label="Search for a language" 
-                    className="rounded-lg mb-4 mr-5 mt-4"
-                    value={languageInput} 
-                    onChange={(ev => setLanguageInput(ev.target.value))}  
-                  />
-                  <div className="grid grid-cols-3">
-                    { languages.length > 0 && searchLanguages.map(language => (
-                        <div className="flex justify-between items-center" key={language}>
-                          <Checkbox 
-                            key={language} 
-                            label={language} 
-                            checked={selectedLanguages.filter(l => l === language).length > 0} 
-                            onChange={() => setSelectedLanguages(prev => 
-                              prev.filter(l => l === language).length > 0
-                                ? prev.filter(l => l !== language)
-                                : [...prev, language]
-                            )} 
-                          />
-                        </div>
-                      ))
-                    }
-                  </div>
-                </div>
-              </Modal>
+                <span><LiaLanguageSolid className="w-6 h-6" /></span>
+                <span>Speaks {user?.languages?.join(', ').replace(/, ([^,]*)$/, ' and $1')}</span>
+              </div>
+
+              { isLanguageSelectModalOpen && <LanguageSelectModal /> }
             </div>
 
             <Editor 
