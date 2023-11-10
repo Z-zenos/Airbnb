@@ -114,10 +114,11 @@ export default function UserEditPage() {
 
       const updatedUser = res.data.data.user;
       setUser(updatedUser);
-      setIsLoading(false);
     } catch (err) {
       console.error(err);
       openToast(<Toast title="Fail" content={err.message} type="error" />);
+    } finally {
+      setIsLoading(false);
     }
   }
 

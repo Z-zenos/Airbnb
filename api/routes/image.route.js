@@ -37,8 +37,9 @@ router
   .route('/user/:id/avatar')
   .patch(
     authController.protect,
-    imageController.deleteUserAvatar,
     imageController.uploadUserAvatar,
+    imageController.fileLimitsChecker,
+    imageController.deleteUserAvatar,
     imageController.resizeUserAvatar,
     userController.updateMe
   );

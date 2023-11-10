@@ -5,8 +5,6 @@ const sharp = require('sharp');
 const AppError = require("../utils/appError");
 const catchErrorAsync = require("../utils/catchErrorAsync");
 
-
-
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
@@ -31,6 +29,21 @@ exports.uploadPlaceImages = upload.fields([
 exports.uploadUserAvatar = upload.fields([
   { name: 'avatar', maxCount: 1 }
 ]);
+
+exports.fileLimitsChecker = catchErrorAsync(async (req, res, next) => {
+  if (!Object.keys(req.files).length) 
+    return next(new AppError("Image missing", 400));
+
+  Object.keys(req.files).forEach(imageField => {
+    req.files[imageField].forEach(file => {
+      if (file.size > process.env.MAX_FILE_SIZE) {
+        return next(new AppError(`File too large. max ${process.env.MAX_FILE_SIZE}, received ${req.file.size}`, 400));
+      }
+    });
+  });
+
+  next();
+});
 
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
   const image_cover = req.files?.image_cover[0];

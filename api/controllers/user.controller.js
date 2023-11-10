@@ -39,7 +39,6 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
     'name', 'email', 'avatar', 
     'interests', 'address', 'languages'
   );
-  //                                          |______|_____> allowed fields.
   /* 
     filteredBody: we don't want to update everything in the body because
     let say user puts in body role(ex: set to admin) -> this would allow any user
