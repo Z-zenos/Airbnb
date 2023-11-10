@@ -35,6 +35,8 @@ export default function Header() {
 
     return adults + children ? adults + children + ' guest(s)' : 'Add guests';
   };
+
+  console.log(location.pathname, HIDE_SEARCH_URLS.some(hsu => location.pathname.startsWith(`/${hsu}`)));
   
   return (
     <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] sticky top-0 bg-white z-20">
@@ -46,22 +48,22 @@ export default function Header() {
         <span className='font-bold text-2xl'>airbnb</span>
       </Link>
 
-      { HIDE_SEARCH_URLS.every(hsu => location.pathname.includes(hsu)).length > 0 && 
-          <div 
-        className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
-        onClick={() => setIsSearchModalOpen(true)}
-      >
-        <div>{ searchParams.get('region') || searchParams.get('address') || 'Anywhere'}</div>
-        <div className='border-l bg-gray-700 h-5'></div>
-        <div>{ time() || 'Any week'}</div>
-        <div className='border-l bg-gray-700 h-5'></div>
-        <div className='text-gray-800 font-thin'>{guests()}</div>
-        <button className='bg-primary rounded-full p-2 text-white font-bold'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-        </button>
-          </div>
+      { !HIDE_SEARCH_URLS.some(hsu => location.pathname.startsWith(`/${hsu}`)) && 
+        <div 
+          className='ab__search-widget flex items-center gap-3 border border-gray-300 rounded-full pr-2 py-2 pl-6 shadow-md shadow-gray-300 text-sm cursor-pointer'
+          onClick={() => setIsSearchModalOpen(true)}
+        >
+          <div>{ searchParams.get('region') || searchParams.get('address') || 'Anywhere'}</div>
+          <div className='border-l bg-gray-700 h-5'></div>
+          <div>{ time() || 'Any week'}</div>
+          <div className='border-l bg-gray-700 h-5'></div>
+          <div className='text-gray-800 font-thin'>{guests()}</div>
+          <button className='bg-primary rounded-full p-2 text-white font-bold'>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </button>
+        </div>
       }
 
       <div className='flex items-center gap-2 relative'>
