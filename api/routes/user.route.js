@@ -11,9 +11,11 @@ router
   .route('/')
   .get(userController.getAllUsers);
 
+router.all('/me', authController.protect);
 router
   .route('/me')
-  .get(authController.protect, userController.me);
+  .get(userController.me)
+  .patch(userController.updateMe);
 
 router
   .route('/profile/:id')

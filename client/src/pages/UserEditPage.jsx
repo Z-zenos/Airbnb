@@ -11,7 +11,6 @@ import { BiTimeFive } from "react-icons/bi";
 import { IoSchoolOutline } from "react-icons/io5";
 import { FcCheckmark } from "react-icons/fc";
 
-import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import Button from "../components/Button/Button";
 import { useContext, useEffect, useRef, useState } from "react";
 import axios from 'axios';
@@ -20,8 +19,8 @@ import Modal from "../components/Modals/Modal";
 import Checkbox from "../components/Input/Checkbox";
 import ToggleButton from "../components/Button/ToggleButton";
 import { UserContext } from "../contexts/user.context";
-
-const MAX_INTERESTS = 7;
+import { ModalContext } from "../contexts/modal.context";
+import InterestSelectModal from "../components/Modals/InterestSelectModal";
 
 const arrow = (on) => {
   const className = "arrow-right transition-all absolute right-5 top-1/2 -translate-y-1/2";
@@ -74,11 +73,7 @@ export default function UserEditPage() {
   });
   const inputFileRef = useRef(null); 
 
-  const [isInterestsModalOpen, setIsInterestsModalOpen] = useState(false);
-  const [interests, setInterests] = useState([]);
-  const [interestInput, setInterestInput] = useState('');
-  const searchInterests = interests.length > 0 ? interests.filter(interest => interest.name.includes(interestInput)) : [];
-  const [selectedInterests, setSelectedInterests] = useState([]);
+  const {isInterestSelectModalOpen, setIsInterestSelectModalOpen} = useContext(ModalContext);
 
   const [languageInput, setLanguageInput] = useState('');
   const [isLanguageModalOpen, setIsLanguageModalOpen] = useState(false);
@@ -96,9 +91,6 @@ export default function UserEditPage() {
   useEffect(() => {
     (async () => {
       try {
-        const resInterests = await axios.get("/resources/interests");
-        setInterests(resInterests.data.data.interests);
-
         const resLanguages = await axios.get("/resources/languages");
         setLanguages(resLanguages.data.data.languages);
       } catch (err) {
@@ -126,8 +118,6 @@ export default function UserEditPage() {
   //       Hanoi,<br /> Vietnam</p>
   //   </div>
   // );
-
-  console.log(user);
 
   async function handleChangeAvatar(ev) {
     try {
@@ -402,74 +392,26 @@ export default function UserEditPage() {
           <h3 className="text-2xl font-medium">What you’re into</h3>
           <p className="opacity-60 my-3">Find common ground with other guests and Hosts by adding interests to your profile.</p>
           
-          <div 
-            className="border-[1px] border-dashed border-gray-primary w-[100px] text-3xl text-center py-1 px-8 opacity-60 hover:opacity-80 hover:border-gray-700 cursor-pointer transition-all rounded-3xl"
-            onClick={() => setIsInterestsModalOpen(true)}
-          >
-            +
+          <div className=" flex justify-start items-center gap-2 flex-wrap">
+            { user?.interests.length > 0 && user?.interests.map(interest => 
+              <div key={interest.id}
+                className="border-[1px] border-gray-primary text-3xl h-[40px] text-center py-1 px-3 flex items-center gap-1 hover:border-gray-700 rounded-3xl"
+              >
+                <img src={`http://localhost:3000/images/interests/${interest.iconImage}`} className="w-[24px] h-[24px]" alt={interest.name} />
+                <span className="text-sm">{interest.name}</span>
+              </div>
+            )}
+
+            <div 
+              className="border-[1px] border-dashed border-gray-primary w-[100px] h-[40px] text-3xl text-center py-1 px-8 opacity-60 hover:opacity-100 hover:border-gray-700 flex items-center justify-center cursor-pointer transition-all rounded-3xl"
+              onClick={() => setIsInterestSelectModalOpen(true)}
+            >
+              { user?.interests.length === 10 ? '-' : '+' }
+            </div>
           </div>
 
-          <Modal
-            isOpen={isInterestsModalOpen} 
-            onSubmit={() => setIsInterestsModalOpen(false)} 
-            onClose={() => setIsInterestsModalOpen(false)} 
-            actionLabel={"Save"} 
-            footer={
-              <div className="text-right border-l-[1px] border-l-gray-400 pl-10">
-                <p className="font-medium">{selectedInterests.length} / {MAX_INTERESTS} selected</p>
-                <p className={`font-light ${selectedInterests.length !== MAX_INTERESTS ? 'opacity-70' : 'opacity-100'}  text-[13px]`}>
-                  {selectedInterests.length === MAX_INTERESTS 
-                    ? <span className="flex items-center gap-2 justify-end"><FcCheckmark size={20} /> You&lsquo;ve selected 7 items.</span> 
-                    : 'Your selections will appear here'}
-                </p>
-              </div>
-            }
-            footerClassName="border-t border-t-gray-300 grid grid-cols-2 items-center"
-          >
-            <div className="no-scrollbar overflow-y-auto text-left w-[600px] h-[600px] px-4">
-              <h3 className="text-2xl font-medium">What are you into?</h3>
-              <p className="opacity-60 my-3">Pick up to 7 interests or sports you enjoy that you want to show on your profile.</p>
-              <Input 
-                label="Interest" 
-                className="rounded-lg mb-4 mr-5"
-                value={interestInput} 
-                onChange={(ev => setInterestInput(ev.target.value))}  
-              />
-              <div className="flex flex-wrap gap-3 pr-5">
-                { interests?.length > 0 && searchInterests.map(interest => (
-                    <div 
-                      key={interest.name} 
-                      className={`
-                        py-[6px] px-5 rounded-3xl flex gap-2 justify-start items-center border hover:border-gray-primary 
-                        cursor-pointer transition-all 
-                        ${selectedInterests.filter(si => si.name === interest.name).length > 0 
-                          ? ' border-black border-[2px]' 
-                          : (selectedInterests.length === MAX_INTERESTS 
-                            ? 'opacity-40' 
-                            : 'border-gray-300'
-                            )
-                        }
-                      `}
-                      onClick={() => {
-                        setSelectedInterests(prev => 
-                          prev.filter(i => i.name === interest.name).length > 0
-                            ? prev.filter(i => i.name !== interest.name)
-                            : (
-                              selectedInterests.length === MAX_INTERESTS
-                                ? prev
-                                : [...prev, interest] 
-                            )
-                          )
-                      }}
-                    >
-                      <span><img src={`http://localhost:3000/images/interests/${interest.iconImage}`} className="w-5 h-5" /></span>
-                      <span className="text-[15px] font-light">{ capitalizeFirstLetter(interest.name) }</span>
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </Modal>
+          {isInterestSelectModalOpen && <InterestSelectModal />  }
+
         </div>
       </div>
 

@@ -55,7 +55,7 @@ exports.getCitiesByKeyword = (req, res, next) => {
 }
 
 exports.getAllInterests =  catchErrorAsync(async (req, res, next) => {
-  const interests = await Interest.find({});
+  const interests = await Interest.find({}, { iconImage: 1, interest_id: 1, name: 1  });
 
   res.status(200).json({
     status: 'success',

@@ -10,15 +10,17 @@ export function ModalContextProvider({ children }) {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [isIntlModalOpen, setIsIntlModalOpen] = useState(false);
+  const [isInterestSelectModalOpen, setIsInterestSelectModalOpen] = useState(false);
   
   return (
     <ModalContext.Provider value={{
-      isOpen, isCreatePlaceModalOpen,
-      setIsOpen, setIsCreatePlaceModalOpen,
+      isOpen, setIsOpen,
+      isCreatePlaceModalOpen, setIsCreatePlaceModalOpen,
       isFilterModalOpen, setIsFilterModalOpen,
       isImageModalOpen, setIsImageModalOpen,
       isSearchModalOpen, setIsSearchModalOpen,
       isIntlModalOpen, setIsIntlModalOpen,
+      isInterestSelectModalOpen, setIsInterestSelectModalOpen
     }}>
       { children }
     </ModalContext.Provider>

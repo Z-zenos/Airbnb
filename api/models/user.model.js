@@ -127,6 +127,13 @@ userSchema.pre('save', function(next) {
   next();
 });
 
+// userSchema.pre('findOneAndUpdate', function(next) {
+//   if(this._update.interests)
+//     this._update.interests = this._update.interests.map(id => new mongoose.Types.ObjectId(id));
+//   console.log(this._update);
+//   next();
+// });
+
 // Select all users are currently active
 userSchema.pre(/^find/, function(next) {
   this.find({ active: { $ne: false } });
@@ -136,7 +143,7 @@ userSchema.pre(/^find/, function(next) {
 userSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'interests',
-    select: '-__v -_id -created -modified'
+    select: '-__v -created -modified'
   });
 
   next();
