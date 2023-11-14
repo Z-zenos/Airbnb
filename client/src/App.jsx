@@ -13,6 +13,7 @@ import UserPage from "./pages/UserPage";
 import { IntlContextProvider } from "./contexts/intl.context";
 import AccountSettingPage from "./pages/AccountSettingPage";
 import UserEditPage from "./pages/UserEditPage";
+import PersonalInfoPage from "./pages/PersonalInfoPage";
 
 
 // Apply for all requests
@@ -47,6 +48,7 @@ function App() {
                   <Route path="/places" element={<IndexPage />} />
                   <Route path="/places/search" element={<IndexPage />} />
                   <Route path="/account-settings" element={<AccountSettingPage />} />
+                  <Route path="/account-settings/personal-info" element={<PersonalInfoPage />} />
                   <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />
                   <Route path='/places/:id' element={ <PlacePage /> } />

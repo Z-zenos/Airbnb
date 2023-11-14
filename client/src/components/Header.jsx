@@ -35,8 +35,6 @@ export default function Header() {
 
     return adults + children ? adults + children + ' guest(s)' : 'Add guests';
   };
-
-  console.log(location.pathname, HIDE_SEARCH_URLS.some(hsu => location.pathname.startsWith(`/${hsu}`)));
   
   return (
     <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] sticky top-0 bg-white z-20">
