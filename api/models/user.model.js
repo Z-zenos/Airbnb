@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Please tell us your phone.'],
       unique: true,
-      // match: [/^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/im, "Please provide valid your phone number"]
+      validate: [validator.isNumeric, 'Please provide a valid phone.']
     },
 
     description: {

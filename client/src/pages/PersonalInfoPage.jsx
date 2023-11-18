@@ -13,6 +13,14 @@ import * as yup from "yup";
 import useYupValidationResolver from "../hooks/useYupValidationResolver";
 import { UserContext } from "../contexts/user.context";
 
+function formatEmail(emilString){
+  if(!emilString) return '';
+  var splitEmail = emilString.split("@")
+  var domain = splitEmail[1];
+  var name = splitEmail[0];
+  return  name.substring(0,3).concat("*********@").concat(domain)
+}
+
 const phoneRegex = /^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/im;
 
 const basicPersonalInfoSchema = {
@@ -75,10 +83,24 @@ export default function PersonalInfoPage() {
 
   const { openToast } = useContext(ToastContext);
   const [isLoading, setIsLoading] = useState(false);
-
   function handleFormDataChange(ev) {
     const { name, value } = ev.target;
-    setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
+    if(name.includes('.')) {
+      const splitter = name.split('.');
+      let nestedObj = {
+        [splitter[0]]: {
+          [splitter[1]]: value
+        }
+      };
+
+      setFormData(prevFormData => { 
+        nestedObj = {...prevFormData[splitter[0]], ...nestedObj[splitter[0]]};
+        prevFormData[splitter[0]] = nestedObj;
+        return { ...prevFormData };
+      });
+    }
+    else 
+      setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
   }
 
   async function handleSubmitForm(ev) {
@@ -87,19 +109,18 @@ export default function PersonalInfoPage() {
     if(Object.keys(errors).length === 0 && errors.constructor === Object) {
       try {
         setIsLoading(true);
-        console.log(formData);
-        // const config = {
-        //   headers: {
-        //     "Content-Type": "application/json"
-        //   },
-        // };
+        const config = {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        };
         
-        // const res = await axios.patch(`/users/me`, formData, config);
+        const res = await axios.patch(`/users/me`, formData, config);
 
-        // openToast(<Toast title="Success" content="Update personal info successfully" type="success" />)
+        openToast(<Toast title="Success" content="Update personal info successfully" type="success" />)
 
-        // const loggedUser = res.data.data.user;
-        // setUser(loggedUser);
+        const loggedUser = res.data.data.user;
+        setUser(loggedUser);
         
       } catch (err) {
         openToast(<Toast title="Fail" content={err.response.data.message} type="error" />);
@@ -154,7 +175,7 @@ export default function PersonalInfoPage() {
                     
                   </div>
                 )
-                : <p className="font-light opacity-60 text-[14px]">Tuấn Hoàng Anh</p>
+                : <p className="font-light opacity-60 text-[14px]">{formData?.name}</p>
               }
             </div>
             <p onClick={() => handleEditInfo('name')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['name'] ? 'Cancel' : 'Edit' }</p>
@@ -174,7 +195,7 @@ export default function PersonalInfoPage() {
                     
                   </div>
                 )
-                : <p className="font-light opacity-60 text-[14px]">h**1@gmail.com</p>
+                : <p className="font-light opacity-60 text-[14px]">{formatEmail(formData?.email)}</p>
               }
               
             </div>
@@ -240,7 +261,7 @@ export default function PersonalInfoPage() {
                     </div>
                   </div>
                 )
-                : <p className="font-light opacity-60 text-[14px]">Not provided</p>
+                : <p className="font-light opacity-60 text-[14px]">{formData?.emergency_contact?.phone ? `${formData?.emergency_contact?.name} - ${formData?.emergency_contact?.phone}` : 'Not provided'}</p>
               }
             </div>
             <p onClick={() => handleEditInfo('emergency_contact')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['emergency_contact'] ? 'Cancel' : 'Edit' }</p>
@@ -252,21 +273,21 @@ export default function PersonalInfoPage() {
         <div className="col-span-2">
           <div className="border border-gary-300 rounded-xl p-6">
             <div className="border-b border-b-gray-300 py-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex items-center gap-4 mb-4">
                 <AiOutlineFileProtect className="w-[40px] h-[40px] text-primary" />  
                 <p className="font-medium text-md">Why isn’t my info shown here?</p>
               </div>
               <p className="opacity-60 font-light">We’re hiding some account details to protect your identity.</p>
             </div>
             <div className="border-b border-b-gray-300 py-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex items-center gap-4 mb-4">
                 <FaLock className="w-[40px] h-[40px] text-primary" />  
                 <p className="font-medium text-md">Which details can be edited?</p>
               </div>
               <p className="opacity-60 font-light">Contact info and personal details can be edited. If this info was used to verify your identity, you’ll need to get verified again the next time you book—or to continue hosting.</p>
             </div>
             <div className="border-b border-b-gray-300 py-6">
-              <div className="flex items-center justify-between gap-4 mb-2">
+              <div className="flex items-center gap-4 mb-4">
                 <FaEye className="w-[40px] h-[40px] text-primary" />  
                 <p className="font-medium text-md">What info is shared with others?</p>
               </div>

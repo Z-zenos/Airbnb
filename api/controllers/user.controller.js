@@ -39,7 +39,7 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
     'name', 'email', 'avatar', 'interests', 'address', 'languages',
     'school', 'obsessed_with', 'useless_skill', 'time_consuming_activity',
     'work', 'favorite_song', 'fun_fact', 'biography_title',
-    'pets', 'description'
+    'pets', 'description', 'emergency_contact', 'phone'
   );
   /* 
     filteredBody: we don't want to update everything in the body because
