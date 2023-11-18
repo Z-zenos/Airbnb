@@ -7,7 +7,7 @@ export default function UserCard({ user }) {
     <div className="rounded-2xl md:w-[300px] w-[350px] shadow-[rgba(0,_0,_0,_0.2)_0px_6px_20px_0px] border">
       <div className="grid grid-cols-3 py-4 px-6 md:px-3">
         <div className="col-span-2 flex items-center justify-center flex-col">
-          <img src={user?.avatar.includes('github') ? user?.avatar : `http://localhost:3000/images/users/avatars/${user?.avatar}`} className="w-[100px] h-[100px] rounded-full" />
+          <img src={user?.avatar.includes('github') ? user?.avatar : (user?.avatar && `http://localhost:3000/images/users/avatars/${user?.avatar}`)} className="w-[100px] h-[100px] rounded-full" />
 
           <p className="text-3xl mt-4 font-bold text-primary">{user?.name.split(' ')[0]}</p>
           <p className="text-[14px] font-medium mt-1 flex items-center gap-1 "><BiSolidMedal className="inline w-5 h-5" /> Superhost</p>
