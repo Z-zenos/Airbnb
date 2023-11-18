@@ -85,7 +85,6 @@ const userBasicInfoFormSchema = yup.object({
   description: yup.string().max(1000, "Name must be less than 1000 characters."),
 });
 
-
 export default function UserEditPage() {
   const {user, setUser} = useContext(UserContext);
 

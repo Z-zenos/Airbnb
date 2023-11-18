@@ -38,7 +38,7 @@ const importData = async () => {
     // }));
     // await PropertyType.create(property_types);
     await Place.create(places);
-    // await User.create([...users].slice(200, 201));
+    // await User.create([...users].slice(900, 1000));
     // await View.create(views);
     // await Interest.create(interests);
 
@@ -57,8 +57,8 @@ const deleteData = async () => {
     // await PropertyType.deleteMany();
     // await View.deleteMany();
     // await Amenity.deleteMany();
-    // await User.deleteMany();
-    await Place.deleteMany();
+    await User.deleteMany();
+    // await Place.deleteMany();
 
     console.log('Data successfully deleted!');
   }

@@ -18,6 +18,8 @@ async function getIdList(Model) {
   return (await Model.find({}, {_id: 1})).map(item => item.id);
 }
 
+const relationships = ["Beneficiary", "Brother", "Domestic Partner", "Father", "Mother", "Wife", "Husband", "Niece", "Friend", "Nephew", "Sister"];
+
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
 
 mongoose.connect(DB).then(() => console.log('DB connection successful!'));
@@ -28,12 +30,13 @@ const create = async () => {
   
     const users = [];
   
-    for(let i = 0; i < 200; i++) {
+    for(let i = 0; i < 1000; i++) {
 
       users.push({
         name: `${faker.person.firstName()} ${faker.person.lastName()}`,
         description: faker.lorem.paragraph({ min: 3, max: 7 }),
-        email: faker.internet.email(),
+        email: faker.internet.email().toLowerCase(),
+        phone: `${faker.phone.number("0### ### ###")}`,
 
         avatar: faker.image.avatar(),
         password: '12345',
@@ -43,14 +46,14 @@ const create = async () => {
         school: faker.helpers.arrayElement(universities),
         address: `${faker.location.city()}, ${faker.location.country()}`,
         decade_born: faker.helpers.arrayElement([40, 50, 60, 70, 80, 90]),
-        obsessed_with: faker.lorem.sentence(10),
-        useless_skill: faker.lorem.sentence(8),
+        obsessed_with: faker.lorem.sentence(5),
+        useless_skill: faker.lorem.sentence(5),
         time_consuming_activity: faker.lorem.sentence({ min: 1, max: 7 }),
         work: faker.person.jobTitle(),
         languages: faker.helpers.arrayElements(languages, { min: 1, max: 7 }),
 
         favorite_song: faker.music.songName(),
-        fun_fact: faker.lorem.sentence(10),
+        fun_fact: faker.lorem.sentence(5),
         biography_title: faker.person.bio(),
         pets: faker.helpers.arrayElements([
           faker.animal.cat(),
@@ -62,7 +65,13 @@ const create = async () => {
           faker.animal.rabbit()
         ], { min: 1, max: 3 }),
         showPastTrips: true,
-        year_hosting: 5
+        year_hosting: 5,
+        emergency_contact: {
+          email: faker.internet.email().toLowerCase(),
+          name: `${faker.person.firstName()} ${faker.person.lastName()}`,
+          phone: `${faker.phone.number("0### ### ###")}`,
+          relation_ship: faker.helpers.arrayElement(relationships),
+        },
       });
     }
   

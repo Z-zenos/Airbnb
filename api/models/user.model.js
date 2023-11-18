@@ -3,6 +3,7 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Interest = require('./interest.model');
 const AppError = require('../utils/appError');
+const emergencyContactSchema = require('./emergency_contact.model');
 
 const userSchema = new mongoose.Schema(
   {
@@ -12,6 +13,14 @@ const userSchema = new mongoose.Schema(
       trim: true,
       maxlength: [255, "Name must be less than 256 characters."],
       minlength: [4, "Name must be greater than 3 characters."]
+    },
+
+    phone: {
+      type: String,
+      trim: true,
+      required: [true, 'Please tell us your phone.'],
+      unique: true,
+      // match: [/^[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6}$/im, "Please provide valid your phone number"]
     },
 
     description: {
@@ -122,7 +131,11 @@ const userSchema = new mongoose.Schema(
 
     showPastTrips: Boolean,
     year_hosting: Number,
-    
+
+    emergency_contact: {
+      type: emergencyContactSchema,
+      default: () => ({})
+    },
   },
   {
     toJSON: { virtuals: true },
