@@ -1,12 +1,14 @@
 import { AiOutlineFileProtect } from "react-icons/ai";
 import { FaLock } from "react-icons/fa6";
 import { FaEye } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "../components/Input/Input";
 import Button from "../components/Button/Button";
+import axios from "axios";
+import SelectInput from "../components/Input/SelectInput";
 
 export default function PersonalInfoPage() {
-  const [info, setInfo] = useState({
+  const [infoInputOpen, setInfoInputOpen] = useState({
     legalName: false,
     email: false,
     phone: false,
@@ -14,7 +16,7 @@ export default function PersonalInfoPage() {
   });
 
   function handleEditInfo(prop) {
-    setInfo(prev => {
+    setInfoInputOpen(prev => {
       const newInfo = { ...prev };
       newInfo[prop] = !newInfo[prop];
       Object.keys(newInfo).forEach(key => {
@@ -25,15 +27,34 @@ export default function PersonalInfoPage() {
     });
   }
 
+  const [countries, setCountries] = useState([]);
+
+  async function getCountriesData () {
+    try {
+      const res = await axios.get('/resources/countries');
+      const countries = res.data.data.countries;
+
+      setCountries(countries);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  useEffect(() => {
+    getCountriesData();
+  }, []);
+
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 ">
       <h2 className="font-medium text-3xl my-10">Personal Info</h2>
       <div className="md:grid md:grid-cols-5 gap-20 py-10">
         <div className="col-span-3">
+          
+          {/* LEGAL NAME */}
           <div className="grid grid-cols-11 gap-2 border-b border-b-gray-300 py-6">
             <div className=" col-span-10">
               <p className="text-[17px]">Legal name</p>
-              { info['legalName'] 
+              { infoInputOpen['legalName'] 
                 ? (
                   <div>
                     <p className="my-3 text-[14px] font-light opacity-60">
@@ -46,13 +67,14 @@ export default function PersonalInfoPage() {
                 : <p className="font-light opacity-60 text-[14px]">Tuấn Hoàng Anh</p>
               }
             </div>
-            <p onClick={() => handleEditInfo('legalName')} className="underline cursor-pointer text-[15px]">{ info['legalName'] ? 'Cancel' : 'Edit' }</p>
+            <p onClick={() => handleEditInfo('legalName')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['legalName'] ? 'Cancel' : 'Edit' }</p>
           </div>
 
+          {/* EMAIL ADDRESS */}
           <div className="grid grid-cols-11 gap-2 border-b border-b-gray-300 py-6">
             <div className=" col-span-10">
               <p className="text-[17px]">Email address</p>
-              { info['email'] 
+              { infoInputOpen['email'] 
                 ? (
                   <div>
                     <p className="my-3 text-[14px] font-light opacity-60">
@@ -66,23 +88,70 @@ export default function PersonalInfoPage() {
               }
               
             </div>
-            <p onClick={() => handleEditInfo('email')} className="underline cursor-pointer text-[15px]">{ info['email'] ? 'Cancel' : 'Edit' }</p>
+            <p onClick={() => handleEditInfo('email')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['email'] ? 'Cancel' : 'Edit' }</p>
           </div>
-
+          
+          {/* PHONE NUMBER */}
           <div className="grid grid-cols-11 gap-2 border-b border-b-gray-300 py-6">
             <div className=" col-span-10">
               <p className="text-[17px]">Phone numbers</p>
               <p className="font-light opacity-60 text-[14px]">Add a number so confirmed guests and Airbnb can get in touch. You can add other numbers and choose how they’re used.</p>
+              { infoInputOpen['phone'] && (
+                  <div>
+                    <p className="my-3 text-[14px] font-light opacity-90">
+                      Enter an new phone number
+                    </p>
+                    
+                    <SelectInput 
+                      label="Country/region" 
+                      data={countries} 
+                      optionValueTitle="name" 
+                      className=" border-b-transparent rounded-tl-lg rounded-tr-lg" 
+                      optionDisplayFormat="name (dialling_code)" 
+                    />
+
+                    <Input label="Phone number" className="mb-3 rounded-br-lg rounded-bl-lg" />
+                    <p className="text-[14px] font-light opacity-60 mb-3">We’ll send you a code to verify your number. Standard message and data rates apply.</p>
+                    <Button label="Save" className=" hover:bg-white hover:text-primary px-6" />
+                  </div>
+              )}
             </div>
-            <p onClick={() => {}} className="underline cursor-pointer text-[15px]">Edit</p>
+            <p onClick={() => handleEditInfo('phone')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['phone'] ? 'Cancel' : 'Edit' }</p>
           </div>
 
+          {/* EMERGENCY CONTACT */}
           <div className="grid grid-cols-11 gap-2 border-b border-b-gray-300 py-6">
             <div className=" col-span-10">
               <p className="text-[17px]">Emergency contact</p>
-              <p className="font-light opacity-60 text-[14px]">Not provided</p>
+              { infoInputOpen['emergencyContact'] 
+                ? (
+                  <div>
+                    <p className="my-3 text-[14px] font-light opacity-60">
+                    A trusted contact we can alert in an urgent situation.
+                    </p>
+                    <div className="grid grid-cols-1 mb-6">
+                      <Input label="Name" className="rounded-tl-lg rounded-tr-lg border-b-0" />
+                      <Input label="Relationship" className="border-b-0" />
+                      <Input label="Email" />
+                      <div className="flex justify-between items-center">
+                        <SelectInput 
+                          label="Country/region" 
+                          data={countries} 
+                          optionValueTitle="name" 
+                          className=" border-t-transparent border-r-transparent rounded-bl-lg" 
+                          optionDisplayFormat="name (dialling_code)" 
+                        />
+                        <Input label="Phone number" className="border-t-0 rounded-br-lg" />
+                      </div>
+                    </div>
+
+                    <Button label="Save" className=" hover:bg-white hover:text-primary px-6" />
+                  </div>
+                )
+                : <p className="font-light opacity-60 text-[14px]">Not provided</p>
+              }
             </div>
-            <p onClick={() => {}} className="underline cursor-pointer text-[15px]">Edit</p>
+            <p onClick={() => handleEditInfo('emergencyContact')} className="underline cursor-pointer text-[15px]">{ infoInputOpen['emergencyContact'] ? 'Cancel' : 'Edit' }</p>
           </div>
         </div>
 
