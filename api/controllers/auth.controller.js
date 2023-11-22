@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user.model');
 const catchErrorAsync = require('../utils/catchErrorAsync');
 const AppError = require('../utils/appError');
-// const sendEmail = require('../utils/email');
+const Email = require("../services/email.service");
 
 const signToken = id => jwt.sign({ id }, process.env.JWT_SECRET, {
   expiresIn: process.env.JWT_EXPIRES_IN,
@@ -42,6 +42,12 @@ exports.signup = catchErrorAsync(async (req, res, next) => {
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
   });
+
+  await new Email(
+    newUser,
+    `${req.protocol}://${req.get('host')}/me`
+  )
+    .sendWelcome();
 
   createAndSendToken(newUser, 201, req, res);
 });

@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       required: [true, 'Please tell us your phone.'],
       unique: true,
-      validate: [validator.isNumeric, 'Please provide a valid phone.']
+      // validate: [validator.isNumeric, 'Please provide a valid phone.']
     },
 
     description: {
@@ -62,7 +62,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please confirm your password.'],
       validate: {
-        validator: function(el) {
+        validator: function (el) {
           return el === this.password;
         },
         message: 'Passwords are not the same!'
@@ -104,7 +104,7 @@ const userSchema = new mongoose.Schema(
     work: {
       type: String,
       trim: true,
-      maxlength: [ 100, 'Work name must be less than 100 characters.']
+      maxlength: [100, 'Work name must be less than 100 characters.']
     },
     languages: [String],
     favorite_song: {
@@ -155,8 +155,8 @@ const userSchema = new mongoose.Schema(
 //   return places;
 // });
 
-userSchema.pre('save', async function(next) {
-  if(!this.isModified('password')) return next();
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) return next();
 
   // Hash the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
@@ -166,26 +166,26 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-userSchema.pre('save', function(next) {
-  if(!this.isModified('password') || this.isNew) return next();
+userSchema.pre('save', function (next) {
+  if (!this.isModified('password') || this.isNew) return next();
 
   this.passwordChangedAt = Date.now() - 1000;
   next();
 });
 
-userSchema.pre('findOneAndUpdate', function(next) {
-  if(this._update.interests)
-    if(this._update.interests.length > 10) return next(new AppError("The user is trying to select more than 10 interests. ", 400));
+userSchema.pre('findOneAndUpdate', function (next) {
+  if (this._update.interests)
+    if (this._update.interests.length > 10) return next(new AppError("The user is trying to select more than 10 interests. ", 400));
   next();
 });
 
 // Select all users are currently active
-userSchema.pre(/^find/, function(next) {
+userSchema.pre(/^find/, function (next) {
   this.find({ active: { $ne: false } });
   next();
 });
 
-userSchema.pre(/^find/, function(next) {
+userSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'interests',
     select: '-__v -created -modified'
@@ -199,11 +199,11 @@ userSchema.pre(/^find/, function(next) {
 //   next();
 // });
 
-userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
+userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
   return await bcrypt.compare(candidatePassword, userPassword);
 }
 
-userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
+userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   if (this.passwordChangedAt) {
     const changedTimestamp = parseInt(
       this.passwordChangedAt.getTime() / 1000,
