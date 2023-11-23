@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import useYupValidationResolver from "../hooks/useYupValidationResolver";
 import { UserContext } from "../contexts/user.context";
+import Badge from "../components/Badge";
 
 function formatEmail(emilString) {
   if (!emilString) return '';
@@ -157,6 +158,8 @@ export default function PersonalInfoPage() {
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 ">
       <h2 className="font-medium text-3xl my-10">Personal Info</h2>
+      <Badge type="alert" content="For security reasons, after clicking save to save your information, please check your email to complete the process of updating your information." />      
+
       <div className="md:grid md:grid-cols-5 gap-20 py-10">
 
         <form className="col-span-3" onSubmit={handleSubmit(handleSubmitForm)}>

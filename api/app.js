@@ -74,7 +74,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get('/_health', (req, res) => {
-	res.status(200).render('email_changed');
+	res.status(200).render('confirm_email_changed');
 });
 
 app.use('/api/v1/auth', authRouter);

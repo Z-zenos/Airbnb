@@ -1,0 +1,8 @@
+extends base
+
+block content
+  p.text-lg Hi #{name},
+  p.text-lg.font-light.my-6 To complete the process of changing your email address, you must confirm your new address below:
+  .mt-4
+    a.block.btn.btn-link.text-center(href=`${url}`, target='_blank') Confirm email
+  .h-1.bg-gray-200.w-full.my-10

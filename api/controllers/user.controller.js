@@ -46,6 +46,14 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
         device: req.get('User-Agent')
       });
 
+    await new Email(
+      req.user,
+      `${req.protocol}://${req.get('host')}/api/v1/auth/confirm-email`
+    )
+      .sendConfirmCheckEmailChanged({
+        name: req.user.name,
+      });
+
     return;
     // await new Email(req.user,)
   }

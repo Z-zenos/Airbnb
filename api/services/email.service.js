@@ -60,9 +60,9 @@ module.exports = class Email {
       text: htmlToText(html),
       attachments: [
         {
-          filename: 'basic.jpeg',
-          path: `${__dirname}/../resources/images/app/basic.jpeg`,
-          cid: 'uniq-basic.jpeg'
+          filename: 'logo.png',
+          path: `${__dirname}/../resources/images/app/logo.png`,
+          cid: 'uniq-logo.png'
         }
       ]
     };
@@ -82,11 +82,19 @@ module.exports = class Email {
     );
   }
 
-  async sendCheckEmailChanged(changedInfo) {
+  async sendCheckEmailChanged(data) {
     await this.send(
       'email_changed',
       'Did you just update your email?',
-      changedInfo
+      data
+    );
+  }
+
+  async sendConfirmCheckEmailChanged(data) {
+    await this.send(
+      'confirm_email_changed',
+      'Confirm your changed email',
+      data
     );
   }
 }

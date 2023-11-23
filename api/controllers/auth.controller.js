@@ -116,3 +116,8 @@ exports.protect = catchErrorAsync(async (req, res, next) => {
 
   next();
 });
+
+
+exports.confirmEmail = catchErrorAsync(async (req, res, next) => {
+  res.status(301).redirect(`${req.protocol}://localhost:5173/`);
+});
