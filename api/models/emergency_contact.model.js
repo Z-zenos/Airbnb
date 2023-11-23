@@ -13,7 +13,7 @@ const emergencyContactSchema = new mongoose.Schema(
     phone: {
       type: String,
       trim: true,
-      validate: [validator.isNumeric, 'Please provide a valid phone.']
+      // validate: [validator.isNumeric, 'Please provide a valid phone.']
     },
 
     email: {

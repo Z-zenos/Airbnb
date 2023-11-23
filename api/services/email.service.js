@@ -42,12 +42,13 @@ module.exports = class Email {
   }
 
   // Send the actual email
-  async send(template, subject) {
+  async send(template, subject, variables) {
     // 1) Render HTML based on a pug template
     const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
       username: this.username,
       url: this.url,
-      subject // Subject line
+      subject, // Subject line,
+      ...variables
     });
 
     // 2) Define email options
@@ -78,6 +79,14 @@ module.exports = class Email {
     await this.send(
       'passwordReset',
       'Your password reset token (valid for only 10 minutes)'
+    );
+  }
+
+  async sendCheckEmailChanged(changedInfo) {
+    await this.send(
+      'email_changed',
+      'Did you just update your email?',
+      changedInfo
     );
   }
 }

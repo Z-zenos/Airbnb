@@ -1,24 +1,23 @@
 extends base
 
 block content
-  img(src="./images/app/logo.png", alt="airbnb logo")
   h2.font-bold.text-2xl.mt-5.my-3 Did you change your email address?
   p.text-lg.font-light We noticed the email address for your Airbnb account was recently changed. If this was you, you can safely disregard this email. 
   
   .py-10.px-10.mt-4.border.border-gray-300
     h3.font-bold.text-lg Email address changed to
-    p email
+    p= email
     .h-1.bg-gray-200.w-full.my-2
     .py-4.font-light
       .flex.gap-4.items-center 
         span.font-bold When
-        span Thu, Nov 23, 2023, 3:34 AM UTC 
+        span= date
       .flex.gap-4.items-center 
         span.font-bold Where
-        span  Hanoi, Vietnam 
+        span=  address
       .flex.gap-4.items-center 
         span.font-bold Device Type
-        span  Firefox using Linux (Ubuntu) 
+        span=  device
     .h-1.bg-gray-200.w-full.mb-10
     .mt-4
       a.block.btn.btn-link.text-center(href=`${url}`, target='_blank') I didn't do this - review my account

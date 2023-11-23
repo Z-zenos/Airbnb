@@ -2,7 +2,8 @@ const User = require('../models/user.model');
 const catchErrorAsync = require('../utils/catchErrorAsync');
 const AppError = require('../utils/appError');
 const factory = require("./handlerFactory");
-
+const Email = require("../services/email.service");
+const dateFormat = require("dateformat");
 
 const filterObj = (obj, ...allowedFields) => {
   const newObj = {};
@@ -33,9 +34,25 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
     return next(new AppError('This route is not for password updates. Please use /updateMyPassword.', 400));
   }
 
+  // Check update email
+  if (req.body.email && req.user.email !== req.body.email.trim()) {
+    await new Email(
+      req.user,
+      `${req.protocol}://${req.get('host')}/me`
+    )
+      .sendCheckEmailChanged({
+        email: req.body.email,
+        date: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+        device: req.get('User-Agent')
+      });
+
+    return;
+    // await new Email(req.user,)
+  }
+
   // 2) Filtered out unwanted fields names that are not allowed to be updated
   const filteredBody = filterObj(
-    req.body, 
+    req.body,
     'name', 'email', 'avatar', 'interests', 'address', 'languages',
     'school', 'obsessed_with', 'useless_skill', 'time_consuming_activity',
     'work', 'favorite_song', 'fun_fact', 'biography_title',
