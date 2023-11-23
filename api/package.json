@@ -4,14 +4,15 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "build:css": "postcss public/styles/tailwind.css -o public/styles/styles.css"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@faker-js/faker": "^8.0.2",
+    "autoprefixer": "^10.4.16",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
@@ -23,9 +24,12 @@
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.7",
+    "postcss": "^8.4.31",
+    "postcss-cli": "^10.1.0",
     "pug": "^3.0.2",
     "sharp": "^0.32.6",
     "slugify": "^1.6.6",
+    "tailwindcss": "^3.3.5",
     "validator": "^13.11.0"
   },
   "devDependencies": {

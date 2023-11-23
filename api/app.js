@@ -40,16 +40,14 @@ const morganMiddleware = morgan(
 app.use(morganMiddleware);
 
 const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true,
+	origin: "http://localhost:5173",
+	credentials: true,
 }
 
 app.use(cors(corsOptions));
 
-app.use(express.static(path.join(__dirname, 'resources')))
-
-app.use(function(req, res, next) {
-	res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); 
+app.use(function (req, res, next) {
+	res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
 
 	// Request methods you wish to allow
 	res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
@@ -63,12 +61,21 @@ app.use(function(req, res, next) {
 	next();
 });
 
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+app.use(express.static(path.join(__dirname, 'resources')));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.disable('x-powered-by');
 
 // Body parser, reading data from body into req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.get('/_health', (req, res) => {
+	res.status(200).render('email_changed');
+});
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
@@ -77,12 +84,7 @@ app.use('/api/v1/amenities', amenityRouter);
 app.use('/api/v1/resources', resourceRouter);
 app.use('/api/v1/images', imageRouter);
 
-app.get('/_health', (req, res) => {
-  res.status(200).json({
-    message: "Api is very ok!",
-    status: 'success'
-  });
-});
+
 
 // Handling Unhandled Routes
 app.all('*', (req, res, next) => {

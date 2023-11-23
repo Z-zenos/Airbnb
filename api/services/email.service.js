@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
+// Advanced converter that parses HTML and returns beautiful text.
 const { htmlToText } = require('html-to-text');
 
 module.exports = class Email {
@@ -43,7 +44,7 @@ module.exports = class Email {
   // Send the actual email
   async send(template, subject) {
     // 1) Render HTML based on a pug template
-    const html = pug.renderFile(`${__dirname}/../templates/${template}.pug`, {
+    const html = pug.renderFile(`${__dirname}/../views/${template}.pug`, {
       username: this.username,
       url: this.url,
       subject // Subject line
@@ -60,7 +61,7 @@ module.exports = class Email {
         {
           filename: 'basic.jpeg',
           path: `${__dirname}/../resources/images/app/basic.jpeg`,
-          cid: 'man.jpeg'
+          cid: 'uniq-basic.jpeg'
         }
       ]
     };
