@@ -107,9 +107,15 @@ style.
     color: #55c57a;
     text-decoration: underline; 
   }
+
   .btn {
     box-sizing: border-box;
-    width: 100%; }
+    padding: 16px 40px;
+    border-radius: 8px;
+    width: 100%;
+    margin: 0 auto; 
+    transition: all .4s ease;
+  }
     .btn > tbody > tr > td {
       padding-bottom: 15px; }
     .btn table {
@@ -138,6 +144,19 @@ style.
   .btn-primary table td {
     background-color: #55c57a; 
   }
+  .btn-link {
+    background-color: #ff5a5f;
+    color: #fff;
+    font-weight: 500;
+    border: 1px solid #ff5a5f;
+  }
+
+  .btn-link:hover {
+    background-color: #fff;
+    color: #ff5a5f;
+    border: 1px solid #ff5a5f;
+  }
+
   .btn-primary a {
     background-color: #55c57a;
     border-color: #55c57a;
@@ -181,11 +200,6 @@ style.
   }
   .powered-by a {
     text-decoration: none; 
-  }
-  hr {
-    border: 0;
-    border-bottom: 1px solid #f6f6f6;
-    margin: 20px 0; 
   }
   @media only screen and (max-width: 620px) {
     table[class=body] h1 {

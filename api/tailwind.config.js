@@ -3,7 +3,7 @@ module.exports = {
   content: [
     './pages/**/*.{html,js}',
     './components/**/*.{html,js}',
-    './views/base.pug'
+    './views/*.pug'
   ],
   theme: {
     extend: {},

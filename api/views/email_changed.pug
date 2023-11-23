@@ -2,18 +2,23 @@ extends base
 
 block content
   img(src="./images/app/logo.png", alt="airbnb logo")
-  h2(style={margin: '20px 0 10px 0'}) Did you change your email address?
-  p We noticed the email address for your Airbnb account was recently changed. If this was you, you can safely disregard this email. 
-  div.box
-    h3 Email address changed to
-  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
-    tbody
-      tr
-        td(align='left')
-          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
-            tbody
-              tr
-                td
-                  a(href=`${url}`, target='_blank') Upload user photo
-  p If you need any help with booking your next tour, please don't hesitate to contact me!
-  p - Jonas Schmedtmann, CEO
+  h2.font-bold.text-2xl.mt-5.my-3 Did you change your email address?
+  p.text-md.font-medium We noticed the email address for your Airbnb account was recently changed. If this was you, you can safely disregard this email. 
+  
+  .py-5.px-10.mt-4.border.border-gray-300
+    h3.font-bold.text-md Email address changed to
+    p email
+    .h-1.bg-gray-200.w-full.my-2
+    .py-4 
+      .flex.gap-4.items-center 
+        span.font-bold When
+        span Thu, Nov 23, 2023, 3:34 AM UTC 
+      .flex.gap-4.items-center 
+        span.font-bold Where
+        span  Hanoi, Vietnam 
+      .flex.gap-4.items-center 
+        span.font-bold Device Type
+        span  Firefox using Linux (Ubuntu) 
+    .h-1.bg-gray-200.w-full.my-2
+    .my-2
+      a.btn.btn-link(href=`${url}`, target='_blank') I didn't do this - review my account
