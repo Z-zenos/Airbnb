@@ -4,7 +4,6 @@ const userController = require('../controllers/user.controller');
 const authController = require('../controllers/auth.controller');
 const placeController = require('../controllers/place.controller');
 
-
 const router = express.Router();
 
 router
@@ -15,12 +14,12 @@ router.all('/me', authController.protect);
 router
   .route('/me')
   .get(userController.me)
-  .patch(userController.updateMe);
+  .patch(authController.detectChangeEmail, userController.updateMe);
 
 router
   .route('/profile/:id')
   .get(userController.getUser)
-  // .patch(userController);
+// .patch(userController);
 
 router
   .route('/:id/places')

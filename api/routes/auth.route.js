@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.post('/signup', authController.signup);
 router.post('/login', authController.login);
-router.get('/confirm-email', authController.confirmEmail);
+router.post('/confirm-email/:token', authController.confirmChangeEmail);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
+const dateFormat = require("dateformat");
 
 const User = require('../models/user.model');
 const catchErrorAsync = require('../utils/catchErrorAsync');
@@ -117,7 +118,80 @@ exports.protect = catchErrorAsync(async (req, res, next) => {
   next();
 });
 
+exports.detectChangeEmail = catchErrorAsync(async (req, res, next) => {
+  // 1) Detect email changed
+  if (req.body.email && req.user.email !== req.body.email.trim()) {
+    const user = await User.findOne({ email: req.user.email });
+    if (!user)
+      return next(new AppError("There is no user with email address.", 404));
 
-exports.confirmEmail = catchErrorAsync(async (req, res, next) => {
-  res.status(301).redirect(`${req.protocol}://localhost:5173/`);
+    // 2) Generate random confirm token
+    const confirmToken = user.createEmailConfirmToken();
+    await user.save({ validateBeforeSave: false });
+    // 3) Send it to user's email
+
+    try {
+      const confirmUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/confirm-email/${confirmToken}`;
+
+      await new Email(user, `#`)
+        .sendCheckEmailChanged({
+          email: user.email,
+          date: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+          device: req.get('User-Agent')
+        });
+
+      await new Email(user, confirmUrl)
+        .sendConfirmCheckEmailChanged({
+          name: user.name,
+          email: req.body.email.trim()
+        });
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Token sent to email',
+        email: confirmUrl
+      });
+
+    } catch (err) {
+      console.log(err);
+      user.emailConfirmToken = undefined;
+      user.emailConfirmExpires = undefined;
+      await user.save({ validateBeforeSave: false });
+
+      return next(
+        new AppError('There was an error sending the email. Try again later!', 500)
+      )
+    }
+  }
+  else next();
+});
+
+exports.confirmChangeEmail = catchErrorAsync(async (req, res, next) => {
+  console.log(req.body);
+  // 1) Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    emailConfirmToken: hashedToken,
+    emailConfirmExpires: { '$gt': new Date().toISOString() }
+  });
+
+  // 2) If token has not expired, and there is user, set new email
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+  if (req.body.email) {
+    user.email = req.body.email;
+    user.emailConfirmToken = undefined;
+    user.emailConfirmExpires = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    res.status(301).redirect(`${req.protocol}://localhost:5173/`);
+  }
+  else {
+    return next(new AppError('Email is empty', 401));
+  }
 });

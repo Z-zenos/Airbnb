@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
@@ -72,6 +73,10 @@ const userSchema = new mongoose.Schema(
     passwordChangedAt: Date,
     passwordResetToken: String,
     passwordResetExpires: Date,
+
+    emailChangeAt: Date,
+    emailConfirmToken: String,
+    emailConfirmExpires: Date,
 
     active: {
       type: Boolean,
@@ -173,6 +178,13 @@ userSchema.pre('save', function (next) {
   next();
 });
 
+userSchema.pre('save', function (next) {
+  if (!this.isModified('email') || this.isNew) return next();
+
+  this.emailChangeAt = Date.now() - 1000;
+  next();
+});
+
 userSchema.pre('findOneAndUpdate', function (next) {
   if (this._update.interests)
     if (this._update.interests.length > 10) return next(new AppError("The user is trying to select more than 10 interests. ", 400));
@@ -216,6 +228,33 @@ userSchema.methods.changedPasswordAfter = function (JWTTimestamp) {
   // False means NOT changed
   return false;
 };
+
+userSchema.methods.changedEmailAfter = function (JWTTimestamp) {
+  if (this.emailChangeAt) {
+    const changedTimestamp = parseInt(
+      this.emailChangeAt.getTime() / 1000,
+      10
+    );
+
+    return JWTTimestamp < changedTimestamp;
+  }
+
+  // False means NOT changed
+  return false;
+};
+
+userSchema.methods.createEmailConfirmToken = function () {
+  const confirmToken = crypto.randomBytes(128).toString('hex');
+
+  this.emailConfirmToken = crypto
+    .createHash('sha256')
+    .update(confirmToken)
+    .digest('hex');
+
+  this.emailConfirmExpires = Date.now() + 10 * 60 * 1000;
+
+  return confirmToken;
+}
 
 const User = mongoose.model('User', userSchema);
 

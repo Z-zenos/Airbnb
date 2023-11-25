@@ -118,13 +118,17 @@ export default function PersonalInfoPage() {
 
         const res = await axios.patch(`/users/me`, formData, config);
 
-        openToast(<Toast title="Success" content="Update personal info successfully" type="success" />)
+        console.log(res.data);
+        if(res.data.email)
+          openToast(<Toast title="Pending" content={`Please check email: ${res.data.email}`} type="warn" />)
+        else 
+          openToast(<Toast title="Success" content="Update personal info successfully" type="success" />)
 
         const loggedUser = res.data.data.user;
         setUser(loggedUser);
 
       } catch (err) {
-        openToast(<Toast title="Fail" content={err.response.data.message} type="error" />);
+        openToast(<Toast title="Fail" content={err.response?.data?.message} type="error" />);
       } finally {
         setIsLoading(false);
       }
