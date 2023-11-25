@@ -121,11 +121,11 @@ export default function PersonalInfoPage() {
         console.log(res.data);
         if(res.data.email)
           openToast(<Toast title="Pending" content={`Please check email: ${res.data.email}`} type="warn" />)
-        else 
+        else {
           openToast(<Toast title="Success" content="Update personal info successfully" type="success" />)
-
-        const loggedUser = res.data.data.user;
-        setUser(loggedUser);
+          const loggedUser = res.data.data.user;
+          setUser(loggedUser);
+        }
 
       } catch (err) {
         openToast(<Toast title="Fail" content={err.response?.data?.message} type="error" />);

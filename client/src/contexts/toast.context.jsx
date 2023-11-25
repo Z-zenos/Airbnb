@@ -7,7 +7,7 @@ export const ToastContext = createContext({});
 export function ToastContextProvider({ children }) {
   const [toasts, setToasts] = useState([]);
 
-  const openToast = (component, timeout = 3000) => {
+  const openToast = (component, timeout = 5000) => {
     const id = Date.now();
     setToasts(toasts => [...toasts, {id, component}]);
     setTimeout(() => closeToast(id), timeout);
