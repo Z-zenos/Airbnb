@@ -36,15 +36,8 @@ exports.updateMe = catchErrorAsync(async (req, res, next) => {
   const filteredBody = filterObj(
     req.body,
     'email', 'role', 'password', 'passwordConfirm', 'active',
+    'phone', 'name', 'emergency_contact'
   );
-  /* 
-    filteredBody: we don't want to update everything in the body because
-    let say user puts in body role(ex: set to admin) -> this would allow any user
-    to change the role to admin -> not allowed 
-    Or user could also change reset token or when that reset token expires 
-    -> We want to filter body so that in the end it only contains name, email and
-    nothing else.
-  */
 
   // 3) Update user document
   /* 

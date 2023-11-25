@@ -14,7 +14,7 @@ router.all('/me', authController.protect);
 router
   .route('/me')
   .get(userController.me)
-  .patch(authController.detectChangeEmail, userController.updateMe);
+  .patch(authController.detectUpdatePersonalInfo, userController.updateMe);
 
 router
   .route('/profile/:id')

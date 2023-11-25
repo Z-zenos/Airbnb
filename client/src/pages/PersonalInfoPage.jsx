@@ -274,7 +274,7 @@ export default function PersonalInfoPage() {
             <p onClick={() => handleEditInfo('emergency_contact')} className="underline cursor-pointer text-[15px]">{infoInputOpen['emergency_contact'] ? 'Cancel' : 'Edit'}</p>
           </div>
 
-          <Button isLoading={isLoading} label="Save" className="mt-8 hover:bg-white hover:text-primary px-6" onClick={async (ev) => await handleSubmitForm(ev)} />
+          <Button isLoading={isLoading} disabled={errors.length} label="Save" className="mt-8 hover:bg-white hover:text-primary px-6" onClick={async (ev) => await handleSubmitForm(ev)} />
         </form>
 
         <div className="col-span-2">

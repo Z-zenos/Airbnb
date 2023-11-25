@@ -4,7 +4,7 @@ const typeList = {
   alert: {
     border: 'border-red-400',
     color: 'text-red-700',
-    bg: 'bg-red-100',
+    bg: 'bg-red-50',
     icon: <GoAlert size={40} />,
     title: 'Alert!',
     role: 'alert'

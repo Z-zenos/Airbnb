@@ -118,9 +118,23 @@ exports.protect = catchErrorAsync(async (req, res, next) => {
   next();
 });
 
-exports.detectChangeEmail = catchErrorAsync(async (req, res, next) => {
-  // 1) Detect email changed
-  if (req.body.email && req.user.email !== req.body.email.trim()) {
+const detectChange = (src, dest) => {
+  if (!Object.keys(dest).length) return false;
+  for (const key of Object.keys(dest)) {
+    if (typeof src[key] === 'object' && src[key] !== null)
+      if (JSON.stringify(src[key]) !== JSON.stringify(dest[key])) return true;
+      else if (src[key] !== dest[key]) return true;
+  }
+  return false;
+}
+
+exports.detectUpdatePersonalInfo = catchErrorAsync(async (req, res, next) => {
+  // 1) Detect personal info changed
+  if (
+    Object.keys(req.body).length &&
+    Object.keys(req.body).some(k => ['email', 'name', 'phone', 'emergency_contact'].includes(k)) &&
+    detectChange(req.user, req.body)
+  ) {
     const user = await User.findOne({ email: req.user.email });
     if (!user)
       return next(new AppError("There is no user with email address.", 404));
@@ -135,15 +149,20 @@ exports.detectChangeEmail = catchErrorAsync(async (req, res, next) => {
 
       await new Email(user, `#`)
         .sendCheckEmailChanged({
-          email: user.email,
+          email: req.body.email,
           date: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
           device: req.get('User-Agent')
         });
 
       await new Email(user, confirmUrl)
         .sendConfirmCheckEmailChanged({
-          name: user.name,
-          email: req.body.email.trim()
+          name: req.body.name,
+          email: req.body.email.trim(),
+          phone: req.body.phone,
+          ec_name: req.body.emergency_contact.name,
+          ec_relation_ship: req.body.emergency_contact.relation_ship,
+          ec_email: req.body.emergency_contact.email,
+          ec_phone: req.body.emergency_contact.phone,
         });
 
       res.status(200).json({
@@ -166,8 +185,7 @@ exports.detectChangeEmail = catchErrorAsync(async (req, res, next) => {
   else next();
 });
 
-exports.confirmChangeEmail = catchErrorAsync(async (req, res, next) => {
-  console.log(req.body);
+exports.confirmUpdatePersonalInfo = catchErrorAsync(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
@@ -185,6 +203,13 @@ exports.confirmChangeEmail = catchErrorAsync(async (req, res, next) => {
   }
   if (req.body.email) {
     user.email = req.body.email;
+    user.name = req.body.name;
+    user.phone = req.body.phone;
+    user.emergency_contact.name = req.body['emergency_contact.name'];
+    user.emergency_contact.relation_ship = req.body['emergency_contact.relation_ship'];
+    user.emergency_contact.email = req.body['emergency_contact.email'];
+    user.emergency_contact.phone = req.body['emergency_contact.phone'];
+
     user.emailConfirmToken = undefined;
     user.emailConfirmExpires = undefined;
     await user.save({ validateBeforeSave: false });
