@@ -11,7 +11,7 @@ export default function Footer() {
   const { currency } = useContext(IntlContext);
 
   return (
-    <footer className={`z-10 bg-white border border-t-1 border-gray-primary ${location.pathname === '/' || location.pathname === '/places' ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
+    <footer className={`z-10 px-[4%] bg-white border border-t-1 border-gray-primary ${location.pathname === '/' || location.pathname.includes('/places') ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
       <div className="flex justify-center items-center">
         <span className="flex items-center">
           <BiWorld className="inline mr-1" />

@@ -143,7 +143,7 @@ export default function IndexPage() {
   }
 
   return (
-    <div className="relative mb-10">
+    <div className="relative mt-[9%] mb-10">
       <div className="lg:px-20 md:px-10 grid grid-cols-10 items-center gap-6 sticky top-[67px] bg-white shadow-md z-10">
         <div className="mt-4 grid grid-cols-12 items-center lg:col-span-9 md:col-span-8">
           { isHideScrollBtn !== -1 && 
