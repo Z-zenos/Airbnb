@@ -26,4 +26,8 @@ router
   .get(placeController.getPlacesOfUser);
 
 router
+  .route('/wishlists')
+  .patch(authController.protect, userController.updateWishlists);
+
+router
 module.exports = router;

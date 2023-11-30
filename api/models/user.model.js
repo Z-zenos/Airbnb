@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const Interest = require('./interest.model');
+const Place = require('./place.model');
 const AppError = require('../utils/appError');
 const emergencyContactSchema = require('./emergency_contact.model');
 
@@ -141,6 +142,11 @@ const userSchema = new mongoose.Schema(
       type: emergencyContactSchema,
       default: () => ({})
     },
+
+    wishlists: [{
+      type: mongoose.Schema.ObjectId,
+      ref: Place,
+    }]
   },
   {
     toJSON: { virtuals: true },

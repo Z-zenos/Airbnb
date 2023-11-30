@@ -1,12 +1,12 @@
 import Button from "../components/Button/Button";
 import { AiFillStar, AiOutlineRight } from "react-icons/ai";
 import { BiSolidAward, BiShieldQuarter } from "react-icons/bi";
-import { AiOutlineHeart } from "react-icons/ai";
 import { CiShare1 } from "react-icons/ci";
 import { CgMenuGridO } from "react-icons/cg";
 import { GiDesk, GiBlackBook } from "react-icons/gi";
 import { BsCurrencyDollar, BsCalendarWeek, BsHouses } from "react-icons/bs";
 import { MdVerifiedUser } from "react-icons/md";
+import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
 import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
@@ -48,6 +48,7 @@ export default function PlacePage() {
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
   const priceAfterDiscount = place.price -  Math.trunc(place.price * place.price_discount / 100);
+  const [heart, setHeart] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -156,7 +157,10 @@ export default function PlacePage() {
                 outline={true}
                 small={true}
               >
-                <AiOutlineHeart />
+                { heart 
+                  ? <FaHeart className={`w-5 h-5 text-primary transition-all active:scale-100`} onClick={() => setHeart(!heart)} />
+                  : <FaRegHeart className={`w-5 h-5 hover:scale-110 transition-all active:scale-80`} onClick={() => setHeart(!heart)} />
+                }
               </Button>
             </div>
           </div>
