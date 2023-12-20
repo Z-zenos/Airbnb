@@ -23,9 +23,11 @@ import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 import { Link, useLocation } from "react-router-dom";
 import { ModalContext } from "../contexts/modal.context";
 import ImageModal from "../components/Modals/ImageModal";
+import { UserContext } from "../contexts/user.context";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
+  const { user, setUser } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const { isImageModalOpen, setIsImageModalOpen } = useContext(ModalContext);
 
@@ -48,13 +50,14 @@ export default function PlacePage() {
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
   const priceAfterDiscount = place.price -  Math.trunc(place.price * place.price_discount / 100);
-  const [heart, setHeart] = useState(false);
+  const [heart, setHeart] = useState();
 
   useEffect(() => {
     (async () => {
       try {
         const res = await axios.get(location.pathname);
         setPlace(() => res.data.data.place);
+        setHeart(user?.wishlists?.includes(res.data.data.place?._id));
         setAmenities(() => res.data.data.place.amenities.map(a => ({
           name: capitalizeFirstLetter(a.name),
           src: a.iconImage,
@@ -79,6 +82,20 @@ export default function PlacePage() {
       Reviews: reviewsRef,
       Location: locationRef
     }[ev.target.textContent]);
+  }
+
+  async function handleUpdateWishlists() {
+    try {
+      setHeart(!heart);
+      const res = await axios.patch(`/users/wishlists`, {
+        place_id: place?._id,
+        state: heart ? 'unheart' : 'heart',
+      });
+
+      setUser(res.data.data.user);
+    } catch (err) {
+      setHeart(user?.wishlists?.includes(place?._id));
+    }
   }
 
   return (
@@ -124,7 +141,7 @@ export default function PlacePage() {
           </div>
         )}
       </Navbar>
-      <div className=" lg:w-3/5 mx-auto">
+      <div className="md:mt-[4vh] lg:mt-0 lg:w-3/5 mx-auto">
 
         <div className="p-6">
 
@@ -151,16 +168,22 @@ export default function PlacePage() {
               </Button>
 
               <Button 
-                label="Heart" 
+                label={heart ? 'Saved' : 'Save'} 
                 className="flex items-center border-none py-1 px-2 gap-2 hover:bg-gray-200 transition-all rounded-md underline font-light text-sm" 
                 iconClassName="translate-y-[2px]" 
                 outline={true}
                 small={true}
+                onClick={async () => await handleUpdateWishlists()}
               >
-                { heart 
-                  ? <FaHeart className={`w-5 h-5 text-primary transition-all active:scale-100`} onClick={() => setHeart(!heart)} />
-                  : <FaRegHeart className={`w-5 h-5 hover:scale-110 transition-all active:scale-80`} onClick={() => setHeart(!heart)} />
-                }
+                {heart ? (
+                  <FaHeart
+                    className={`w-5 h-5 text-primary transition-all active:scale-100`}
+                  />
+                ) : (
+                  <FaRegHeart
+                    className={`w-5 h-5 hover:scale-110 transition-all active:scale-80`}
+                  />
+                )}
               </Button>
             </div>
           </div>

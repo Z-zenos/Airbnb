@@ -27,6 +27,7 @@ router
 
 router
   .route('/wishlists')
+  .get(authController.protect, userController.getAllWishlists)
   .patch(authController.protect, userController.updateWishlists);
 
 router

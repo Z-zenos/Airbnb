@@ -2,6 +2,8 @@ const User = require('../models/user.model');
 const catchErrorAsync = require('../utils/catchErrorAsync');
 const AppError = require('../utils/appError');
 const factory = require("./handlerFactory");
+const Place = require('../models/place.model');
+const { default: mongoose } = require('mongoose');
 
 const filterObj = (obj, ...ignoreFields) => {
   const newObj = {};
@@ -82,10 +84,42 @@ exports.updateUser = factory.updateOne(User);
 
 exports.deleteUser = factory.deleteOne(User);
 
+exports.getAllWishlists = catchErrorAsync(async (req, res, next) => {
+  const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("User doesn't exist", 401));
+  }
+
+  let places = [];
+
+  if (user.wishlists.length) {
+    places = await Place.find({
+      '_id': {
+        $in: [
+          ...user.wishlists.map(place_id => new mongoose.Types.ObjectId(place_id))
+        ]
+      }
+    });
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      places
+    }
+  });
+});
+
 exports.updateWishlists = catchErrorAsync(async (req, res, next) => {
   const { place_id, state } = req.body;
 
   const user = await User.findById(req.user.id);
+
+  if (!user) {
+    return next(new AppError("User doesn't exist", 401));
+  }
+
 
   if (state === 'heart')
     user.wishlists.push(place_id);

@@ -4,7 +4,7 @@ import { BsCalendarHeart } from 'react-icons/bs';
 import Carousel from '../Carousel/Carousel';
 import { Link } from 'react-router-dom';
 import './PlaceCard.css';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { IntlContext } from '../../contexts/intl.context';
 import axios from 'axios';
 import { UserContext } from '../../contexts/user.context';
@@ -12,20 +12,19 @@ import { UserContext } from '../../contexts/user.context';
 export default function PlaceCard({ place, className }) {
     const { formatCurrency } = useContext(IntlContext);
     const { user, setUser } = useContext(UserContext);
-    const heart = user?.wishlists?.includes(place?._id);
+    const [heart, setHeart] = useState(user?.wishlists?.includes(place?._id));
 
     async function handleUpdateWishlists() {
       try {
+        setHeart(!heart);
         const res = await axios.patch(`/users/wishlists`, {
           place_id: place?._id,
           state: heart ? 'unheart' : 'heart',
         });
 
-        console.log(res.data);
-
         setUser(res.data.data.user);
       } catch (err) {
-        console.log(err);
+        setHeart(user?.wishlists?.includes(place?._id));
       }
     }
 

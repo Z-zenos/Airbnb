@@ -32,7 +32,6 @@ export default function Map({
   }], 
   className 
 }) {
-
   return (
     <MapContainer 
       center={ locations[0].coordinate || [51, -0.09]} 

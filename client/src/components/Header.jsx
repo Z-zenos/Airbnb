@@ -95,6 +95,7 @@ export default function Header() {
             {user.email ? (
               <>
                 <Link to={'/account-settings'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block' onClick={() => setUserBox(false)}>Account</Link>
+                <Link to={'/wishlists'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block' onClick={() => setUserBox(false)}>Wishlists</Link>
                 <li 
                   className='px-4 py-2 hover:bg-gray-100 cursor-pointer' 
                   onClick={() => {
