@@ -1,6 +1,6 @@
 import { AiFillStar } from 'react-icons/ai';
 import { FaLocationDot, FaRegHeart, FaHeart } from 'react-icons/fa6';
-import { BsCalendarHeart } from 'react-icons/bs';
+import { BsCalendarHeart, BsPinMapFill } from 'react-icons/bs';
 import Carousel from '../Carousel/Carousel';
 import { Link } from 'react-router-dom';
 import './PlaceCard.css';
@@ -9,7 +9,7 @@ import { IntlContext } from '../../contexts/intl.context';
 import axios from 'axios';
 import { UserContext } from '../../contexts/user.context';
 
-export default function PlaceCard({ place, className }) {
+export default function PlaceCard({ place, className, hasShowOnMapIcon, showOnMap }) {
     const { formatCurrency } = useContext(IntlContext);
     const { user, setUser } = useContext(UserContext);
     const [heart, setHeart] = useState(user?.wishlists?.includes(place?._id));
@@ -32,6 +32,22 @@ export default function PlaceCard({ place, className }) {
     return (
       <div className={`w-[270px] my-6 cursor-pointer ${className}`}>
         <div className="relative rounded-lg w-full h-[260px]">
+          { hasShowOnMapIcon && 
+            <div className="absolute left-4 top-4 z-[1]">
+              <BsPinMapFill 
+                onClick={() => showOnMap(() => ({
+                  address: place.location.address,
+                  price: place.price,
+                  id: place.id,
+                  image_cover: place.image_cover,
+                  coordinate: place.location.coordinates,
+                  name: place.name,
+                  rating: place.average_ratings,
+                }))} 
+                className=' text-green-500 w-5 h-5 ' 
+              />
+            </div>
+          }
           <div className="absolute right-4 top-4 z-[1]">
             {heart ? (
               <FaHeart

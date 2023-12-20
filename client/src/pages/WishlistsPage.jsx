@@ -9,6 +9,7 @@ export default function WishlistsPage() {
   const [favoritePlaces, setFavorritePlaces] = useState([]);
   const { exchangeRate } = useContext(IntlContext);
   const [loading, setLoading] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState();
 
   useEffect(() => {
     (async() => {
@@ -16,14 +17,23 @@ export default function WishlistsPage() {
         setLoading(true);
         const res = await axios.get(`/users/wishlists`);
 
-        setFavorritePlaces(
-          res.data.data.places.map(place => ({ 
-            ...place, 
-            price: exchangeRate(place.price), 
-            price_discount: exchangeRate(place.price_discount),
-            price_diff: exchangeRate(place.price -  Math.trunc(place.price * place.price_discount))
-          }))
-        );
+        const places = res.data.data.places.map(place => ({ 
+          ...place, 
+          price: exchangeRate(place.price), 
+          price_discount: exchangeRate(place.price_discount),
+          price_diff: exchangeRate(place.price - Math.trunc(place.price * place.price_discount))
+        }))
+
+        setFavorritePlaces(places);
+        setSelectedPlace({
+          address: places[0].location.address,
+          price: places[0].price,
+          id: places[0].id,
+          image_cover: places[0].image_cover,
+          coordinate: places[0].location.coordinates,
+          name: places[0].name,
+          rating: places[0].average_ratings,
+        });
 
         setLoading(false);
   
@@ -42,7 +52,7 @@ export default function WishlistsPage() {
             { favoritePlaces.length > 0 &&
               favoritePlaces.map((place) =>
                 <div key={place.id}>
-                  <PlaceCard place={place} />
+                  <PlaceCard hasShowOnMapIcon={true} showOnMap={setSelectedPlace} place={place} />
                 </div> 
               ) 
             }
@@ -63,6 +73,7 @@ export default function WishlistsPage() {
                 name: fplace.name,
                 rating: fplace.average_ratings,
               })) : undefined} 
+              spotPlace={selectedPlace}
               className="h-full" 
             />
           </div>

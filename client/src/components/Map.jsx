@@ -13,7 +13,6 @@ const customIcon = new Icon({
   iconSize: [38, 38]
 });
 
-
 function ChangeView({ center, zoom }) {
   const map = useMap();
   map.setView(center, zoom);
@@ -30,15 +29,18 @@ export default function Map({
     name: '',
     rating: 0,
   }], 
-  className 
+  className,
+  spotPlace
 }) {
+  const highlightPlace = spotPlace || locations[0];
+
   return (
     <MapContainer 
-      center={ locations[0].coordinate || [51, -0.09]} 
-      zoom={locations[0].coordinate ? 4 : 2} 
+      center={ highlightPlace.coordinate || [51, -0.09]} 
+      zoom={highlightPlace.coordinate ? 4 : 2} 
       className={className}
     >
-      <ChangeView center={locations[0].coordinate} zoom={4} />
+      <ChangeView center={highlightPlace.coordinate} zoom={spotPlace ? 12 : 4} />
       <TileLayer
         url={url}
         attribution={attribution}
