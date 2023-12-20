@@ -192,7 +192,7 @@ export default function IndexPage() {
         </div>
       </div>
       
-      <div className={`h-[75vh] ${isShowMap ? 'grid grid-cols-10 gap-4' : ''}`}>
+      <div className={`h-[75vh] lg:mt-0 md:mt-[4vh] ${isShowMap ? 'grid grid-cols-10 gap-4' : ''}`}>
         <div className={`lg:px-20 md:px-10 grid  md:gap-5 ${isShowMap ? 'col-span-6 2xl:grid-cols-3 overflow-y-scroll md:grid-cols-2' : '2xl:grid-cols-6 md:grid-cols-3 lg:grid-cols-4'}`}>
           { (places.length > 0 && !isURLChanged) &&
             places.map((place, i, places) =>

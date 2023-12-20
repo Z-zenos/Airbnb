@@ -85,16 +85,16 @@ exports.deleteUser = factory.deleteOne(User);
 exports.updateWishlists = catchErrorAsync(async (req, res, next) => {
   const { place_id, state } = req.body;
 
-  const user = await User.findByIdAndUpdate(req.user.id);
+  const user = await User.findById(req.user.id);
 
   if (state === 'heart')
     user.wishlists.push(place_id);
   else if (state === 'unheart')
     user.wishlists.splice(user.wishlists.indexOf(place_id), 1);
 
-  await user.save();
+  await user.save({ validateBeforeSave: false });
 
-  res.status(204).json({
+  res.status(200).json({
     status: 'success',
     data: {
       user
