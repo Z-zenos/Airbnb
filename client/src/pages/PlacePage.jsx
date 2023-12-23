@@ -141,7 +141,7 @@ export default function PlacePage() {
           </div>
         )}
       </Navbar>
-      <div className="md:mt-[4vh] lg:mt-0 lg:w-3/5 mx-auto">
+      <div className=" lg:mt-0 lg:w-3/5 mx-auto">
 
         <div className="p-6">
 

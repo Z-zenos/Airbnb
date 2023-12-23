@@ -8,7 +8,7 @@ import { UserContext } from "../contexts/user.context";
 import { Link } from "react-router-dom";
 
 const SettingCard = ({ setting }) => (
-  <Link to={`${setting.link}`} className="py-5 px-4 flex justify-start flex-col items-start shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px] rounded-lg bg-white cursor-pointer min-h-[160px]">
+  <Link to={`${setting.link}`} className="py-5 px-4 flex justify-start flex-col items-start shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px_0px] rounded-lg bg-white cursor-pointer min-h-[160px] border hover:border-gray-400">
     {setting.icon}
     <p className="font-medium text-[16px] mt-6">{setting.title}</p>
     <p className="font-light opacity-60 text-[14px]">{setting.description}</p>
@@ -35,7 +35,7 @@ export default function AccountSettingPage() {
       icon: <MdSecurity size={32} />,
       title: 'Login & security',
       description: 'Update your password and secure your account',
-      link: '',
+      link: '/account-settings/security',
     },
     {
       icon: <MdOutlinePayment size={32} />,
@@ -64,7 +64,7 @@ export default function AccountSettingPage() {
   ], [user]);
 
   return (
-    <div className="2xl:w-[50%] md:w-[80%] sm:block mx-auto md:px-10 mb-10 p-10">
+    <div className="2xl:w-[50%] md:w-[80%] sm:block mx-auto md:px-10 mb-10 p-10 ">
       <div className="font-light mb-10">
         <h3 className="font-bold text-3xl mb-2">Account</h3>
         <p>

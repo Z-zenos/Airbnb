@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         primary: "#ff385c",
+        secondary: "#008489",
         'gray-primary': "rgb(113, 113, 113)"
       },
       borderWidth: {
