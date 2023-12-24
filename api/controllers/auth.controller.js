@@ -220,3 +220,21 @@ exports.confirmUpdatePersonalInfo = catchErrorAsync(async (req, res, next) => {
     return next(new AppError('Email is empty', 401));
   }
 });
+
+exports.updatePassword = catchErrorAsync(async (req, res, next) => {
+  // 1. Get user from collection
+  const user = await User.findById(req.user.id).select('+password');
+
+  // 2. Check if POSTed current password is correct
+  if (!(await user.correctPassword(req.body.current_password, user.password))) {
+    return next(new AppError("Your current password is wrong.", 401));
+  }
+
+  // 3. If so, update password
+  user.password = req.body.new_password;
+  user.passwordConfirm = req.body.confirm_password;
+  await user.save();
+
+  // 4. Log user in, send JWT
+  createAndSendToken(user, 200, req, res);
+});

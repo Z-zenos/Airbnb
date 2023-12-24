@@ -1,9 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Button from "../components/Button/Button";
 import { MdComputer } from "react-icons/md";
 import { GoShieldLock } from "react-icons/go";
 import { GiCheckedShield } from "react-icons/gi";
 import { TbShieldHeart } from "react-icons/tb";
+import Input from "../components/Input/Input";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import useYupValidationResolver from "../hooks/useYupValidationResolver";
+import Toast from "../components/Toast/Toast";
+import { ToastContext } from "../contexts/toast.context";
+import axios from "axios";
+import { UserContext } from "../contexts/user.context";
+import timeAgo from "../utils/timeAgo";
 
 const tabs = [
   'login',
@@ -11,8 +20,85 @@ const tabs = [
   'shared access'
 ];
 
+const updatePasswordSchema = yup.object().shape({
+  current_password: yup
+    .string().trim()
+    .max(100, "Password must be less than 100 characters.")
+    .min(4, "Password must be greater than 3 characters.")
+    .required("Please tell us your password."),
+
+  new_password: yup
+    .string().trim()
+    .max(100, "Password must be less than 100 characters.")
+    .min(4, "Password must be greater than 3 characters.")
+    .required("Please tell us your new password."),
+
+  confirm_password: yup
+    .string().trim()
+    .max(100, "Password must be less than 100 characters.")
+    .min(4, "Password must be greater than 3 characters.")
+    .oneOf([yup.ref('new_password'), null], "Password and confirm password must match.")
+    .required("Please re-enter password to confirm.")
+});
+
 export default function SecurityPage() {
+  const { user, setUser } = useContext(UserContext);
   const [tab, setTab] = useState(tabs[0]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { openToast } = useContext(ToastContext);
+  const [openUpdatePasswordForm, setOpenUpdatePasswordForm] = useState(false);
+
+  const resolver = useYupValidationResolver(updatePasswordSchema);
+  const [updatePasswordFormData, setUpdatePasswordFormData] = useState({});
+
+  const { 
+    register, 
+    handleSubmit, 
+    reset,
+    formState: { errors } 
+  } = useForm({ 
+    mode: "all", 
+    resolver,
+    defaultValues: {
+      current_password: "",
+      new_password: "",
+      confirm_password: ""
+    }
+  });
+
+  function handleFormDataChange(ev) {
+    const { name, value } = ev.target;
+    setUpdatePasswordFormData(prevFromData => ({ ...prevFromData, [name]: value }));
+  }
+
+  async function handleSubmitForm(ev) {
+    // trigger();
+    ev.preventDefault();
+    if (Object.keys(errors).length === 0 && errors.constructor === Object) {
+      try {
+        setIsLoading(true);
+        const config = {
+          headers: {
+            "Content-Type": "application/json"
+          },
+        };
+
+        const res = await axios.patch(`/auth/updateMyPassword`, updatePasswordFormData, config);
+
+        setUser(res.data.data.user);
+
+        openToast(<Toast title="Success" content={`Update password successfully`} type="success" />);
+
+        reset({});
+        setOpenUpdatePasswordForm(false);
+
+      } catch (err) {
+        openToast(<Toast title="Fail" content={err.response?.data?.message} type="error" />);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  }
 
   const loginTab = (
     <div>
@@ -22,13 +108,63 @@ export default function SecurityPage() {
         <div className="flex justify-between font-light items-start">
           <div>
             <p className="font-medium">Password</p>
-            <p className="text-[15px]">Last updated 3 months ago</p>
+            <p className="text-[15px]">Last updated {timeAgo(user?.passwordChangedAt)}</p>
           </div>
 
-          <div className="text-secondary text-md font-semibold cursor-pointer hover:underline transition-all" onClick={() => {}}>
-            Update
+          <div className="text-secondary text-md font-semibold cursor-pointer hover:underline transition-all" onClick={() => setOpenUpdatePasswordForm(!openUpdatePasswordForm)}>
+            { openUpdatePasswordForm ? 'Cancel' : 'Update' }
           </div>
         </div>
+
+        { openUpdatePasswordForm && (
+          <form onSubmit={handleSubmit(handleSubmitForm)}>
+            <p className="text-secondary font-light text-[14px] my-3 hover:underline hover:transition-all cursor-pointer">Need a new password?</p>
+            <div className="mb-3">
+              <p className="opacity-60 mb-[-4px]">Current password</p>
+              <Input 
+                label="Don't let others see your password" 
+                className="my-3 rounded-md" 
+                value={updatePasswordFormData?.current_password} 
+                type="password" 
+                {...register("current_password", { required: true, onChange: handleFormDataChange })} 
+                errors={errors} 
+              />
+            </div>
+
+            <div className="mb-3">
+              <p className="opacity-60 mb-[-4px]">New password</p>
+              <Input 
+                label="Strong password. Ex: @abc12+-i#" 
+                className="my-3 rounded-md" 
+                value={updatePasswordFormData?.new_password} 
+                type="password" 
+                {...register("new_password", { required: true, onChange: handleFormDataChange })} 
+                errors={errors} 
+              />
+            </div>
+
+            <div className="mb-3">
+              <p className="opacity-60 mb-[-4px]">Confirm password</p>
+              <Input 
+                label="Re-enter the new password." 
+                className="my-3 rounded-md" 
+                value={updatePasswordFormData?.confirm_password} 
+                type="password" 
+                {...register("confirm_password", { required: true, onChange: handleFormDataChange })} 
+                errors={errors} 
+              />
+            </div>
+
+            <Button 
+              isLoading={isLoading} 
+              disabled={errors.length} 
+              label="Update password" 
+              className="mt-8 bg-secondary border-secondary hover:bg-white hover:text-secondary px-6" 
+              onClick={async (ev) => await handleSubmitForm(ev)} 
+            />
+            
+          </form>
+        )}
       </div>
 
       {/* SOCIALS ACCOUNTS */}

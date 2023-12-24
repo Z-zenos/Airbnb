@@ -57,12 +57,15 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Please provide a password.'],
       minlength: 4,
+      maxlength: 100,
       select: false
     },
 
     passwordConfirm: {
       type: String,
       required: [true, 'Please confirm your password.'],
+      minlength: 4,
+      maxlength: 100,
       validate: {
         validator: function (el) {
           return el === this.password;

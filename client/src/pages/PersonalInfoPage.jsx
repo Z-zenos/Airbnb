@@ -84,6 +84,7 @@ export default function PersonalInfoPage() {
 
   const { openToast } = useContext(ToastContext);
   const [isLoading, setIsLoading] = useState(false);
+  
   function handleFormDataChange(ev) {
     const { name, value } = ev.target;
     if (name.includes('.')) {
