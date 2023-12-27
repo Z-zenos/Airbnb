@@ -4,42 +4,19 @@ import { MdComputer } from "react-icons/md";
 import { GoShieldLock } from "react-icons/go";
 import { GiCheckedShield } from "react-icons/gi";
 import { TbShieldHeart } from "react-icons/tb";
-import Input from "../components/Input/Input";
 import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import useYupValidationResolver from "../hooks/useYupValidationResolver";
 import Toast from "../components/Toast/Toast";
 import { ToastContext } from "../contexts/toast.context";
 import axios from "axios";
 import { UserContext } from "../contexts/user.context";
 import timeAgo from "../utils/timeAgo";
+import Inputv2 from "../components/Input/Input.v2";
 
 const tabs = [
   'login',
   'login requests',
   'shared access'
 ];
-
-const updatePasswordSchema = yup.object().shape({
-  current_password: yup
-    .string().trim()
-    .max(100, "Password must be less than 100 characters.")
-    .min(4, "Password must be greater than 3 characters.")
-    .required("Please tell us your password."),
-
-  new_password: yup
-    .string().trim()
-    .max(100, "Password must be less than 100 characters.")
-    .min(4, "Password must be greater than 3 characters.")
-    .required("Please tell us your new password."),
-
-  confirm_password: yup
-    .string().trim()
-    .max(100, "Password must be less than 100 characters.")
-    .min(4, "Password must be greater than 3 characters.")
-    .oneOf([yup.ref('new_password'), null], "Password and confirm password must match.")
-    .required("Please re-enter password to confirm.")
-});
 
 export default function SecurityPage() {
   const { user, setUser } = useContext(UserContext);
@@ -48,17 +25,16 @@ export default function SecurityPage() {
   const { openToast } = useContext(ToastContext);
   const [openUpdatePasswordForm, setOpenUpdatePasswordForm] = useState(false);
 
-  const resolver = useYupValidationResolver(updatePasswordSchema);
   const [updatePasswordFormData, setUpdatePasswordFormData] = useState({});
 
   const { 
     register, 
     handleSubmit, 
     reset,
+    watch,
     formState: { errors } 
   } = useForm({ 
     mode: "all", 
-    resolver,
     defaultValues: {
       current_password: "",
       new_password: "",
@@ -83,10 +59,10 @@ export default function SecurityPage() {
           },
         };
 
+
         const res = await axios.patch(`/auth/updateMyPassword`, updatePasswordFormData, config);
 
         setUser(res.data.data.user);
-
         openToast(<Toast title="Success" content={`Update password successfully`} type="success" />);
 
         reset({});
@@ -121,43 +97,88 @@ export default function SecurityPage() {
             <p className="text-secondary font-light text-[14px] my-3 hover:underline hover:transition-all cursor-pointer">Need a new password?</p>
             <div className="mb-3">
               <p className="opacity-60 mb-[-4px]">Current password</p>
-              <Input 
-                label="Don't let others see your password" 
-                className="my-3 rounded-md" 
-                value={updatePasswordFormData?.current_password} 
+              <Inputv2
                 type="password" 
-                {...register("current_password", { required: true, onChange: handleFormDataChange })} 
+                name="current_password"
+                label="Don't let others see your password" 
                 errors={errors} 
+                value={updatePasswordFormData.current_password}
+                register={register}
+                validationSchema={{
+                  required: "Please tell us your password.",
+                  minLength: {
+                    value: 4,
+                    message: "Please enter a minimum of 4 characters"
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Password must be less than 100 characters."
+                  }
+                }} 
+                onChange={handleFormDataChange}
+                className="my-3 rounded-md" 
               />
             </div>
 
             <div className="mb-3">
               <p className="opacity-60 mb-[-4px]">New password</p>
-              <Input 
-                label="Strong password. Ex: @abc12+-i#" 
-                className="my-3 rounded-md" 
-                value={updatePasswordFormData?.new_password} 
+              <Inputv2
                 type="password" 
-                {...register("new_password", { required: true, onChange: handleFormDataChange })} 
+                name="new_password"
+                label="Strong password. Ex: @abc12+-i#" 
                 errors={errors} 
+                value={updatePasswordFormData.new_password}
+                register={register}
+                validationSchema={{
+                  required: "Please tell us new password.",
+                  minLength: {
+                    value: 4,
+                    message: "Please enter a minimum of 4 characters"
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Password must be less than 100 characters."
+                  }
+                }} 
+                onChange={handleFormDataChange}
+                className="my-3 rounded-md" 
               />
             </div>
 
             <div className="mb-3">
               <p className="opacity-60 mb-[-4px]">Confirm password</p>
-              <Input 
-                label="Re-enter the new password." 
-                className="my-3 rounded-md" 
-                value={updatePasswordFormData?.confirm_password} 
+              
+              <Inputv2
                 type="password" 
-                {...register("confirm_password", { required: true, onChange: handleFormDataChange })} 
+                name="confirm_password"
+                label="Re-enter the new password." 
                 errors={errors} 
+                register={register}
+                value={updatePasswordFormData.confirm_password}
+                validationSchema={{
+                  required: "Please re-enter password to confirm.",
+                  minLength: {
+                    value: 4,
+                    message: "Please enter a minimum of 4 characters"
+                  },
+                  maxLength: {
+                    value: 100,
+                    message: "Password must be less than 100 characters."
+                  },
+                  validate: (confirm_password) => {
+                    if (watch('new_password') !== confirm_password) {
+                      return "Your passwords do no match";
+                    }
+                  }
+                }} 
+                onChange={handleFormDataChange}
+                className="my-3 rounded-md" 
               />
             </div>
 
             <Button 
               isLoading={isLoading} 
-              disabled={errors.length} 
+              disabled={Object.keys(errors).length} 
               label="Update password" 
               className="mt-8 bg-secondary border-secondary hover:bg-white hover:text-secondary px-6" 
               onClick={async (ev) => await handleSubmitForm(ev)} 
