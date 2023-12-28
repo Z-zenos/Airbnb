@@ -20,7 +20,7 @@ export function ToastContextProvider({ children }) {
       openToast
     }}>
       { children }
-      <div className="space-y-2 fixed top-4 right-4 z-20">
+      <div className="space-y-2 fixed top-4 right-4 z-60">
         {toasts.map(({id, component}) => (
           <div key={id} className="relative">
             <button className="absolute top-2 right-2 p-1 rounded-lg bg-gray-200/20 text-gray-800/60" onClick={() => closeToast(id)}>

@@ -9,7 +9,7 @@ router.post('/login', authController.login);
 router.post('/confirm-email/:token', authController.confirmUpdatePersonalInfo);
 
 // forgot password only receive the email address
-// router.post('/forgotPassword', authController.forgotPassword); // get only email address
+router.post('/forgotPassword', authController.forgotPassword); // get only email address
 
 // receive token, and set new password
 // router.patch('/resetPassword/:token', authController.resetPassword); // get token along new password

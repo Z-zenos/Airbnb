@@ -97,4 +97,12 @@ module.exports = class Email {
       data
     );
   }
+
+  async sendResetPasswordLink(data) {
+    await this.send(
+      'reset_password',
+      'Confirm your changed email',
+      data
+    );
+  }
 }

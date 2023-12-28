@@ -4,17 +4,18 @@ import Modal from "./Modal";
 import axios from "axios";
 import Inputv2 from "../Input/Input.v2";
 import { useForm } from "react-hook-form";
+import { ToastContext } from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
 
 export default function ForgotPasswordModal() {
   const { isForgotPasswordModalOpen, setIsForgotPasswordModalOpen } = useContext(ModalContext);
   const [isLoading, setIsLoading] = useState(false);
   const [forgotPasswordFormData, setForgotPasswordFormData] = useState({});
+  const { openToast } = useContext(ToastContext);
 
   const { 
     register, 
     handleSubmit, 
-    reset,
-    watch,
     formState: { errors } 
   } = useForm({ 
     mode: "all", 
@@ -32,13 +33,24 @@ export default function ForgotPasswordModal() {
     if (Object.keys(errors).length === 0 && errors.constructor === Object) {
       try {
         setIsLoading(true);
+
+        const res = await axios.post('/auth/forgotPassword', forgotPasswordFormData, {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        openToast(<Toast type="success" title="Successfully" content={res.data.message} />);
         console.log(forgotPasswordFormData);
 
       } catch (error) {
-        console.log(error);
+        openToast(<Toast type="error" title="Failure" content={error.response.data.message} />);
       } finally {
         setIsLoading(false);
       }
+    }
+    else {
+      openToast(<Toast type="error" title="Failure" content={errors?.email?.message} />);
     }
   }
 

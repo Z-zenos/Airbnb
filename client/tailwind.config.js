@@ -6,6 +6,9 @@ export default {
   ],
   theme: {
     extend: {
+      zIndex: {
+        '60': '60'
+      },
       colors: {
         primary: "#ff385c",
         secondary: "#008489",
