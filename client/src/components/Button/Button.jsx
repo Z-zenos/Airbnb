@@ -9,13 +9,15 @@ const Button = ({
   className,
   iconClassName,
   style,
-  isLoading
+  isLoading,
+  type
 }) => {
   return ( 
     <button
       disabled={disabled}
       onClick={onClick}
       style={style}
+      type={type}
       className={`
         rounded-lg
         transition

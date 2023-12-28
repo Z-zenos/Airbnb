@@ -89,6 +89,7 @@ export default function Modal({
                   disabled={disabled}
                   label={actionLabel}
                   onClick={handleSubmit}
+                  type="submit"
                 />
               </div>
 

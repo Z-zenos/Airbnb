@@ -13,6 +13,7 @@ export function ModalContextProvider({ children }) {
   const [isInterestSelectModalOpen, setIsInterestSelectModalOpen] = useState(false);
   const [isSearchAddressModalOpen, setIsSearchAddressModalOpen] = useState(false);
   const [isLanguageSelectModalOpen, setIsLanguageSelectModalOpen] = useState(false);
+  const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
   
   return (
     <ModalContext.Provider value={{
@@ -25,6 +26,7 @@ export function ModalContextProvider({ children }) {
       isInterestSelectModalOpen, setIsInterestSelectModalOpen,
       isSearchAddressModalOpen, setIsSearchAddressModalOpen,
       isLanguageSelectModalOpen, setIsLanguageSelectModalOpen,
+      isForgotPasswordModalOpen, setIsForgotPasswordModalOpen,
     }}>
       { children }
     </ModalContext.Provider>

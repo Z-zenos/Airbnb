@@ -15,7 +15,7 @@ import AccountSettingPage from "./pages/AccountSettingPage";
 import UserEditPage from "./pages/UserEditPage";
 import PersonalInfoPage from "./pages/PersonalInfoPage";
 import WishlistsPage from "./pages/WishlistsPage";
-import SecurityPage from "./pages/SecurityPage";
+import LoginSecurityPage from "./pages/LoginSecurityPage";
 
 
 // Apply for all requests
@@ -53,7 +53,7 @@ function App() {
                   <Route path="/account-settings" element={<AccountSettingPage />} />
                   
                   <Route path="/account-settings/personal-info" element={<PersonalInfoPage />} />
-                  <Route path="/account-settings/security" element={<SecurityPage />} />
+                  <Route path="/account-settings/security" element={<LoginSecurityPage />} />
 
                   <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />

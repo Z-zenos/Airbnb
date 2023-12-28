@@ -11,6 +11,8 @@ import axios from "axios";
 import { UserContext } from "../contexts/user.context";
 import timeAgo from "../utils/timeAgo";
 import Inputv2 from "../components/Input/Input.v2";
+import { ModalContext } from "../contexts/modal.context";
+import ForgotPasswordModal from "../components/Modals/ForgotPasswordModal";
 
 const tabs = [
   'login',
@@ -18,11 +20,12 @@ const tabs = [
   'shared access'
 ];
 
-export default function SecurityPage() {
+export default function LoginSecurityPage() {
   const { user, setUser } = useContext(UserContext);
   const [tab, setTab] = useState(tabs[0]);
   const [isLoading, setIsLoading] = useState(false);
   const { openToast } = useContext(ToastContext);
+  const { isForgotPasswordModalOpen, setIsForgotPasswordModalOpen } = useContext(ModalContext);
   const [openUpdatePasswordForm, setOpenUpdatePasswordForm] = useState(false);
 
   const [updatePasswordFormData, setUpdatePasswordFormData] = useState({});
@@ -59,7 +62,6 @@ export default function SecurityPage() {
           },
         };
 
-
         const res = await axios.patch(`/auth/updateMyPassword`, updatePasswordFormData, config);
 
         setUser(res.data.data.user);
@@ -94,7 +96,12 @@ export default function SecurityPage() {
 
         { openUpdatePasswordForm && (
           <form onSubmit={handleSubmit(handleSubmitForm)}>
-            <p className="text-secondary font-light text-[14px] my-3 hover:underline hover:transition-all cursor-pointer">Need a new password?</p>
+            <p 
+              className="text-secondary font-light text-[14px] my-3 hover:underline hover:transition-all cursor-pointer"
+              onClick={() => setIsForgotPasswordModalOpen(true)}  
+            >
+              Need a new password?
+            </p>
             <div className="mb-3">
               <p className="opacity-60 mb-[-4px]">Current password</p>
               <Inputv2
@@ -318,7 +325,8 @@ export default function SecurityPage() {
             }
           </div>
         </div>
-        </div>
+      </div>
+      { isForgotPasswordModalOpen && <ForgotPasswordModal /> }
     </div>
   );
 }

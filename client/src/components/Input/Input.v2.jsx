@@ -4,7 +4,7 @@ import "./Input.css";
 export default function Inputv2(props) {
   const { 
     name, label, register, errors, required, value,
-    type, validationSchema, className, onChange
+    type = 'text', validationSchema, className, onChange
   } = props;
 
 
