@@ -17,6 +17,7 @@ import PersonalInfoPage from "./pages/PersonalInfoPage";
 import WishlistsPage from "./pages/WishlistsPage";
 import LoginSecurityPage from "./pages/LoginSecurityPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import ReviewAccountPage from "./pages/ReviewAccountPage";
 
 
 // Apply for all requests
@@ -56,6 +57,7 @@ function App() {
                   <Route path="/account-settings/personal-info" element={<PersonalInfoPage />} />
                   <Route path="/account-settings/security" element={<LoginSecurityPage />} />
                   <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                  <Route path="/review-account/:token" element={<ReviewAccountPage />} />
                   <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />
                   <Route path='/places/:id' element={ <PlacePage /> } />

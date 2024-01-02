@@ -7,7 +7,8 @@ const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const HIDE_SEARCH_URLS = ['users', 'account-settings'];
+const HIDE_SEARCH_URLS = ['users', 'account-settings', 'review-account'];
+const HIDE_USER_MENU_URLS = ['review-account'];
 
 export default function Header() {
   const { setIsCreatePlaceModalOpen, setIsIntlModalOpen } = useContext(ModalContext);
@@ -74,21 +75,23 @@ export default function Header() {
           </svg>
         </div>
 
-        <div className='ab__auth-widget flex items-center gap-2 border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer' onClick={() => setUserBox(!userBox)}>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-          </svg>
+        { !HIDE_USER_MENU_URLS.some(humu => location.pathname.startsWith(`/${humu}`)) &&
+          <div className='ab__auth-widget flex items-center gap-2 border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer' onClick={() => setUserBox(!userBox)}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+            </svg>
 
-          <div className='border-[1px] border-primary rounded-full p-1'>
-            { user?.avatar && <img className='rounded-full w-[30px] h-[30px]' src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} /> }
+            <div className='border-[1px] border-primary rounded-full p-1'>
+              { user?.avatar && <img className='rounded-full w-[30px] h-[30px]' src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} /> }
+
+            </div>
+
+            {!!user && (
+              <div>{user.name}</div>
+            )}
 
           </div>
-
-          {!!user && (
-            <div>{user.name}</div>
-          )}
-
-        </div>
+        }
 
         { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm z-[60]'>
           <ul>

@@ -75,8 +75,12 @@ const userSchema = new mongoose.Schema(
     },
 
     passwordChangedAt: Date,
+
     passwordResetToken: String,
     passwordResetExpires: Date,
+
+    reviewAccountToken: String,
+    reviewAccountExpires: Date,
 
     emailChangeAt: Date,
     emailConfirmToken: String,
@@ -269,6 +273,17 @@ userSchema.methods.createPasswordResetToken = function () {
 
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
+}
+
+userSchema.methods.createReviewAccountToken = function () {
+  const reviewAccountToken = crypto.randomBytes(32).toString('hex');
+  this.reviewAccountToken = crypto
+    .createHash('sha256')
+    .update(reviewAccountToken)
+    .digest('hex');
+
+  this.reviewAccountExpires = Date.now() + 10 * 60 * 1000;
+  return reviewAccountToken;
 }
 
 const User = mongoose.model('User', userSchema);

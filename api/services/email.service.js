@@ -101,7 +101,15 @@ module.exports = class Email {
   async sendResetPasswordLink(data) {
     await this.send(
       'reset_password',
-      'Confirm your changed email',
+      'Reset your password',
+      data
+    );
+  }
+
+  async sendReviewAccount(data) {
+    await this.send(
+      'review_account',
+      'Account activity: Password changed',
       data
     );
   }

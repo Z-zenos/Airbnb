@@ -290,9 +290,23 @@ exports.resetPassword = catchErrorAsync(async (req, res, next) => {
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = user.passwordResetExpires = undefined;
+  const reviewAccountToken = user.createReviewAccountToken();
   await user.save();
 
   // 3. Update changePasswordAt property for the user ()
-  // 4. Log the user in, send JWT
+
+  // 4. Send review reset password for user
+  const reviewAccountURL = `${req.get('origin')}/review-account/${reviewAccountToken}`;
+  await new Email(user, reviewAccountURL).sendReviewAccount({
+    date: dateFormat(new Date(), "dddd, mmmm dS, yyyy, h:MM:ss TT"),
+    device: req.get('User-Agent')
+  });
+
+  // 5. Log the user in, send JWT
   createAndSendToken(user, 200, req, res);
+});
+
+exports.reviewAccount = catchErrorAsync(async (req, res, next) => {
+  console.log("review account");
+  next();
 });
