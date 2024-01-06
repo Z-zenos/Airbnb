@@ -13,7 +13,10 @@ router.post('/forgotPassword', authController.forgotPassword); // get only email
 
 // receive token, and set new password
 router.patch('/resetPassword/:token', authController.resetPassword); // get token along new password
-router.patch('/reviewAccount/:token', authController.reviewAccount); // get token along new password
+router
+  .route('/reviewAccount/:token')
+  .get(authController.checkTokenValid('review-account'))
+  .patch(authController.reviewAccount);
 
 router.use(authController.protect); // Protect all routes that come after this point.
 router.patch('/updateMyPassword', authController.updatePassword);

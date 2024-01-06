@@ -72,6 +72,36 @@ exports.login = catchErrorAsync(async (req, res, next) => {
   createAndSendToken(user, 200, req, res);
 });
 
+
+exports.checkTokenValid = (type) => catchErrorAsync(async (req, res, next) => {
+  // 1. Get user based on the token
+  const hashedToken = crypto
+    .createHash('sha256')
+    .update(req.params.token)
+    .digest('hex');
+
+  let tokenName = {
+    password: 'passwordReset',
+    'review-account': 'reviewAccount'
+  }[type];
+
+  const user = await User.findOne({
+    [`${tokenName}Token`]: hashedToken,
+    [`${tokenName}Expires`]: { $gt: Date.now() }
+  });
+
+  // 2. If token has not expired and there is user, set the new password
+  if (!user) {
+    return next(new AppError('Token is invalid or has expired', 400));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    message: 'Token is still valid',
+    valid: true,
+  });
+});
+
 exports.protect = catchErrorAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;

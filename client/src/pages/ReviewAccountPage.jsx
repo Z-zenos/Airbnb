@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import Inputv2 from "../components/Input/Input.v2";
 import { UserContext } from "../contexts/user.context";
 import { ToastContext } from "../contexts/toast.context";
@@ -10,9 +10,15 @@ import Button from "../components/Button/Button";
 import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdArrowBack, IoMdCloseCircleOutline } from "react-icons/io";
 import { TiTick } from "react-icons/ti";
+import { FaCheck } from "react-icons/fa";
+import { RiProhibitedLine } from "react-icons/ri";
 import passwordChecker from "../utils/passwordChecker";
+import Spinner from "../components/Spinner/Spinner";
 
 export default function ReviewAccountPage() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const { openToast } = useContext(ToastContext);
@@ -20,6 +26,9 @@ export default function ReviewAccountPage() {
     password: "",
     confirm_password: ""
   });
+
+  const reviewAccountToken = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
+  const [isReviewAccountTokenValid, setIsReviewAccountTokenValid] = useState(true);
 
   const [rules, setRules] = useState({
     password_strength: {
@@ -42,9 +51,6 @@ export default function ReviewAccountPage() {
     }
   });
 
-  const location = useLocation();
-  const navigate = useNavigate();
-
   const { 
     register, 
     handleSubmit, 
@@ -57,6 +63,20 @@ export default function ReviewAccountPage() {
       confirm_password: "",
     }
   });
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get(`auth/reviewAccount/${reviewAccountToken}}`);
+        setIsReviewAccountTokenValid(res.data.valid);
+      } catch (error) {
+        setIsReviewAccountTokenValid(false);
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   function handleRules(ev) {
     let password = ev.target.value || '';
@@ -98,7 +118,7 @@ export default function ReviewAccountPage() {
           },
         };
 
-        const res = await axios.patch(`/auth/resetPassword/${location.pathname.slice(location.pathname.lastIndexOf('/') + 1)}`, {
+        const res = await axios.patch(`/auth/review-account/${reviewAccountToken}}`, {
           password: resetPasswordFormData.password,
           passwordConfirm: resetPasswordFormData.confirm_password
         }, config);
@@ -252,6 +272,50 @@ export default function ReviewAccountPage() {
     </>
   );
 
+  const Review_account_info_Step = (
+    <>
+      <p className="font-light mb-8">Update your info or click <span className="font-semibold">Remove</span> or <span className="font-semibold">Change</span> next to anything you don’t recognize. You can always make more changes from your account settings later.</p>
+
+      <div>
+        <h3 className="font-semibold">First & last name</h3>
+        <input className="p-3 focus:outline-none  w-full border border-gray-300 focus:border-secondary rounded my-2" />
+        <input className="p-3 focus:outline-none  w-full border border-gray-300 focus:border-secondary rounded my-2" />
+      </div>
+      <div className="mt-4">
+        <h3 className="font-semibold">Email Address</h3>
+        <input className="p-3 focus:outline-none  w-full border border-gray-300 focus:border-secondary rounded my-2" />
+      </div>
+    </>
+  );
+
+  const Check_profile_photo_Step = (
+    <>
+      <p className="font-light mb-8">If you don’t recognize one of these photos, click the trash icon to remove it from your profile.</p>
+
+      <div className="mt-10">
+        <img src="https://a0.muscache.com/im/pictures/user/14e684fa-919f-4077-b692-1aaea77be871.jpg?aki_policy=profile_large" className="w-full rounded" />
+      </div>
+    </>
+  );
+
+  const Final_Step = (
+    <>
+      <p className="font-light mb-8">Taking time to review your account helps keep Airbnb secure for you and the rest of our community.</p>
+
+      <div className="mt-10">
+        <h3 className="font-semibold">Here&lsquo;s what you did:</h3>
+        <div className="my-3 flex justify-between items-center">
+          <p className="font-light">Reviewed recent logins</p>
+          <FaCheck className=" text-green-400" />
+        </div>
+        <div className="my-3 flex justify-between items-center">
+          <p className="font-light">Updated your account details</p>
+          <FaCheck className=" text-green-400" />
+        </div>
+      </div>
+    </>
+  )
+
   const steps = useMemo(() => [
     { 
       title: "Let's review your account", 
@@ -268,39 +332,71 @@ export default function ReviewAccountPage() {
       step: Check_device_Step, 
       right_button: 'Next'  
     },
+    { 
+      title: "Now, let’s review your account info", 
+      step: Review_account_info_Step, 
+      right_button: 'Next'  
+    },
+    {
+      title: "Are these your profile photos?",
+      step: Check_profile_photo_Step,
+      right_button: 'Next'
+    },
+    {
+      title: "You're all set!",
+      step: Final_Step,
+      right_button: 'Return to Airbnb'
+    },
   ], []);
 
   const [step, setStep] = useState(0);
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 ">
-      <div className="flex justify-center items-center flex-col py-[110px]">
-        <div className="px-[15%]">
-          <h3 className="font-medium text-3xl mb-6">{steps[step].title}</h3>
+      { isLoading 
+        ? <div className="flex justify-center items-center"><Spinner className="mx-auto" /></div> 
+        : <>
+          { isReviewAccountTokenValid ? (
+          <div className="flex justify-center items-center flex-col py-[110px]">
+            <div className="px-[20%]">
+              <h3 className="font-medium text-3xl mb-4">{steps[step].title}</h3>
 
-          {steps[step].step}
-        </div>
+              {steps[step].step}
+            </div>
 
-        <div className="flex gap-3 justify-start items-center">
-          { step > 0 && <Button 
-              isLoading={isLoading} 
-              label="Back" 
-              outline={true}
-              className="w-full mt-8 text-secondary border-none hover:underline px-6" 
-              onClick={() => setStep(prev => prev - 1)} 
-            >
-              <IoMdArrowBack />
-            </Button>
-          }
+            <div className="flex gap-3 justify-start items-center">
+              { (step > 0 && step < steps.length - 1) && <Button 
+                  isLoading={isLoading} 
+                  label="Back" 
+                  outline={true}
+                  className="w-full mt-8 text-secondary border-none hover:underline px-6" 
+                  onClick={() => setStep(prev => prev - 1)} 
+                >
+                  <IoMdArrowBack />
+                </Button>
+              }
 
-          <Button 
-            isLoading={isLoading} 
-            label={steps[step].right_button}
-            className="w-full mt-8 bg-secondary border-secondary hover:bg-white hover:text-secondary px-6" 
-            onClick={() => setStep(prev => prev + 1)} 
-          />
-        </div>
-      </div>
+              <Button 
+                isLoading={isLoading} 
+                label={steps[step].right_button}
+                className="w-full mt-8 bg-secondary border-secondary hover:bg-white hover:text-secondary px-6" 
+                onClick={() => {
+                  if(step === steps.length - 1) {
+                    navigate('/');
+                  }
+                  else setStep(prev => prev + 1)
+                }} 
+              />
+            </div>
+          </div>
+          ) : (
+          <div className="">
+            <RiProhibitedLine className="text-primary mx-auto w-[100px] h-[100px] mt-10" />
+            <p className="text-primary font-semibold flex justify-center items-center flex-col py-[110px]">You do not have permission to access this resource.</p>
+          </div>
+          )}
+        </>
+      }
     </div>
   );
 }
