@@ -72,6 +72,19 @@ exports.login = catchErrorAsync(async (req, res, next) => {
   createAndSendToken(user, 200, req, res);
 });
 
+exports.logout = catchErrorAsync(async (req, res, next) => {
+  // Set token  to none and expire after 1 seconds
+  res.cookie('jwt', 'none', {
+    expires: new Date(Date.now() + 1 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    status: 'success',
+    message: 'You logged out successfully'
+  });
+});
+
 
 exports.checkTokenValid = (type) => catchErrorAsync(async (req, res, next) => {
   // 1. Get user based on the token

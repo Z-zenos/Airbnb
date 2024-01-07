@@ -20,5 +20,6 @@ router
 
 router.use(authController.protect); // Protect all routes that come after this point.
 router.patch('/updateMyPassword', authController.updatePassword);
+router.get('/logout', authController.logout);
 
 module.exports = router;
