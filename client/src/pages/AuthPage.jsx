@@ -84,12 +84,11 @@ export default function AuthPage() {
     getCountriesData();
   }, []);
 
-
   function handleFormDataChange(ev) {
     const { name, value } = ev.target;
     setFormData(prevFromData => ({ ...prevFromData, [name]: value }));
   }
-  
+
   async function handleSubmitForm(ev) {
     trigger();
     ev.preventDefault();
@@ -123,14 +122,20 @@ export default function AuthPage() {
   if(redirect) return <Navigate to='/' />
 
   return (
-    <div className="bg-[url('src/assets/images/background-1.webp')] grow flex items-center justify-around h-[85vh]">
+    <div className="bg-[url('src/assets/images/background-1.webp')] grow flex items-center justify-around">
       
       <div className="auth-box bg-white w-[600px] rounded-md py-2 shadow-[0_0_0_1000px_rgba(0,0,0,0.5)] -mt-16">
         <div className="px-6 pb-4 pt-2 text-center border-b-[1px] border-gray-300">
           <h3 className="font-bold text-md">Login or signup</h3>
         </div>
-        <div className="p-6 relative">
-          <h2 className="text-xl font-bold mb-4">Welcome to Airbnb</h2>
+        <div className="p-6 relative h-[520px]  overflow-y-scroll">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-bold">Welcome to Airbnb</h2>
+            <div className="flex gap-3">
+              <AiFillFacebook className="text-[#1773ea] text-3xl cursor-pointer" />
+              <FcGoogle className="text-3xl cursor-pointer" />
+            </div>
+          </div>
 
           <form className="w-2/3" onSubmit={handleSubmit(handleSubmitForm)}>
             <div className="relative">
@@ -186,22 +191,6 @@ export default function AuthPage() {
             <p className="text-xs text-gray-600 mt-2 mb-5">We’ll call or text you to confirm your number. Standard message and data rates apply. <a className="underline font-bold">Privacy Policy</a></p>
             
           </form>
-
-          <div className="other">
-            <div className="h-[1px] relative bg-gray-300 mt-10">
-              <div className="absolute w-10 h-10 text-gray-700 text-sm bg-white flex items-center justify-center top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">or</div>
-            </div>
-
-            <button className="relative text-[15px] flex justify-center items-center w-3/4 mx-auto rounded-md text-center p-2 cursor-pointer bg-white border border-gray-500 shadow-sm shadow-gray-300 hover:bg-gray-100 mt-7 mb-4">
-              <AiFillFacebook className="absolute top-1/2 left-[32px] -translate-x-1/2 -translate-y-1/2 text-[#1773ea] text-[24px] " />
-              Continue with Facebook
-            </button>
-
-            <button className="relative text-[15px] flex justify-center items-center w-3/4 mx-auto  rounded-md text-center p-2 cursor-pointer bg-white border border-gray-500 shadow-sm shadow-gray-300 hover:bg-gray-100">
-              <FcGoogle className="absolute top-1/2 left-[32px] -translate-x-1/2 -translate-y-1/2 text-[24px] " />
-              Continue with Google
-            </button>
-          </div>
         </div>
       
       </div>

@@ -2,16 +2,15 @@
 import { BiWorld } from "react-icons/bi";
 import { AiFillFacebook, AiOutlineTwitter, AiOutlineInstagram, AiOutlineCopyrightCircle } from "react-icons/ai";
 import { BsDot } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { IntlContext } from "../../contexts/intl.context";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
-  const location = useLocation();
   const { currency } = useContext(IntlContext);
 
   return (
-    <footer className={`z-10 px-[4%] bg-white border border-t-1 border-gray-primary ${location.pathname === '/' || location.pathname.includes('/places') ? 'fixed bottom-0 left-0 bg-white w-full flex justify-between items-center px-4 py-1' : 'flex flex-col items-center py-4'}`}>
+    <footer className={`h-[60px] border border-t-1 border-gray-primary bottom-0 left-0 bg-white w-full flex justify-between items-center md:px-4 lg:px-[5%] py-1`}>
       <div className="flex justify-center items-center">
         <span className="flex items-center">
           <BiWorld className="inline mr-1" />
@@ -30,10 +29,10 @@ export default function Footer() {
         </span>
       </div>
 
-      <div className="font-light text-sm flext items-center my-3">
+      <Link to={'/'} className=" text-sm flex items-center my-3 text-primary font-bold">
         <AiOutlineCopyrightCircle className="inline mr-2" />
         2023 Airbnb, Inc.
-      </div>
+      </Link>
 
       <div className="font-light text-sm">
         <span className="hover:underline">Terms</span>

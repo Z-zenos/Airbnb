@@ -234,7 +234,7 @@ export default function UserEditPage() {
       </div>
 
       <div className="col-span-2 relative">
-        <div className="flex justify-between items-center sticky top-[80px] bg-white z-10 py-4">
+        <div className="flex justify-between items-center sticky top-[40px] bg-white z-10 py-4 border-y border-y-gray-300">
           <h3 className="font-bold text-4xl  ">
             Your profile
           </h3>

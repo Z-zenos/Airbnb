@@ -64,7 +64,7 @@ export default function AccountSettingPage() {
   ], [user]);
 
   return (
-    <div className="2xl:w-[50%] md:w-[80%] sm:block mx-auto md:px-10 mb-10 p-10 ">
+    <div className="2xl:w-[50%] md:w-[80%] sm:block mx-auto md:px-10 p-10 ">
       <div className="font-light mb-10">
         <h3 className="font-bold text-3xl mb-2">Account</h3>
         <p>

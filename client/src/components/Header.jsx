@@ -1,13 +1,21 @@
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { UserContext } from '../contexts/user.context';
+import { ToastContext } from '../contexts/toast.context';
 import { ModalContext } from '../contexts/modal.context';
+import { MdManageAccounts } from "react-icons/md";
+import { FcLike } from "react-icons/fc";
+import { IoIosCreate } from "react-icons/io";
+import { SlLogout } from "react-icons/sl";
+import { CiLogin } from "react-icons/ci";
+import Toast from "./Toast/Toast";
+import axios from 'axios';
 
 const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const HIDE_SEARCH_URLS = ['users', 'account-settings', 'review-account'];
+const HIDE_SEARCH_URLS = ['users', 'account-settings', 'review-account', 'login'];
 const HIDE_USER_MENU_URLS = ['review-account'];
 
 export default function Header() {
@@ -17,6 +25,7 @@ export default function Header() {
   const { setIsSearchModalOpen } = useContext(ModalContext);
   const [searchParams] = useSearchParams();
   const location = useLocation();
+  const { openToast } = useContext(ToastContext);
 
   const time = () => {
     const checkin = +searchParams.get('checkin');
@@ -35,10 +44,19 @@ export default function Header() {
     const children = +searchParams.get('children') || 0;
 
     return adults + children ? adults + children + ' guest(s)' : 'Add guests';
-  };
-  
+  }
+
+  async function logout() {
+    try {
+      await axios.get('/auth/logout');
+      window.location.reload();
+    } catch (error) {
+      openToast(<Toast title="Failure" content="Logout failed" type="error" />)
+    }
+  }
+
   return (
-    <header className="px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px] fixed w-full top-0 bg-white z-20">
+    <header className="h-[80px] px-20 py-4 flex justify-between items-center border-b-gray-200 border-b-[1px]  w-full bg-white">
       <Link to={'/'} className="ab__logo flex gap-1 items-center text-primary font-bold">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 -rotate-90">
           <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
@@ -75,44 +93,58 @@ export default function Header() {
           </svg>
         </div>
 
-        { !HIDE_USER_MENU_URLS.some(humu => location.pathname.startsWith(`/${humu}`)) &&
-          <div className='ab__auth-widget flex items-center gap-2 border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer' onClick={() => setUserBox(!userBox)}>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-            </svg>
+        <div className='ab__auth-widget border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer'>
+          { user?.email ? (
+            !HIDE_USER_MENU_URLS.some(humu => location.pathname.startsWith(`/${humu}`)) &&
+            <div className='flex items-center gap-2' onClick={() => setUserBox(!userBox)}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
+              </svg>
 
-            <div className='border-[1px] border-primary rounded-full p-1'>
-              { user?.avatar && <img className='rounded-full w-[30px] h-[30px]' src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} /> }
+              <div className='border-[1px] border-primary rounded-full p-1'>
+                { user?.avatar && <img className='rounded-full w-[30px] h-[30px]' src={`http://localhost:3000/images/users/avatars/${user?.avatar}`} /> }
+
+              </div>
+
+              {!!user && (
+                <div>{user?.name}</div>
+              )}
 
             </div>
+          ) : (
+            <Link to={'/login'} className='text-sm px-3'>Login / Register</Link>
+          )}
+        </div>
 
-            {!!user && (
-              <div>{user.name}</div>
-            )}
-
-          </div>
-        }
-
-        { userBox && <div className='bg-white absolute right-0 top-[50px] shadow shadow-gray-500 rounded-xl py-4 w-[200px] text-sm z-[60]'>
+        { userBox && <div className='bg-white absolute right-0 top-[60px] shadow shadow-gray-400 rounded-xl py-4 w-[200px] text-sm z-[60]'>
           <ul>
-            {user.email ? (
+            {user?.email ? (
               <>
-                <Link to={'/account-settings'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block' onClick={() => setUserBox(false)}>Account</Link>
-                <Link to={'/wishlists'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block' onClick={() => setUserBox(false)}>Wishlists</Link>
+                <Link to={'/account-settings'} className='px-4 flex items-center gap-3 py-2 hover:bg-gray-100 cursor-pointer w-full' onClick={() => setUserBox(false)}>
+                  <MdManageAccounts className='w-5 h-5 inline' /> Account
+                </Link>
+                <Link to={'/wishlists'} className='px-4 flex items-center gap-3 py-2 hover:bg-gray-100 cursor-pointer w-full' onClick={() => setUserBox(false)}>
+                  <FcLike className='w-5 h-5 inline' /> Wishlists
+                </Link>
                 <li 
-                  className='px-4 py-2 hover:bg-gray-100 cursor-pointer' 
+                  className='px-4 flex items-center gap-3 py-2 hover:bg-gray-100 cursor-pointer' 
                   onClick={() => {
                     setIsCreatePlaceModalOpen(true)
                     setUserBox(false);
                   }}
                 >
-                  Create your places
+                  <IoIosCreate className='w-5 h-5 inline' /> Create your places
+                </li>
+                <li 
+                  className='px-4 flex items-center gap-3 py-2 hover:bg-gray-100 cursor-pointer' 
+                  onClick={logout}
+                >
+                  <SlLogout className='w-5 h-5 inline' /> Logout
                 </li>
               </>
             ) : (
               <>
-                <Link to={'/login'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'>Login</Link>
-                <li className='px-4 py-2 hover:bg-gray-100 cursor-pointer'>Register</li>
+                <Link to={'/login'} className='px-4 py-2 hover:bg-gray-100 cursor-pointer w-full block'><CiLogin /> Login / Register</Link>
               </>
             )}
           </ul>

@@ -20,7 +20,7 @@ function CustomInput(props, ref) {
       style={wrapperStyle}
       onClick={handleClick}
     >
-      { ((value || beforeText)) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
+      { (value || beforeText) && <span className={"text-gray-500 text-sm -translate-x-[3px] " + (value ? "" : "w-7 mr-2")}>{beforeText}</span> }
       
       {/* 
         This is the correct answer given @Joris's solution would override the change handler spread from {...register('name')} which returns {onChange, onBlur, name, ref}, and this could lead to bugs. 
@@ -35,7 +35,7 @@ function CustomInput(props, ref) {
         {...rest}
       >
       </input>
-      {label && <label className={value && 'filled'} htmlFor={name}>{label}</label> }
+      {label && <label className={(value || beforeText) && 'filled'} htmlFor={name}>{label}</label> }
       { (errors?.[name] && value) && <p className="absolute top-[7px] right-3 text-primary text-xs">{errors?.[name]?.message}</p> }
     </div>
   )

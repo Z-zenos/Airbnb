@@ -45,7 +45,7 @@ export default function WishlistsPage() {
   }, []);
 
   return (
-    <div className=" h-[77vh] lg:mt-0 w-full ">
+    <div className="lg:mt-0 w-full">
       <div className="grid lg:grid-cols-5 md:grid-cols-2 h-full">
         <div className="lg:col-span-3 md:col-span-1 overflow-y-scroll py-6">
           <div className={`lg:px-10 md:px-10 grid place-items-center md:gap-1 2xl:grid-cols-3 md:grid-cols-1 lg:grid-cols-2`}>

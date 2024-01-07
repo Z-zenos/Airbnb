@@ -352,9 +352,9 @@ export default function ReviewAccountPage() {
   const [step, setStep] = useState(0);
 
   return (
-    <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 ">
+    <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 relative">
       { isLoading 
-        ? <div className="flex justify-center items-center"><Spinner className="mx-auto" /></div> 
+        ? <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"><Spinner className="mx-auto" /></div> 
         : <>
           { isReviewAccountTokenValid ? (
           <div className="flex justify-center items-center flex-col py-[110px]">
@@ -390,9 +390,9 @@ export default function ReviewAccountPage() {
             </div>
           </div>
           ) : (
-          <div className="">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <RiProhibitedLine className="text-primary mx-auto w-[100px] h-[100px] mt-10" />
-            <p className="text-primary font-semibold flex justify-center items-center flex-col py-[110px]">You do not have permission to access this resource.</p>
+            <p className="text-primary font-semibold flex justify-center items-center flex-col py-10">You do not have permission to access this resource.</p>
           </div>
           )}
         </>

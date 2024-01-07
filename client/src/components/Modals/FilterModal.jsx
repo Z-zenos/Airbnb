@@ -53,6 +53,7 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
       selected: searchParams.get(bo.param) || false
     })
   ));
+  const[isLoading, setIsLoading] = useState(true);
 
   const [placeTypes, setPlaceTypes] = useState([]);
   const [query, setQuery] = useState("");
@@ -159,6 +160,7 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
   function handleFilters() {
     (async () => {
       try {
+        setIsLoading(true);
         const placeTypeQuery = placeType === 'any type' ? '' : `&place_type=${placeType}`;
         const bedroomsQuery = !bedrooms ? '' : `&bedrooms${bedrooms < 8 ? `=` : `[gte]=`}${bedrooms}`;
         const bedsQuery = !beds ? '' : `&beds${beds < 8 ? `=` : `[gte]=`}${beds}`;
@@ -167,7 +169,7 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
         const selectedAmenities = amenities.filter(a => a.selected === true);
         const amenitiesQuery = selectedAmenities.length ? `&${selectedAmenities.map(a => 'amenities=' + a.id).join('&')}` : '';
         const bookingOptionsQuery = bookingOptions.filter(bo => bo.selected).map(b => `&${b.param}=true`).join('');
-
+        
         let queryStr = `${priceQuery}${bedroomsQuery}${bathroomsQuery}${bedsQuery}${amenitiesQuery}${placeTypeQuery}${bookingOptionsQuery}`;
         setQuery(queryStr);
 
@@ -176,6 +178,8 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
         setFilteredPlaces(res.data.count);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }
@@ -303,6 +307,7 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
       secondaryActionLabel="Clear all"
       secondaryAction={handleClearAll}
       body={bodyContent}
+      isLoading={isLoading}
     />
   );
 }

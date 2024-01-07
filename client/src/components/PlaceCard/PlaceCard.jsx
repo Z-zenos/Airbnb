@@ -8,23 +8,33 @@ import { useContext, useState } from 'react';
 import { IntlContext } from '../../contexts/intl.context';
 import axios from 'axios';
 import { UserContext } from '../../contexts/user.context';
+import { ToastContext } from '../../contexts/toast.context';
+import Toast from '../Toast/Toast';
 
 export default function PlaceCard({ place, className, hasShowOnMapIcon, showOnMap }) {
     const { formatCurrency } = useContext(IntlContext);
     const { user, setUser } = useContext(UserContext);
     const [heart, setHeart] = useState(user?.wishlists?.includes(place?._id));
+    const { openToast } = useContext(ToastContext);
 
     async function handleUpdateWishlists() {
-      try {
-        setHeart(!heart);
-        const res = await axios.patch(`/users/wishlists`, {
-          place_id: place?._id,
-          state: heart ? 'unheart' : 'heart',
-        });
-
-        setUser(res.data.data.user);
-      } catch (err) {
-        setHeart(user?.wishlists?.includes(place?._id));
+      if(user?.email) {
+        try {
+          setHeart(!heart);
+          const res = await axios.patch(`/users/wishlists`, {
+            place_id: place?._id,
+            state: heart ? 'unheart' : 'heart',
+          });
+  
+          openToast(<Toast title="Success" content={`${!heart ? 'Added' : 'Removed'} ${place?.name} to your wishlist`} type="success" />);
+          setUser(res.data.data.user);
+        } catch (err) {
+          openToast(<Toast title="Failure" content={`Failure`} type="error" />);
+          setHeart(user?.wishlists?.includes(place?._id));
+        }
+      }
+      else {
+        openToast(<Toast title="Unauthorized" content={`Please login / register for using this feature`} type="info" />);
       }
     }
 

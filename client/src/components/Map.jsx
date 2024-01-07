@@ -30,7 +30,8 @@ export default function Map({
     rating: 0,
   }], 
   className,
-  spotPlace
+  spotPlace,
+  zoom = 4
 }) {
   const highlightPlace = spotPlace || locations[0];
 
@@ -40,7 +41,7 @@ export default function Map({
       zoom={highlightPlace.coordinate ? 4 : 2} 
       className={className}
     >
-      <ChangeView center={highlightPlace.coordinate} zoom={spotPlace ? 12 : 4} />
+      <ChangeView center={highlightPlace.coordinate} zoom={spotPlace ? 12 : zoom} />
       <TileLayer
         url={url}
         attribution={attribution}

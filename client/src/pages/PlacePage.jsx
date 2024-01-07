@@ -24,6 +24,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ModalContext } from "../contexts/modal.context";
 import ImageModal from "../components/Modals/ImageModal";
 import { UserContext } from "../contexts/user.context";
+import Map from "../components/Map";
 
 export default function PlacePage() {
   const { width } = useWindowDimensions();
@@ -445,13 +446,23 @@ export default function PlacePage() {
           <div className="py-8 px-2" ref={locationRef}>
             <h3 className="text-2xl font-medium">Where you{"'"}be</h3>
 
-            {/* 
-              Two options for q=
-              + q=lat,long -> q=25.30{priceAfterDiscount}008,51.4803216
-              + q=name_address -> q=morklake or q=Google, 8th Avenue, New York, NY, USA
-            */}
-            { place.location && <iframe className="mt-6 mx-auto" width="800" height="500" id="gmap_canvas" src={`https://maps.google.com/maps?q=${place.location.coordinates[1]},${place.location.coordinates[0]}&t=&z=13&ie=UTF8&iwloc=&output=embed&hl=en`} >
-            </iframe>}
+            { place.location && 
+              <div className="mt-3 rounded-xl h-[400px]">
+                <Map 
+                  locations={[{
+                    address: place.location.address,
+                    price: place.price,
+                    id: place.id,
+                    image_cover: place.image_cover,
+                    coordinate: place.location.coordinates,
+                    name: place.name,
+                    rating: place.average_ratings,
+                  }]} 
+                  className="h-full rounded-xl" 
+                  zoom={12}
+                />
+              </div>
+            }
           </div>
         </div>
 

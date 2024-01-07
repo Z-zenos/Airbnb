@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 export const UserContext = createContext({});
 
-const unauthorizedRoutes = ['review-account'];
+const unauthorizedRoutes = ['review-account', 'login'];
 
 // eslint-disable-next-line react/prop-types
 export function UserContextProvider({ children }) {
@@ -20,9 +20,7 @@ export function UserContextProvider({ children }) {
           const user = res.data.data.user;
           setUser(user);
         }
-      } catch(err) {
-        console.error(err);
-      }
+      } catch(err) { /* empty */ }
     })();
   }, []);
 
