@@ -15,8 +15,8 @@ const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const HIDE_SEARCH_URLS = ['users', 'account-settings', 'review-account', 'login'];
-const HIDE_USER_MENU_URLS = ['review-account'];
+const HIDE_SEARCH_URLS = ['users', 'account-settings', 'review-account', 'login', 'booking'];
+const HIDE_USER_MENU_URLS = ['review-account', 'booking'];
 
 export default function Header() {
   const { setIsCreatePlaceModalOpen, setIsIntlModalOpen } = useContext(ModalContext);

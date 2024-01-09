@@ -20,13 +20,14 @@ import { PlaceContext } from "../contexts/place.context";
 import axios from "axios";
 import Modal from "../components/Modals/Modal";
 import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ModalContext } from "../contexts/modal.context";
 import ImageModal from "../components/Modals/ImageModal";
 import { UserContext } from "../contexts/user.context";
 import Map from "../components/Map";
 
 export default function PlacePage() {
+  const navigate = useNavigate();
   const { width } = useWindowDimensions();
   const { user, setUser } = useContext(UserContext);
   const [open, setOpen] = useState(false);
@@ -133,12 +134,15 @@ export default function PlacePage() {
               </div>
             </div>
 
-            <button 
-              className="rounded-md text-center p-2 cursor-pointer bg-primary border border-primary text-white font-bold hover:bg-white hover:text-primary "
+            <Button 
+              className="rounded-md text-center p-2 cursor-pointer hover:bg-white hover:text-primary"
               type="submit"
+              onClick={() => {
+                navigate(`/booking/${place?.id}`);
+              }}
             >
               Reverse
-            </button>
+            </Button>
           </div>
         )}
       </Navbar>
@@ -380,12 +384,15 @@ export default function PlacePage() {
 
               </div>
               
-              <button 
-                className=" w-full bottom-[2px] rounded-md text-center p-2 cursor-pointer bg-primary border border-primary text-white font-bold hover:bg-white hover:text-primary my-4 mb-8"
+              <Button 
+                onClick={() => {
+                  navigate(`/booking/${place?.id}`);
+                }}
+                className="w-full flex items-center justify-center my-4 hover:bg-white hover:text-primary"
                 type="submit"
               >
                 Reverse
-              </button>
+              </Button>
 
               <div className=" font-light">
                 <div className="flex justify-between items-center mb-4">

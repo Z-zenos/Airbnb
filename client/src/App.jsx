@@ -18,6 +18,7 @@ import WishlistsPage from "./pages/WishlistsPage";
 import LoginSecurityPage from "./pages/LoginSecurityPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ReviewAccountPage from "./pages/ReviewAccountPage";
+import BookingPage from "./pages/BookingPage";
 
 
 // Apply for all requests
@@ -61,6 +62,8 @@ function App() {
                   <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
                   <Route path='/login' element={ <AuthPage /> } />
                   <Route path='/places/:id' element={ <PlacePage /> } />
+                  
+                  <Route path='/booking/:place_id' element={ <BookingPage /> } />
                 </Route>
               </Routes>
             </ToastContextProvider>
