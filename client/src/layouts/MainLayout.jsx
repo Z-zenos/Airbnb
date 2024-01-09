@@ -6,7 +6,7 @@ export default function MainLayout() {
   return (
     <div className="flex flex-col h-screen">
       <Header />
-      <div className="main flex flex-1 overflow-y-scroll mb-3">
+      <div className="main flex-1 overflow-y-scroll mb-3">
         <Outlet />
       </div>
       <Footer />

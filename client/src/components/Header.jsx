@@ -48,6 +48,11 @@ export default function Header() {
 
   async function logout() {
     try {
+      /*
+        If you are setting the cookie on a response in a login route/controller in express backend for JWT and are using 'httpOnly' option, you are unable to access the token from the client/react, even when using a third party library like 'universal-cookie' or 'document.cookie'.
+        
+        You will need to clear the cookie on the response from the backend e.g. when a user logs out in the logout controller as detailed below.
+      */
       await axios.get('/auth/logout');
       window.location.reload();
     } catch (error) {
