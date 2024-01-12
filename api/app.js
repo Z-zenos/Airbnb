@@ -12,6 +12,7 @@ const amenityRouter = require('./routes/amenity.route');
 const authRouter = require('./routes/auth.route');
 const imageRouter = require('./routes/image.route');
 const resourceRouter = require('./routes/resource.route');
+const bookingRouter = require('./routes/booking.route');
 const placeRouter = require('./routes/place.route');
 
 const AppError = require('./utils/appError');
@@ -74,7 +75,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.get('/_health', (req, res) => {
-	res.status(200).render('confirm_email_changed');
+	res.status(200).send('ok');
 });
 
 app.use('/api/v1/auth', authRouter);
@@ -82,8 +83,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/v1/places', placeRouter);
 app.use('/api/v1/amenities', amenityRouter);
 app.use('/api/v1/resources', resourceRouter);
+app.use('/api/v1/bookings', bookingRouter);
 app.use('/api/v1/images', imageRouter);
-
 
 
 // Handling Unhandled Routes

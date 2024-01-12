@@ -2,16 +2,29 @@ import { FaAngleLeft, FaStar } from "react-icons/fa6";
 import Button from "../components/Button/Button";
 import { LiaBusinessTimeSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
+import Checkout from "../components/Checkout/Checkout";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 export default function BookingPage() {
   const navigate = useNavigate();
+  const placeId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
+  const [place, setPlace] = useState();
+
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get(`places/${placeId}`);
+      setPlace(res.data.data.place);
+    })();
+  }, []);
+
 
   return (
     <div className="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid sm:grid-cols-4 lg:grid-cols-5 md:gap-10 lg:gap-20 p-10">
       <div className="lg:col-span-3 sm:col-span-2">
         <p 
           className="text-2xl flex items-center "
-          onClick={() => navigate('')}
+          onClick={() => navigate(`/places/${placeId}`)}
         >
           <FaAngleLeft className="inline cursor-pointer" />
           Request to Book
@@ -36,7 +49,7 @@ export default function BookingPage() {
           <div className="flex justify-between">
             <div>
               <p className="text-[18px] mb-1">Guests</p>
-              <p className="font-light">1 guests</p>
+              <p className="font-light">{place?.guests} guests</p>
             </div>
             <p 
               onClick={() => {}} 
@@ -50,6 +63,7 @@ export default function BookingPage() {
         <div className="text-[15px] py-6 border-b border-b-gray-300">
           <p className="font-medium text-xl mb-4">Pay with</p>
           <div>
+            <Checkout placeId={placeId} />
           </div>
         </div>
 
@@ -121,11 +135,11 @@ export default function BookingPage() {
       <div className="lg:col-span-2 sm:col-span-2">
         <div className="fixed mt-20 p-8 sm:flex sm:justify-between sm:items-center sm:relative md:block border border-gray-300 rounded-xl">
           <div className="flex gap-4 pb-5 border-b border-b-gray-300">
-            <img src="https://a0.muscache.com/im/pictures/miso/Hosting-13903824/original/82d996fb-d7c4-46a8-a713-febd281cd69f.jpeg?aki_policy=large" className="w-[150px] h-[120px] rounded-xl" />
+            <img src={`http://localhost:3000/images/places/${place?.image_cover}`} className="w-[150px] h-[120px] rounded-xl" />
             <div className="flex flex-col justify-between">
               <div>
-                <p className="font-light mb-1 opacity-70 text-[13px]">Room in condo</p>
-                <p className="font-light text-sm">Noble rooom into the historical Torino</p>
+                <p className="font-light mb-1 opacity-70 text-[13px]">Room in {place?.location?.address}</p>
+                <p className="font-light text-sm">{place?.name}</p>
               </div>
               <p className="text-sm">
                 <span className="font-semibold flex-inline mr-1 items-center">
