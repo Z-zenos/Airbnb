@@ -36,8 +36,6 @@ export default function ImageUpload({
         else formData.append("images", image);
       });
 
-      console.log(formData);
-
       const res = await axios.patch(
         `/images/${placeId}/upload`,
         formData,

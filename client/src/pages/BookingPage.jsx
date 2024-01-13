@@ -1,17 +1,31 @@
 import { FaAngleLeft, FaStar } from "react-icons/fa6";
 import Button from "../components/Button/Button";
 import { LiaBusinessTimeSolid } from "react-icons/lia";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Checkout from "../components/Checkout/Checkout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner/Spinner";
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 
 export default function BookingPage() {
   const navigate = useNavigate();
   const placeId = location.pathname.slice(location.pathname.lastIndexOf('/') + 1);
   const [place, setPlace] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const [guests, setGuests] = useState({
+    adults: +searchParams.get("adults") || 1,
+    children: +searchParams.get("children") || 0,
+    pets: +searchParams.get("pets") || 1,
+    total: +searchParams.get("adults") + (+searchParams.get("children")) + (+searchParams.get("pets")),
+  });
+  const checkInDate = searchParams.get("checkInDate");
+  const checkOutDate = searchParams.get("checkOutDate");
+  const datediff = (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24);
 
   useEffect(() => {
     (async () => {
@@ -26,6 +40,11 @@ export default function BookingPage() {
       }
     })();
   }, []);
+
+  function formatDate(date) {
+    const ymd = date.split('-');
+    return `${ymd[0]}, ${monthNames[+ymd[1]]} ${ymd[2]}`;
+  }
 
   return (
     <div className="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid sm:grid-cols-4 lg:grid-cols-5 md:gap-10 lg:gap-20 p-10">
@@ -46,7 +65,7 @@ export default function BookingPage() {
               <div className="flex justify-between mb-4">
                 <div>
                   <p className="text-[18px] mb-1">Dates</p>
-                  <p className="font-light">Jan 10 - 15</p>
+                  <p className="font-light">{formatDate(checkInDate)} – {formatDate(checkOutDate)}</p>
                 </div>
                 <p 
                   onClick={() => {}} 
@@ -59,7 +78,7 @@ export default function BookingPage() {
               <div className="flex justify-between">
                 <div>
                   <p className="text-[18px] mb-1">Guests</p>
-                  <p className="font-light">{place?.guests} guests</p>
+                  <p className="font-light">{guests?.total} guests</p>
                 </div>
                 <p 
                   onClick={() => {}} 
@@ -169,27 +188,21 @@ export default function BookingPage() {
                 <ul className="flex flex-col gap-4 font-light">
                   <li className="flex justify-between items-center">
                     <span className="underline">
-                      $46.42 x 5 nights
+                      ${place?.price} x {datediff} nights
                     </span>
                     <span>$232.09</span>
                   </li>
                   <li className="flex justify-between items-center">
                     <span className="underline">
-                      Cleaning fee
+                      Discounts
                     </span>
-                    <span>$21.90</span>
+                    <span>-{place?.price_discount * 100}%</span>
                   </li>
                   <li className="flex justify-between items-center">
                     <span className="underline">
                       Airbnb service fee
                     </span>
-                    <span>$35.86</span>
-                  </li>
-                  <li className="flex justify-between items-center">
-                    <span className="underline">
-                      Taxes
-                    </span>
-                    <span>$12.59</span>
+                    <span>$1</span>
                   </li>
                 </ul>
               </div>

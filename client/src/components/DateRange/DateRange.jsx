@@ -25,7 +25,7 @@ export default function DateRange() {
   }
 
   return (
-    <div ref={dateRangeRef} className="relative flex border border-gray-400 rounded-tl-xl rounded-tr-xl" onClick={handleClick}>
+    <div ref={dateRangeRef} id="daterange" className="relative flex border border-gray-400 rounded-tl-xl rounded-tr-xl" onClick={handleClick}>
       <div className="w-1/2 p-3 border-r-[1px] border-gray-400">
         <p className="font-medium text-[11px]">CHECK-IN</p>
         <p className="text-sm text-gray-600">{checkInDate ? format(checkInDate, 'dd-MM-yyyy') : 'Add date'}</p>

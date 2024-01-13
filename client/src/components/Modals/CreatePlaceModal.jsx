@@ -131,8 +131,6 @@ export default function CreatePlaceModal() {
     }
   }, [step, name, location?.country, price]);
 
-  console.log(getValues());
-
   function onNext() {
     if(!isErrorsOfStep(step))
       setStep(prevStep => prevStep + 1);
@@ -149,15 +147,12 @@ export default function CreatePlaceModal() {
     delete placeData._id;
     delete placeData.host;
 
-    console.log(placeData);
-
     try {
       const resp = await axios.patch(`/places/${getValues()._id}`, placeData, {
         headers: {
           "Content-Type": "application/json"
         },
       });
-      console.log(resp);
     } catch(err) {
       console.log(err);
     }

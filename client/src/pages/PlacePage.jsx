@@ -51,8 +51,13 @@ export default function PlacePage() {
 
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
-  const priceAfterDiscount = place.price -  Math.trunc(place.price * place.price_discount / 100);
   const [heart, setHeart] = useState();
+  const [guests, setGuests] = useState({
+    adults: 1,
+    children: 0,
+    pets: 0,
+    total: 1,
+  });
 
   useEffect(() => {
     (async () => {
@@ -100,6 +105,17 @@ export default function PlacePage() {
     }
   }
 
+  function calculateFees(airbnbServiceFee = 1) {
+    const total = place?.price * datediff;
+    return airbnbServiceFee + (datediff 
+      ? total - Math.trunc(total * place?.price_discount)
+      : place?.price - Math.trunc(place?.price * place?.price_discount)); 
+  }
+
+  function formatDate(date) {
+    return new Date(date).toISOString().split('T')[0];
+  }
+
   return (
     <>
       <Navbar className="flex justify-between items-center w-full">
@@ -112,16 +128,15 @@ export default function PlacePage() {
 
         {!isPurchaseCardVisible && (
           <div className="flex justify-start items-center">
-            <div className="w-[140px]">
+            <div className="w-[160px]">
               <span className="-translate-y-1 font-light text-sm line-through text-gray-400">
-                <span className="font-medium text-lg">
+                <span className="font-medium text-lg mr-2">
                   <BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}
                 </span>
               </span>
               <span className="-translate-y-1 font-light text-sm">
                 <span className="font-medium text-lg mr-1">
-                  <BsCurrencyDollar className="inline -translate-y-[2px]" />
-                  {priceAfterDiscount}
+                  {place?.price - Math.trunc(place?.price * place?.price_discount) + 1}
                 </span> 
                 night
               </span>
@@ -138,7 +153,7 @@ export default function PlacePage() {
               className="rounded-md text-center p-2 cursor-pointer hover:bg-white hover:text-primary"
               type="submit"
               onClick={() => {
-                navigate(`/booking/${place?.id}`);
+                navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${formatDate(checkInDate)}&checkOutDate=${formatDate(checkOutDate)}`);
               }}
             >
               Reverse
@@ -334,14 +349,6 @@ export default function PlacePage() {
                       <span className="">{amenity.name}</span>
                     </div>
                   ))}
-                  
-
-                  {/* <div className="flex gap-4 items-center">
-                    <span className="relative before:absolute before:w-[2px] before:h-[140%] before:bg-black before:block before:-rotate-45 before:left-1/2 before:-top-1">
-                      <BsMicrosoftTeams className="inline text-[24px] font-light" />
-                    </span>
-                    <span className="font-light line-through">Ms.Team</span>
-                  </div> */}
                 </div>
 
                 <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary " label={`Show all ${place?.amenities?.length} amenities`} onClick={() => setOpen(true)} />
@@ -367,9 +374,9 @@ export default function PlacePage() {
 
             </div>
 
-            <div ref={purchaseCardRef} className="rounded-xl shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px] py-7 px-5 w-[35%] ml-10 my-10 border border-gray-30 sticky right-2 top-32">
+            <div ref={purchaseCardRef} className="rounded-xl shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px] py-7 px-5 w-[35%] border border-[rgb(221, 221, 221)] ml-10 my-10 sticky right-2 top-32">
               <div className="flex justify-between items-center">
-                <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{priceAfterDiscount}</span> night</p>
+                <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place?.price}</span> night</p>
                 <div>
                   <span className="font-medium"><AiFillStar className="inline text-yellow-400" /> {place.average_ratings}</span>
                   <span className="mx-2 font-medium">·</span>
@@ -379,41 +386,71 @@ export default function PlacePage() {
 
               <div className="mt-4">
                 <DateRange />
-                <GuestInput className="border-t-0 rounded-bl-xl rounded-br-xl" />
-              </div>
-              
-              <Button 
-                onClick={() => {
-                  navigate(`/booking/${place?.id}`);
-                }}
-                className="w-full flex items-center justify-center my-4 hover:bg-white hover:text-primary"
-                type="submit"
-              >
-                Reverse
-              </Button>
-
-              <div className=" font-light">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="underline">
-                    <BsCurrencyDollar className="inline -translate-y-[2px]" />
-                    {priceAfterDiscount} x <span>{datediff} nights</span>
-                  </span>
-                  <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />{priceAfterDiscount * datediff}</span>
-                </div>
-                <div className="flex justify-between items-center mb-4">
-                  <span className="underline">
-                    Airbnb service fee
-                  </span>
-                  <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />144</span>
-                </div>
+                <GuestInput 
+                  className="border-t-0 rounded-bl-xl rounded-br-xl" 
+                  guests={guests}
+                  setGuests={setGuests}
+                  max_guests={place?.guests}
+                  max_children={place?.rules?.children}
+                  pets_allowed={place?.rules?.pets_allowed}
+                  max_pets={place?.rules?.pets}
+                />
               </div>
 
-              <div className="h-[1px] bg-gray-300"></div>
+              { datediff 
+                ? (
+                  <>
+                    <Button 
+                      onClick={() => {
+                        navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${formatDate(checkInDate)}&checkOutDate=${formatDate(checkOutDate)}`);
+                      }}
+                      className="w-full flex items-center justify-center my-4 hover:bg-white hover:text-primary"
+                      type="submit"
+                    >
+                      Reverse
+                    </Button>
+                    <div className="font-light">
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="underline">
+                          ${place?.price} x <span>{datediff} nights</span>
+                        </span>
+                        <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />{place?.price * datediff}</span>
+                      </div>
+                      { place?.price_discount && (
+                        <div className="flex justify-between items-center mb-3">
+                          <span className="underline">
+                            Discount
+                          </span>
+                          <span>-{place?.price_discount * 100}%</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center mb-3">
+                        <span className="underline">
+                          Airbnb service fee
+                        </span>
+                        <span><BsCurrencyDollar className="inline text-gray-700 -translate-y-[2px]" />1</span>
+                      </div>
+                    </div>
 
-              <div className="flex justify-between items-center mt-4 font-medium">
-                <p>Total before taxes</p>
-                <p><BsCurrencyDollar className="inline -translate-y-[2px]" />{priceAfterDiscount * datediff + 144}</p>
-              </div>
+                    <div className="h-[1px] bg-gray-300"></div>
+
+                    <div className="flex justify-between items-center mt-4 font-medium">
+                      <p>Total before taxes</p>
+                      <p><BsCurrencyDollar className="inline -translate-y-[2px]" />{calculateFees()}</p>
+                    </div>
+                  </>
+                ) 
+                : (
+                  <Button 
+                    onClick={() => {
+                      document.getElementById("daterange").click();
+                    }}
+                    className="w-full flex items-center justify-center mt-4 hover:bg-white hover:text-primary"
+                  >
+                    Check availability
+                  </Button>
+                )
+              }
             </div>
           </div>
 

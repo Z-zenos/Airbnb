@@ -41,7 +41,6 @@ export default function ForgotPasswordModal() {
         });
 
         openToast(<Toast type="success" title="Successfully" content={res.data.message} />);
-        console.log(forgotPasswordFormData);
 
       } catch (error) {
         openToast(<Toast type="error" title="Failure" content={error.response.data.message} />);

@@ -110,8 +110,6 @@ export default function ReviewAccountPage() {
       try {
         setIsLoading(true);
 
-        console.log(resetPasswordFormData);
-
         const config = {
           headers: {
             "Content-Type": "application/json"

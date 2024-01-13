@@ -119,7 +119,6 @@ export default function PersonalInfoPage() {
 
         const res = await axios.patch(`/users/me`, formData, config);
 
-        console.log(res.data);
         if(res.data.email)
           openToast(<Toast title="Pending" content={`Please check email: ${res.data.email}`} type="warn" />)
         else {

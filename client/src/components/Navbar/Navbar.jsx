@@ -5,7 +5,6 @@ export default function Navbar({ children, className }) {
 
   const handleScroll = () => {
     const currentScrollPos = document.querySelector('.main').scrollTop;
-    console.log(currentScrollPos);
     setVisible(currentScrollPos > 600);
   }
 
