@@ -8,7 +8,6 @@ import { BsCurrencyDollar, BsCalendarWeek, BsHouses } from "react-icons/bs";
 import { MdVerifiedUser } from "react-icons/md";
 import { FaRegHeart, FaHeart } from "react-icons/fa6";
 
-import Input from "../components/Input/Input";
 import DateRange from "../components/DateRange/DateRange";
 import { DateRange as SimpleDateRange } from 'react-date-range';
 import { useRef, useContext, useEffect, useState } from "react";
@@ -25,6 +24,7 @@ import { ModalContext } from "../contexts/modal.context";
 import ImageModal from "../components/Modals/ImageModal";
 import { UserContext } from "../contexts/user.context";
 import Map from "../components/Map";
+import GuestInput from "../components/Input/GuestInput";
 
 export default function PlacePage() {
   const navigate = useNavigate();
@@ -378,10 +378,8 @@ export default function PlacePage() {
               </div>
 
               <div className="mt-4">
-                
                 <DateRange />
-                <Input label="GUESTS" type="number" className="border-t-0 rounded-bl-xl rounded-br-xl" />
-
+                <GuestInput className="border-t-0 rounded-bl-xl rounded-br-xl" />
               </div>
               
               <Button 

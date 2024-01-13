@@ -4,7 +4,7 @@ import {
   EmbeddedCheckout
 } from '@stripe/react-stripe-js';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 
 // Make sure to call 'loadStripe' outside of a component's render to avoid
 // recreating the 'Stripe' object on every render
