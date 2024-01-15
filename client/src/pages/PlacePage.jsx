@@ -14,7 +14,6 @@ import { useRef, useContext, useEffect, useState } from "react";
 import useWindowDimensions from "../hooks/useWindowDementions";
 import Navbar from "../components/Navbar/Navbar";
 import useOnScreen from "../hooks/useOnScreen";
-import { PlaceContext } from "../contexts/place.context";
 
 import axios from "axios";
 import Modal from "../components/Modals/Modal";
@@ -25,6 +24,7 @@ import ImageModal from "../components/Modals/ImageModal";
 import { UserContext } from "../contexts/user.context";
 import Map from "../components/Map";
 import GuestInput from "../components/Input/GuestInput";
+import useDateRange from "../hooks/useDateRange";
 
 export default function PlacePage() {
   const navigate = useNavigate();
@@ -45,9 +45,9 @@ export default function PlacePage() {
   const {
     checkInDate, checkOutDate,
     selectionRange, handleSelectDateRange
-  } = useContext(PlaceContext);
+  } = useDateRange();
 
-  const datediff = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
+  const datediff = (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24) + 1;
 
   const [place, setPlace] = useState({});
   const [amenities, setAmenities] = useState([]);
@@ -112,10 +112,6 @@ export default function PlacePage() {
       : place?.price - Math.trunc(place?.price * place?.price_discount)); 
   }
 
-  function formatDate(date) {
-    return new Date(date).toISOString().split('T')[0];
-  }
-
   return (
     <>
       <Navbar className="flex justify-between items-center w-full">
@@ -153,7 +149,7 @@ export default function PlacePage() {
               className="rounded-md text-center p-2 cursor-pointer hover:bg-white hover:text-primary"
               type="submit"
               onClick={() => {
-                navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${formatDate(checkInDate)}&checkOutDate=${formatDate(checkOutDate)}`);
+                navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${checkInDate.getTime()}&checkOutDate=${checkOutDate.getTime()}`);
               }}
             >
               Reverse
@@ -385,7 +381,13 @@ export default function PlacePage() {
               </div>
 
               <div className="mt-4">
-                <DateRange />
+                <DateRange 
+                  className="rounded-tl-xl rounded-tr-xl"
+                  checkin={checkInDate}
+                  checkout={checkOutDate}
+                  onDateRangeChange={handleSelectDateRange}
+                  selectionRange={selectionRange}
+                />
                 <GuestInput 
                   className="border-t-0 rounded-bl-xl rounded-br-xl" 
                   guests={guests}
@@ -397,12 +399,12 @@ export default function PlacePage() {
                 />
               </div>
 
-              { datediff 
+              { datediff - 1
                 ? (
                   <>
                     <Button 
                       onClick={() => {
-                        navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${formatDate(checkInDate)}&checkOutDate=${formatDate(checkOutDate)}`);
+                        navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${checkInDate.getTime()}&checkOutDate=${checkOutDate.getTime()}`);
                       }}
                       className="w-full flex items-center justify-center my-4 hover:bg-white hover:text-primary"
                       type="submit"

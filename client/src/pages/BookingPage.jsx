@@ -6,10 +6,9 @@ import Checkout from "../components/Checkout/Checkout";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner/Spinner";
-
-const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+import GuestInput from "../components/Input/GuestInput";
+import DateRange from "../components/DateRange/DateRange";
+import useDateRange from "../hooks/useDateRange";
 
 export default function BookingPage() {
   const navigate = useNavigate();
@@ -23,9 +22,17 @@ export default function BookingPage() {
     pets: +searchParams.get("pets") || 1,
     total: +searchParams.get("adults") + (+searchParams.get("children")) + (+searchParams.get("pets")),
   });
-  const checkInDate = searchParams.get("checkInDate");
-  const checkOutDate = searchParams.get("checkOutDate");
-  const datediff = (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24);
+
+  const {
+    checkInDate, checkOutDate,
+    handleSelectDateRange,
+    selectionRange
+  } = useDateRange(
+    +searchParams.get('checkInDate'), 
+    +searchParams.get('checkOutDate')
+  );
+
+  const datediff = (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24) + 1;
 
   useEffect(() => {
     (async () => {
@@ -40,11 +47,6 @@ export default function BookingPage() {
       }
     })();
   }, []);
-
-  function formatDate(date) {
-    const ymd = date.split('-');
-    return `${ymd[0]}, ${monthNames[+ymd[1]]} ${ymd[2]}`;
-  }
 
   return (
     <div className="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid sm:grid-cols-4 lg:grid-cols-5 md:gap-10 lg:gap-20 p-10">
@@ -62,30 +64,25 @@ export default function BookingPage() {
               <p className="font-medium text-xl mb-4">
                 Your trip
               </p>
-              <div className="flex justify-between mb-4">
-                <div>
-                  <p className="text-[18px] mb-1">Dates</p>
-                  <p className="font-light">{formatDate(checkInDate)} – {formatDate(checkOutDate)}</p>
-                </div>
-                <p 
-                  onClick={() => {}} 
-                  className="underline cursor-pointer text-[15px]"
-                >
-                  Edit
-                </p>
-              </div>
-
-              <div className="flex justify-between">
-                <div>
-                  <p className="text-[18px] mb-1">Guests</p>
-                  <p className="font-light">{guests?.total} guests</p>
-                </div>
-                <p 
-                  onClick={() => {}} 
-                  className="underline cursor-pointer text-[15px]"
-                >
-                  Edit
-                </p>
+              <div className="">
+                <DateRange 
+                  className="rounded-tl-md rounded-tr-md border-b-0"
+                  checkin={checkInDate}
+                  checkout={checkOutDate}
+                  onDateRangeChange={handleSelectDateRange}
+                  selectionRange={selectionRange}
+                  calendarClassName="left-0"
+                />
+                <GuestInput 
+                  className="rounded-bl-md rounded-br-md h-16" 
+                  guests={guests}
+                  setGuests={setGuests}
+                  max_guests={place?.guests}
+                  max_children={place?.rules?.children}
+                  pets_allowed={place?.rules?.pets_allowed}
+                  max_pets={place?.rules?.pets}
+                  menuClassName="left-0 top-14"
+                />
               </div>
             </div>
 
@@ -196,7 +193,7 @@ export default function BookingPage() {
                     <span className="underline">
                       Discounts
                     </span>
-                    <span>-{place?.price_discount * 100}%</span>
+                    <span className=" text-green-600">-{place?.price_discount * 100}%</span>
                   </li>
                   <li className="flex justify-between items-center">
                     <span className="underline">

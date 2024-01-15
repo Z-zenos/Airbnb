@@ -6,7 +6,6 @@ import MainLayout from './layouts/MainLayout';
 import axios from 'axios';
 import { UserContextProvider } from './contexts/user.context';
 import PlacePage from './pages/PlacePage';
-import { PlaceContextProvider } from './contexts/place.context';
 import { ModalContextProvider } from './contexts/modal.context';
 import { ToastContextProvider } from './contexts/toast.context';
 import UserPage from "./pages/UserPage";
@@ -42,35 +41,33 @@ function App() {
   const [searchParams] = useSearchParams();
 
   return (
-    <PlaceContextProvider>
-      <UserContextProvider>
-        <IntlContextProvider>
-          <ModalContextProvider>
-            <ToastContextProvider>
-              <Routes>
-                <Route path='/' element={ <MainLayout /> } >
-                  <Route index element={<IndexPage />} />
-                  <Route path="/places" element={<IndexPage />} />
-                  <Route path="/places/search" element={<IndexPage />} />
-                  <Route path="/wishlists" element={<WishlistsPage />} />
-                  <Route path="/account-settings" element={<AccountSettingPage />} />
-                  
-                  <Route path="/account-settings/personal-info" element={<PersonalInfoPage />} />
-                  <Route path="/account-settings/security" element={<LoginSecurityPage />} />
-                  <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
-                  <Route path="/review-account/:token" element={<ReviewAccountPage />} />
-                  <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
-                  <Route path='/login' element={ <AuthPage /> } />
-                  <Route path='/places/:id' element={ <PlacePage /> } />
-                  
-                  <Route path='/booking/:place_id' element={ <BookingPage /> } />
-                </Route>
-              </Routes>
-            </ToastContextProvider>
-          </ModalContextProvider>
-        </IntlContextProvider>
-      </UserContextProvider>
-    </PlaceContextProvider>
+    <IntlContextProvider>
+      <ModalContextProvider>
+        <ToastContextProvider>
+          <UserContextProvider>
+            <Routes>
+              <Route path='/' element={ <MainLayout /> } >
+                <Route index element={<IndexPage />} />
+                <Route path="/places" element={<IndexPage />} />
+                <Route path="/places/search" element={<IndexPage />} />
+                <Route path="/wishlists" element={<WishlistsPage />} />
+                <Route path="/account-settings" element={<AccountSettingPage />} />
+                
+                <Route path="/account-settings/personal-info" element={<PersonalInfoPage />} />
+                <Route path="/account-settings/security" element={<LoginSecurityPage />} />
+                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                <Route path="/review-account/:token" element={<ReviewAccountPage />} />
+                <Route path="/users/profile/:id" element={searchParams.get('editMode') ? <UserEditPage /> : <UserPage />} />
+                <Route path='/login' element={ <AuthPage /> } />
+                <Route path='/places/:id' element={ <PlacePage /> } />
+                
+                <Route path='/booking/:place_id' element={ <BookingPage /> } />
+              </Route>
+            </Routes>
+          </UserContextProvider>
+        </ToastContextProvider>
+      </ModalContextProvider>
+    </IntlContextProvider>
   );
 }
 
