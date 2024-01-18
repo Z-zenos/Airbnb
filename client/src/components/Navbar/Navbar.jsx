@@ -15,7 +15,13 @@ export default function Navbar({ children, className }) {
   });
 
   return (
-    <div className={className + ` bg-white shadow-sm z-10 shadow-gray-300 h-20 flex items-center px-10 fixed w-full ${visible ? 'top-0 visible' : 'hidden'} `}>
+    <div className={`
+        bg-white shadow-sm z-10 shadow-gray-300 h-20 
+        flex items-center px-10 fixed w-full 
+        ${visible ? 'top-0 visible' : 'hidden'}
+        ${className}
+      `}
+    >
       {children}
     </div>
   );

@@ -127,18 +127,18 @@ export default function PlacePage() {
             <div className="w-[160px]">
               <span className="-translate-y-1 font-light text-sm line-through text-gray-400">
                 <span className="font-medium text-lg mr-2">
-                  <BsCurrencyDollar className="inline -translate-y-[2px]" />{place.price}
+                  <BsCurrencyDollar className="inline -translate-y-[2px]" />{place?.price}
                 </span>
               </span>
               <span className="-translate-y-1 font-light text-sm">
                 <span className="font-medium text-lg mr-1">
-                  {place?.price - Math.trunc(place?.price * place?.price_discount) + 1}
+                  {place?.price && place?.price - Math.trunc(place?.price * place?.price_discount) + 1}
                 </span> 
                 night
               </span>
               <div className="text-[12px]">
                 <span className="">
-                  <AiFillStar className="inline font-medium text-yellow-400" /> {place.average_ratings}
+                  <AiFillStar className="inline font-medium text-yellow-400" /> {place?.average_ratings}
                 </span>
                 <span className="mx-1 font-medium">·</span>
                 <span className="text-gray-500">205 reviews</span>
@@ -149,8 +149,9 @@ export default function PlacePage() {
               className="rounded-md text-center p-2 cursor-pointer hover:bg-white hover:text-primary"
               type="submit"
               onClick={() => {
-                navigate(`/booking/${place?.id}?adults=${guests.adults}&children=${guests.children}&pets=${guests.pets}&checkInDate=${checkInDate.getTime()}&checkOutDate=${checkOutDate.getTime()}`);
+                navigate(`/booking/${place?.id}?adults=${guests?.adults}&children=${guests?.children}&pets=${guests?.pets}&checkInDate=${checkInDate.getTime()}&checkOutDate=${checkOutDate?.getTime()}`);
               }}
+              disabled={!(datediff - 1)}
             >
               Reverse
             </Button>
@@ -358,10 +359,10 @@ export default function PlacePage() {
                 <div>
                 <SimpleDateRange
                   onChange={handleSelectDateRange}
-                  months={width < 1000 ? 1 : 2}
                   minDate={new Date()}
+                  months={2}
                   ranges={[selectionRange]}
-                  direction="horizontal"
+                  direction={width > 1000 ? 'horizontal' : 'vertical'}
                   rangeColors={["#ff385c"]}
                   className={"my-8 text-black " + (width < 1000 ? 'w-full text-[16px] [&_.rdrMonth]:w-full ' : '')}
                 />

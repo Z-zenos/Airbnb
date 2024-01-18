@@ -48,6 +48,13 @@ export default function BookingPage() {
     })();
   }, []);
 
+  function calculateFees(airbnbServiceFee = 1) {
+    const total = place?.price * datediff;
+    return airbnbServiceFee + (datediff 
+      ? total - Math.trunc(total * place?.price_discount)
+      : place?.price - Math.trunc(place?.price * place?.price_discount)); 
+  }
+
   return (
     <div className="2xl:w-[60%] xl:w-[60%] lg:w-[60%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid sm:grid-cols-4 lg:grid-cols-5 md:gap-10 lg:gap-20 p-10">
       { isLoading ? <Spinner className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" /> : (
@@ -170,9 +177,9 @@ export default function BookingPage() {
                   <p className="text-sm">
                     <span className="font-semibold flex-inline mr-1 items-center">
                       <FaStar className="inline" />
-                      <span>4,99</span>
+                      <span>{place?.average_ratings}</span>
                     </span>
-                    <span className="font-light opacity-70">(170)</span>
+                    <span className="font-light opacity-70">({place?.quantity_ratings})</span>
                   </p>
                 </div>
 
@@ -187,7 +194,7 @@ export default function BookingPage() {
                     <span className="underline">
                       ${place?.price} x {datediff} nights
                     </span>
-                    <span>$232.09</span>
+                    <span>${place?.price * datediff}</span>
                   </li>
                   <li className="flex justify-between items-center">
                     <span className="underline">
@@ -206,7 +213,7 @@ export default function BookingPage() {
               <div className="pt-6">
                 <p className="flex justify-between items-center text-lg font-medium">
                   <span>Total <span>(USD)</span></span>
-                  <span>$302.44</span>
+                  <span>${calculateFees()}</span>
                 </p>
               </div>
             </div>

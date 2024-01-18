@@ -25,7 +25,7 @@ export default function GuestInput({
   }
 
   const guestInputRef = useRef(null);
-  useOutsideDetector(guestInputRef, "", setIsOpenGuestMenu);
+  useOutsideDetector(guestInputRef, "_", setIsOpenGuestMenu);
 
   return (
     <div className={`
