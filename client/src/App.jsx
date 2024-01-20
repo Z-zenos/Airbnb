@@ -18,6 +18,7 @@ import LoginSecurityPage from "./pages/LoginSecurityPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import ReviewAccountPage from "./pages/ReviewAccountPage";
 import BookingPage from "./pages/BookingPage";
+import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 
 
 // Apply for all requests
@@ -62,6 +63,7 @@ function App() {
                 <Route path='/places/:id' element={ <PlacePage /> } />
                 
                 <Route path='/booking/:place_id' element={ <BookingPage /> } />
+                <Route path='/booking/result' element={ <CheckoutSuccessPage /> } />
               </Route>
             </Routes>
           </UserContextProvider>

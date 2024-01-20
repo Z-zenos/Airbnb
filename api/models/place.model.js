@@ -89,6 +89,7 @@ const placeSchema = new mongoose.Schema(
       set: val => Math.round(val * 100) / 100
     },
 
+    // Assume each time that a guest fulfill checkout then increase quantity_ratings up 1 unit
     quantity_ratings: {
       type: Number,
       default: 0
@@ -189,7 +190,7 @@ const placeSchema = new mongoose.Schema(
         message: 'status is either: creating, published, deactivated'
       }
     },
-    
+
     safety: {
       type: safetySchema,
       default: () => ({}),
@@ -226,7 +227,7 @@ placeSchema.index({ 'location.address': "text" }, {
 
 // DOCUMENT MIDDLEWARE: runs before .save() and .create()
 
-placeSchema.pre(/^find/, async function(next) {
+placeSchema.pre(/^find/, async function (next) {
   // await Place.ensureIndexes({ 
   //   "location.address": "text", 
   // }, { 
@@ -237,7 +238,7 @@ placeSchema.pre(/^find/, async function(next) {
   next();
 })
 
-placeSchema.pre('save', function(next) {
+placeSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
@@ -258,7 +259,7 @@ placeSchema.pre('save', function(next) {
 
 // QUERY MIDDLEWARE
 
-placeSchema.pre(/^find/, function(next) {
+placeSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'property_type',
     select: '-__v -_id -created -modified'

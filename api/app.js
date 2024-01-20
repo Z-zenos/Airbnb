@@ -4,6 +4,12 @@ const express = require("express");
 const cors = require("cors");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const bodyParser = require('body-parser');
+const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const compression = require('compression');
 
 const logger = require('./utils/logger');
 
@@ -14,6 +20,7 @@ const imageRouter = require('./routes/image.route');
 const resourceRouter = require('./routes/resource.route');
 const bookingRouter = require('./routes/booking.route');
 const placeRouter = require('./routes/place.route');
+const bookingController = require('./controllers/booking.controller');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/error.controller');
@@ -69,12 +76,38 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.disable('x-powered-by');
 
+app.use(helmet());
+
+// Limit requests from same API
+const limiter = rateLimit({
+	max: 100,
+	windowMs: 60 * 60 * 1000,
+	message: 'Too many requests from this IP, please try again in an hour!'
+});
+app.use('/api', limiter);
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+app.post(
+	'/webhook-checkout',
+	bodyParser.raw({ type: 'application/json' }),
+	bookingController.webhookCheckout
+);
+
 // Body parser, reading data from body into req.body
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
+app.use(compression());
+
 app.get('/_health', (req, res) => {
+	console.log(req);
 	res.status(200).send('ok');
 });
 
