@@ -8,7 +8,12 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 exports.createCheckoutSession = catchErrorAsync(async (req, res, next) => {
   // 1. Get currently booked place
   const place = await Place.findById(req.params.place_id);
+  const { checkin, checkout, guests } = req.body;
+  console.log(checkin, checkout, guests);
 
+  const datediff = (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24) + 1;
+
+  let airbnbServiceFee = 1;
   // 2. Create checkout session
   const session = await stripe.checkout.sessions.create({
     line_items: [{
@@ -17,7 +22,7 @@ exports.createCheckoutSession = catchErrorAsync(async (req, res, next) => {
         product_data: {
           name: place.name,
         },
-        unit_amount: place.price * 100,
+        unit_amount: Math.trunc(place.price * datediff * (1 - place.price_discount) + airbnbServiceFee) * 100,
       },
       quantity: 1,
     }],
