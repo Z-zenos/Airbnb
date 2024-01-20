@@ -51,8 +51,8 @@ export default function BookingPage() {
   function calculateFees(airbnbServiceFee = 1) {
     const total = place?.price * datediff;
     return airbnbServiceFee + (datediff 
-      ? total - Math.trunc(total * place?.price_discount)
-      : place?.price - Math.trunc(place?.price * place?.price_discount)); 
+      ? Math.trunc(total - total * place?.price_discount)
+      : Math.trunc(place?.price - place?.price * place?.price_discount)); 
   }
 
   return (
@@ -96,7 +96,12 @@ export default function BookingPage() {
             <div className="text-[15px] py-6 border-b border-b-gray-300">
               <p className="font-medium text-xl mb-4">Pay with</p>
               <div>
-                <Checkout placeId={placeId} />
+                <Checkout 
+                  placeId={placeId} 
+                  guests={guests}
+                  checkin={checkInDate}
+                  checkout={checkOutDate}  
+                />
               </div>
             </div>
 

@@ -10,13 +10,28 @@ import axios from 'axios';
 // recreating the 'Stripe' object on every render
 const stripePromise = loadStripe('pk_test_51OXKvCEpprKrC1LztwiszELyKt96XSuNpiugcRHLJHmAEJx2e8uN9D1JNTRCLZ7phVNZWqLox1JnkjJvEwiIDEGO009plMkgUs');
 
-export default function Checkout({ placeId }) {
+export default function Checkout({ 
+  placeId, checkin, checkout, guests
+}) {
   const [clientSecret, setClientSecret] = useState('');
 
   useEffect(() => {
     (async () => {
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        },
+      };
       // Create a Checkout Session as soon as the page loads
-      const res = await axios.post(`/bookings/checkout-session/${placeId}`);
+      const res = await axios.post(
+        `/bookings/checkout-session/${placeId}`, 
+        {
+          checkin,
+          checkout,
+          guests
+        }, 
+        config
+      );
 
       setClientSecret(res.data.clientSecret);
     })();

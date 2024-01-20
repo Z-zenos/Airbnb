@@ -108,8 +108,8 @@ export default function PlacePage() {
   function calculateFees(airbnbServiceFee = 1) {
     const total = place?.price * datediff;
     return airbnbServiceFee + (datediff 
-      ? total - Math.trunc(total * place?.price_discount)
-      : place?.price - Math.trunc(place?.price * place?.price_discount)); 
+      ? Math.trunc(total - total * place?.price_discount)
+      : Math.trunc(place?.price - place?.price * place?.price_discount)); 
   }
 
   return (
