@@ -26,8 +26,8 @@ export default function Checkout({
       const res = await axios.post(
         `/bookings/checkout-session/${placeId}`, 
         {
-          checkin,
-          checkout,
+          checkin: checkin.getTime(),
+          checkout: checkout.getTime(),
           guests
         }, 
         config

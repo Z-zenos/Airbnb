@@ -52,6 +52,10 @@ const bookingSchema = new mongoose.Schema({
   },
 
   phone: Number,
+  message: {
+    type: String,
+    max: [500, 'A message for host must be less than 500 characters'],
+  }
 });
 
 bookingSchema.pre(/^find/, function (next) {
