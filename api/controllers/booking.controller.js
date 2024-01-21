@@ -1,20 +1,53 @@
+const mongoose = require("mongoose");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
 const catchErrorAsync = require("../utils/catchErrorAsync");
+const AppError = require("../utils/appError");
 const factory = require('./handlerFactory');
 const Place = require('../models/place.model');
 const User = require("../models/user.model");
 const Booking = require("../models/booking.model");
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY;
 
 exports.getCheckoutSession = catchErrorAsync(async (req, res, next) => {
   // 1. Get currently booked place
   const place = await Place.findById(req.params.place_id);
-  const { checkin, checkout, guests } = req.body;
+  const { checkin, checkout, guests, hasMessage, hasPhone } = req.body;
 
   const datediff = (new Date(checkout) - new Date(checkin)) / (1000 * 60 * 60 * 24) + 1;
 
   let airbnbServiceFee = 1;
+
+  const custom_fields = [];
+  if (hasPhone)
+    custom_fields.push({
+      key: 'phone',
+      label: {
+        custom: 'Phone number',
+        type: 'custom'
+      },
+      type: 'text',
+      optional: true,
+      text: {
+        maximum_length: 20
+      }
+    });
+
+  if (hasMessage)
+    custom_fields.push({
+      key: 'message',
+      label: {
+        custom: 'Message for host',
+        type: 'custom',
+      },
+      type: 'text',
+      optional: true,
+      text: {
+        maximum_length: 255
+      }
+    });
+
   // 2. Create checkout session
   const session = await stripe.checkout.sessions.create({
     /*
@@ -37,6 +70,12 @@ exports.getCheckoutSession = catchErrorAsync(async (req, res, next) => {
     }],
 
     /*
+      Collect additional information from your customer using custom fields. Up to 2 
+      fields are supported.
+    */
+    custom_fields,
+
+    /*
       If provided, this value will be used when the Customer object is created. If 
       not provided, customers will be asked to enter their email address. Use this 
       parameter to prefill customer data if you already have an email on file. To 
@@ -44,6 +83,19 @@ exports.getCheckoutSession = catchErrorAsync(async (req, res, next) => {
       customer field.
     */
     customer_email: req.user.email,
+
+    /*
+      Set of key-value pairs that you can attach to an object. This can be useful for 
+      storing additional information about the object in a structured format. 
+      Individual keys can be unset by posting an empty value to them. All keys can be 
+      unset by posting an empty value to metadata.
+    */
+    metadata: {
+      checkin,
+      checkout,
+      guests: JSON.stringify(guests),
+      place_id: place?.id
+    },
 
     /*
       A unique string to reference the Checkout Session. This can be a customer ID, a 
@@ -71,30 +123,45 @@ exports.getCheckoutSession = catchErrorAsync(async (req, res, next) => {
   });
 });
 
-const createBookingCheckout = async (session) => {
-  console.log(session);
-  const place = session.client_reference_id;
-  const user = (await User.findOne({
+const createBookingCheckout = catchErrorAsync(async (session) => {
+  const place = await Place.findById(session.metadata.place_id);
+
+  if (!place)
+    return next(new AppError("Place doesn't exist.", 403));
+
+  const user = await User.findOne({
     email: session.customer_email
-  }));
+  });
 
-  const price = session.amount_total;
-  // const discount = ;
+  if (!user)
+    return next(new AppError("User doesn't exist.", 403));
 
-  // const guests = ;
-  // const adults = ;
-  // const children = ;
-  // const pets = ;
-  // const checkin = ;
-  // const checkout = ;
-  // const phone = ;
+  const metadata = session.metadata;
+  const guests = JSON.parse(metadata.guests);
 
+  const phone = session.custom_fields
+    .find(field => field.key === 'phone')
+    ?.text?.value || "";
 
-  console.log(place, user, price);
-  // await Booking.create({
-  //   place, user, price
-  // });
-}
+  const message = session.custom_fields
+    .find(field => field.key === 'message')
+    ?.text?.value || "";
+
+  await Booking.create({
+    place: new mongoose.Types.ObjectId(place?.id),
+    user: new mongoose.Types.ObjectId(user?.id),
+    price: session.amount_total / 100,
+    guests: guests?.total,
+    adults: guests?.adults || 1,
+    children: guests?.children || 0,
+    pets: guests?.pets || 0,
+    discount: place.price_discount,
+    checkin: new Date(+metadata.checkin),
+    checkout: new Date(+metadata.checkout),
+    message,
+    phone,
+  });
+});
 
 exports.webhookCheckout = catchErrorAsync(async (req, res, next) => {
   const payload = req.body;

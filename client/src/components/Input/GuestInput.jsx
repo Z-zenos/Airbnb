@@ -19,7 +19,7 @@ export default function GuestInput({
       };
       return ({
         ...newGuests,
-        total: newGuests.adults + newGuests.children + newGuests.pets
+        total: newGuests.adults + newGuests.children
       });
     });
   }
@@ -81,7 +81,7 @@ export default function GuestInput({
             value={guests.pets}
             title="Pets" 
             subtitle="Bringing a service animal?"
-            max={max_pets}
+            max={pets_allowed ? max_pets : 0}
             size="small"
             min={0}
           />

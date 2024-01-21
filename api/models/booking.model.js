@@ -16,7 +16,6 @@ const bookingSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Booking must have a price'],
   },
-  discount: Number,
 
   created_at: {
     type: Date,
@@ -51,11 +50,15 @@ const bookingSchema = new mongoose.Schema({
     required: [true, 'Booking must have a checkout time']
   },
 
-  phone: Number,
+  phone: {
+    type: String,
+    max: [20, 'A message for host must be less than 20 characters'],
+  },
   message: {
     type: String,
-    max: [500, 'A message for host must be less than 500 characters'],
-  }
+    max: [255, 'A message for host must be less than 255 characters'],
+  },
+  discount: Number,
 });
 
 bookingSchema.pre(/^find/, function (next) {

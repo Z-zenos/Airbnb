@@ -7,8 +7,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner/Spinner";
 import GuestInput from "../components/Input/GuestInput";
+import ToggleButton from "../components/Button/ToggleButton";
 import DateRange from "../components/DateRange/DateRange";
 import useDateRange from "../hooks/useDateRange";
+import Modal from "../components/Modals/Modal";
 
 export default function BookingPage() {
   const navigate = useNavigate();
@@ -19,9 +21,13 @@ export default function BookingPage() {
   const [guests, setGuests] = useState({
     adults: +searchParams.get("adults") || 1,
     children: +searchParams.get("children") || 0,
-    pets: +searchParams.get("pets") || 1,
-    total: +searchParams.get("adults") + (+searchParams.get("children")) + (+searchParams.get("pets")),
+    pets: +searchParams.get("pets") || 0,
+    total: +searchParams.get("adults") + (+searchParams.get("children")),
   });
+
+  const [isOpenPaymentModal, setIsOpenPaymentModal] = useState(false);
+  const [addMessage, setAddMessage] = useState(false);
+  const [addPhone, setAddPhone] = useState(false);
 
   const {
     checkInDate, checkOutDate,
@@ -62,7 +68,7 @@ export default function BookingPage() {
           <div className="lg:col-span-3 sm:col-span-2">
             <p 
               className="text-2xl flex items-center "
-              onClick={() => navigate(`/places/${placeId}`)}
+              onClick={() => navigate(`/places/${place?.id}`)}
             >
               <FaAngleLeft className="inline cursor-pointer" />
               Request to Book
@@ -93,44 +99,50 @@ export default function BookingPage() {
               </div>
             </div>
 
-            <div className="text-[15px] py-6 border-b border-b-gray-300">
-              <p className="font-medium text-xl mb-4">Pay with</p>
-              <div>
-                <Checkout 
-                  placeId={placeId} 
-                  guests={guests}
-                  checkin={checkInDate}
-                  checkout={checkOutDate}  
-                />
-              </div>
-            </div>
+            { isOpenPaymentModal && (
+              <Modal
+                isOpen={isOpenPaymentModal} 
+                onClose={() => setIsOpenPaymentModal(false)} 
+                title="Pay with"
+                body={
+                  <Checkout 
+                    placeId={placeId} 
+                    guests={guests}
+                    checkin={checkInDate}
+                    checkout={checkOutDate} 
+                    hasMessage={addMessage}
+                    hasPhone={addPhone} 
+                  />
+                }
+                className="max-h-[800px] overflow-y-scroll"
+              />
+            ) }
 
             <div className="text-[15px] py-6 border-b border-b-gray-300">
               <p className="font-medium text-xl mb-4">Required for your trip</p>
               <div className="flex justify-between text-[16px] gap-6">
-                <div>
+                <div className="flex-1">
                   <p className="text-[18px] mb-1">Message the Host</p>
                   <p className="font-light">Share why you&lsquo;re traveling, who&lsquo; coming with you, and what you love about the space.</p>
                 </div>
-                <Button
-                  onClick={() => {}}
-                  className="bg-white !text-black !border-black h-10 hover:bg-gray-200 transition-all"
-                >
-                  Add
-                </Button>
+                <ToggleButton 
+                  selected={addMessage} 
+                  onClick={() => setAddMessage(!addMessage)}
+                  className="w-18"
+                />
+
               </div>
 
               <div className="flex justify-between mt-5 text-[16px] gap-6">
-                <div>
+                <div className="flex-1">
                   <p className="text-[18px] mb-1">Phone number</p>
                   <p className="font-light">Add and confirm your phone number to get trip updates.</p>
                 </div>
-                <Button
-                  onClick={() => {}}
-                  className="bg-white !text-black !border-black h-10 hover:bg-gray-200 transition-all"
-                >
-                  Add
-                </Button>
+                <ToggleButton 
+                  selected={addPhone} 
+                  onClick={() => setAddPhone(!addPhone)}
+                  className="w-18"
+                />
               </div>
               
             </div>
@@ -164,8 +176,8 @@ export default function BookingPage() {
             </p>
             <Button
               type="submit"
-              onClick={() => {}}
-              className="mt-8"
+              onClick={() => setIsOpenPaymentModal(true)}
+              className="mt-8 hover:bg-white hover:text-primary"
             >
               Request to book
             </Button>
@@ -187,8 +199,6 @@ export default function BookingPage() {
                     <span className="font-light opacity-70">({place?.quantity_ratings})</span>
                   </p>
                 </div>
-
-                
               </div>
               <div className="py-6 border-b border-b-gray-300">
                 <p className="font-medium text-xl mb-4">

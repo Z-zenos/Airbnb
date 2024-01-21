@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 export default function Modal({ 
   isOpen, onClose, children, title, body,
   secondaryAction, secondaryActionLabel, disabled,
-  actionLabel, onSubmit, footer,
+  actionLabel, onSubmit, footer, className,
   optionBtn, footerClassName, isLoading
 }) {
   const [showModal, setShowModal] = useState(isOpen);
@@ -48,7 +48,12 @@ export default function Modal({
       {/* modal */}
       <div
         onClick={ev => ev.stopPropagation()}
-        className={`w-full md:w-4/6 lg:w-3/6 xl:w-1/2 2xl:w-2/5 my-6 mx-auto h-full lg:h-auto md:h-auto relative bg-white rounded-xl shadow transition-all ${showModal ? "scale-100 opacity-100" : "scale-125 opacity-0"}`}
+        className={`
+          w-full md:w-4/6 lg:w-3/6 xl:w-1/2 2xl:w-2/5 my-6 mx-auto h-full 
+          lg:h-auto md:h-auto relative bg-white rounded-xl shadow transition-all 
+          ${showModal ? "scale-100 opacity-100" : "scale-125 opacity-0"}
+          ${className}
+        `}
       >
 
         <div className="translate h-full lg:h-auto md:h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">

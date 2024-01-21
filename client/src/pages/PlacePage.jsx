@@ -145,7 +145,7 @@ export default function PlacePage() {
               </div>
             </div>
 
-            <Button 
+            <Button
               className="rounded-md text-center p-2 cursor-pointer hover:bg-white hover:text-primary"
               type="submit"
               onClick={() => {
@@ -158,10 +158,9 @@ export default function PlacePage() {
           </div>
         )}
       </Navbar>
+
       <div className=" lg:mt-0 lg:w-3/5 mx-auto">
-
         <div className="p-6">
-
           <h2 className="font-bold text-2xl mb-1">{place?.name}</h2>
           <div className="flex justify-between items-center">
             <div className="text-[15px]">
@@ -348,7 +347,10 @@ export default function PlacePage() {
                   ))}
                 </div>
 
-                <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary " label={`Show all ${place?.amenities?.length} amenities`} onClick={() => setOpen(true)} />
+                <Button 
+                  className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 hover:text-primary " 
+                  label={`Show all ${place?.amenities?.length} amenities`} 
+                  onClick={() => setOpen(true)} />
               </div>
 
               <div className="h-[1px] bg-gray-300"></div>
@@ -371,26 +373,38 @@ export default function PlacePage() {
 
             </div>
 
-            <div ref={purchaseCardRef} className="rounded-xl shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px] py-7 px-5 w-[35%] border border-[rgb(221, 221, 221)] ml-10 my-10 sticky right-2 top-32">
+            <div 
+              ref={purchaseCardRef} 
+              className="rounded-xl shadow-[rgba(0,_0,_0,_0.12)_0px_6px_16px] py-7 px-5 w-[35%] border border-[rgb(221, 221, 221)] ml-10 my-10 sticky right-2 top-32"
+            >
               <div className="flex justify-between items-center">
-                <p className="-translate-y-1"><span className="font-medium text-2xl"><BsCurrencyDollar className="inline -translate-y-[2px]" />{place?.price}</span> night</p>
+                <p className="-translate-y-1">
+                  <span className="font-medium text-2xl">
+                    <BsCurrencyDollar className="inline -translate-y-[2px]" />
+                    {place?.price}
+                  </span> 
+                  night
+                </p>
                 <div>
-                  <span className="font-medium"><AiFillStar className="inline text-yellow-400" /> {place.average_ratings}</span>
+                  <span className="font-medium">
+                    <AiFillStar className="inline text-yellow-400" /> 
+                    {place.average_ratings}
+                  </span>
                   <span className="mx-2 font-medium">·</span>
                   <span className="underline font-light text-sm">205 reviews</span>
                 </div>
               </div>
 
               <div className="mt-4">
-                <DateRange 
+                <DateRange
                   className="rounded-tl-xl rounded-tr-xl"
                   checkin={checkInDate}
                   checkout={checkOutDate}
                   onDateRangeChange={handleSelectDateRange}
                   selectionRange={selectionRange}
                 />
-                <GuestInput 
-                  className="border-t-0 rounded-bl-xl rounded-br-xl" 
+                <GuestInput
+                  className="border-t-0 rounded-bl-xl rounded-br-xl"
                   guests={guests}
                   setGuests={setGuests}
                   max_guests={place?.guests}
@@ -461,7 +475,10 @@ export default function PlacePage() {
 
           <div className="py-8 px-2 text-xl">
             <div className="font-medium">
-              <span className=""><AiFillStar className="inline text-yellow-400" /> {place.average_ratings}</span>
+              <span className="">
+                <AiFillStar className="inline text-yellow-400" /> 
+                {place.average_ratings}
+              </span>
               <span className="mx-2 font-medium">·</span>
               <span className="underline">205 reviews</span>
             </div>
@@ -469,7 +486,10 @@ export default function PlacePage() {
             <div className="mt-8" ref={reviewsRef}>
               <div className="my-2">
                 <div className="flex gap-3 items-center justify-start mb-3">
-                  <img src="https://a0.muscache.com/im/users/7179431/profile_pic/1372514494/original.jpg?im_w=240" className="rounded-full w-10 h-10" />
+                  <img 
+                    src="https://a0.muscache.com/im/users/7179431/profile_pic/1372514494/original.jpg?im_w=240" 
+                    className="rounded-full w-10 h-10" 
+                  />
 
                   <div>
                     <p className="text-sm font-medium">Meg</p>
@@ -482,7 +502,10 @@ export default function PlacePage() {
               </div>
             </div>
             
-            <Button className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px] hover:text-primary " label="Show all 90 reviews" />
+            <Button 
+              className="border border-black py-[10px] px-6 rounded-lg mt-8 hover:bg-gray-100 text-[16px] hover:text-primary " 
+              label="Show all 90 reviews" 
+            />
             
           </div>
 

@@ -11,7 +11,8 @@ import axios from 'axios';
 const stripePromise = loadStripe('pk_test_51OXKvCEpprKrC1LztwiszELyKt96XSuNpiugcRHLJHmAEJx2e8uN9D1JNTRCLZ7phVNZWqLox1JnkjJvEwiIDEGO009plMkgUs');
 
 export default function Checkout({ 
-  placeId, checkin, checkout, guests
+  placeId, checkin, checkout, guests,
+  hasMessage, hasPhone
 }) {
   const [clientSecret, setClientSecret] = useState('');
 
@@ -28,7 +29,9 @@ export default function Checkout({
         {
           checkin: checkin.getTime(),
           checkout: checkout.getTime(),
-          guests
+          guests,
+          hasMessage,
+          hasPhone,
         }, 
         config
       );
