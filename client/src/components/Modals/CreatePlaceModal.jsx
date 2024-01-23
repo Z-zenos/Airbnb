@@ -13,6 +13,7 @@ import ImageUpload from "../Input/ImageUpload";
 import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
 import Input from "../Input/Input";
+import Spinner from "../Spinner/Spinner";
 
 const STEPS = {
   PROPERTY_TYPES: 0,
@@ -31,6 +32,7 @@ export default function CreatePlaceModal() {
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   let {
     setValue,
@@ -175,7 +177,8 @@ export default function CreatePlaceModal() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get('/places/place-types');
+        setIsLoading(true);
+        const res = await axios.get('/places/property-types');
 
         setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
           id: pt.id,
@@ -185,6 +188,8 @@ export default function CreatePlaceModal() {
 
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     })();
   }, []); 
@@ -193,7 +198,7 @@ export default function CreatePlaceModal() {
     if(step === STEPS['AMENITIES']) {
       (async () => {
         const resp = await axios.get('/amenities');
-        setAmenityList(resp.data.data.amenity);
+        setAmenityList(resp.data.data.amenitys);
       })();
     }
   }, [step]);
@@ -208,17 +213,20 @@ export default function CreatePlaceModal() {
       <div
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
       >
-        { propertyTypeList.length && propertyTypeList.map(pt => (
-          <div key={pt.id} className="col-span-1">
-            <CategoryInput
-              onClick={property_typeId => setCustomValue('property_type', property_typeId)}
-              selected={property_type === pt.id}
-              id={pt.id}
-              label={pt.name}
-              iconSrc={pt.src}
-            />
-          </div>
-        )) }
+        { (propertyTypeList.length > 0 && !isLoading)
+          ? propertyTypeList.map(pt => (
+              <div key={pt.id} className="col-span-1">
+                <CategoryInput
+                  onClick={property_typeId => setCustomValue('property_type', property_typeId)}
+                  selected={property_type === pt.id}
+                  id={pt.id}
+                  label={pt.name}
+                  iconSrc={pt.src}
+                />
+              </div>
+            )) 
+          : <Spinner />
+        }
       </div>
     </div>
   );
@@ -237,10 +245,12 @@ export default function CreatePlaceModal() {
         />
 
         <Map 
-          className="h-[35vh]" 
           locations={[{
-            coordinate: location?.coordinates.length ? location.coordinates : [0,0]
+            coordinate: location?.coordinates.length ? location.coordinates : [0,0],
           }]} 
+          className="h-[35vh] rounded-xl" 
+          zoom={12}
+          isDisplayExtraInfoPlace={false}
         />
       </div>
     );
@@ -298,7 +308,7 @@ export default function CreatePlaceModal() {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
         >
-          { amenityList.length && amenityList.map(a => (
+          { amenityList?.length > 0 && amenityList?.map(a => (
             <div key={a.id} className="col-span-1">
               <CategoryInput
                 onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
