@@ -1,5 +1,5 @@
 
-import {Route, Routes, useSearchParams} from "react-router-dom";
+import {Navigate, Route, Routes, useSearchParams} from "react-router-dom";
 import IndexPage from './pages/IndexPage';
 import AuthPage from './pages/AuthPage';
 import MainLayout from './layouts/MainLayout';
@@ -64,6 +64,8 @@ function App() {
                 
                 <Route path='/booking/:place_id' element={ <BookingPage /> } />
                 <Route path='/booking/result' element={ <CheckoutSuccessPage /> } />
+
+                <Route path="*" element={<Navigate replace to="/" />}  />
               </Route>
             </Routes>
           </UserContextProvider>
