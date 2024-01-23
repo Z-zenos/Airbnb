@@ -46,7 +46,7 @@ export default function WishlistsPage() {
 
   return (
     <div className="lg:mt-0 w-full">
-      <div className="grid lg:grid-cols-5 md:grid-cols-2 h-full">
+      <div className="grid lg:grid-cols-5 md:grid-cols-2 h-[82vh]">
         <div className="lg:col-span-3 md:col-span-1 overflow-y-scroll py-6">
           <div className={`lg:px-10 md:px-10 grid place-items-center md:gap-1 2xl:grid-cols-3 md:grid-cols-1 lg:grid-cols-2`}>
             { favoritePlaces.length > 0 &&
@@ -61,7 +61,7 @@ export default function WishlistsPage() {
             { (!loading && !favoritePlaces.length) && <div className=" col-span-10 text-3xl opacity-70 font-bold text-center py-[250px]">No results</div> }
           </div>
         </div>
-        <div className="lg:col-span-2 md:col-span-1">
+        <div className="lg:col-span-2 md:col-span-1 h-full">
           <div className="h-full border-l pl-1 border-l-primary">
             <Map 
               locations={favoritePlaces.length ? favoritePlaces?.map(fplace => ({
