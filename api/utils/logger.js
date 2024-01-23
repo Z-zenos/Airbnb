@@ -25,13 +25,15 @@ const colours = {
     POST: "\x1b[1;38;5;226m",
     PATCH: "\x1b[1;38;5;202m",
     DELETE: "\x1b[1;38;5;196m",
+    OPTIONS: "\x1b[1;38;5;165m",
   },
 
   code: code => {
-    if ([200, 201, 202, 204].includes(code))
+    if ([200, 201, 202, 204].includes(+code))
       return "\x1b[1;38;5;47m";
-    else if ([400, 401, 403, 404, 500, 502].includes(code))
+    else if ([400, 401, 403, 404, 500, 502].includes(+code))
       return "\x1b[1;38;5;196m";
+    else return "\x1b[1;38;5;45m";
   }
 };
 
