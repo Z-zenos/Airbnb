@@ -16,7 +16,9 @@ export function UserContextProvider({ children }) {
       try {
         if(!unauthorizedRoutes.some(route => location.pathname.includes(route))) {
           // https://blog.bitsrc.io/api-call-in-react-using-axios-handling-complicated-scenarios-befff1655abc
-          const res = await axios.get('/users/me');
+          const res = await axios.get('/users/me', {
+            withCredentials: true,
+          });
           const user = res.data.data.user;
           setUser(user);
         }

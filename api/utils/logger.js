@@ -50,7 +50,7 @@ const symbols = {
 const datestring = date =>
   ("0" + date.getDate()).slice(-2)
   + "-" + ("0" + (date.getMonth() + 1)).slice(-2)
-  + "-" + (date.getFullYear())
+  + "-" + (`${date.getFullYear()}`.slice(2))
   + " " + ("0" + date.getHours()).slice(-2)
   + ":" + ("0" + date.getMinutes()).slice(-2)
   + ":" + ("0" + date.getSeconds()).slice(-2);
@@ -77,7 +77,7 @@ const http = message => {
   log(
     'white',
     'http',
-    `${colours.http[method]}${method}\x1b[0m \x1b[4m${url}\x1b[0m ${colours.code(status)}${status}\x1b[0m ${content_length} - \x1b[1;38;5;226m${response_time}\x1b[0m⏲ ms`
+    `${colours.http[method]}${method}\x1b[0m \x1b[4m${url}\x1b[0m ${colours.code(status)}${status}\x1b[0m ${content_length} - \x1b[1;38;5;226m${response_time}\x1b[0m ⏲ ms`
   );
 }
 

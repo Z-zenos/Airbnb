@@ -22,7 +22,7 @@ import CheckoutSuccessPage from "./pages/CheckoutSuccessPage";
 
 
 // Apply for all requests
-axios.defaults.baseURL = "http://127.0.0.1:3000/api/v1";
+axios.defaults.baseURL = "http://localhost:3000/api/v1";
 /*
   The XMLHttpRequest.withCredentials property is a boolean value that indicates 
   whether or not cross-site Access-Control requests should be made using credentials 
