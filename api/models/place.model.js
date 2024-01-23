@@ -243,20 +243,6 @@ placeSchema.pre('save', function (next) {
   next();
 });
 
-// placeSchema.pre('save', async function(next) {
-//   next();
-// });
-
-// placeSchema.pre('save', function(next) {
-//   console.log('Will save document...');
-//   next();
-// });
-
-// placeSchema.post('save', function(doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY MIDDLEWARE
 
 placeSchema.pre(/^find/, function (next) {
@@ -276,19 +262,6 @@ placeSchema.pre(/^find/, function (next) {
 
   next();
 });
-
-// placeSchema.post(/^find/, function(docs, next) {
-//   console.log(`Query took ${Date.now() - this.start} milliseconds!`);
-//   next();
-// });
-
-// AGGREGATION MIDDLEWARE
-// placeSchema.pre('aggregate', function(next) {
-//   this.pipeline().unshift({ $match: { secretplace: { $ne: true } } });
-
-//   console.log(this.pipeline());
-//   next();
-// });
 
 const Place = mongoose.model('Place', placeSchema);
 

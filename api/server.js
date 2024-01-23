@@ -26,7 +26,6 @@ mongoose
 	?.connect(DB)
 	.then(() => logger.success("Connect to MongoDB successfully"))
 	.catch((err) => {
-		console.log(err);
 		throw new AppError("Disconnect to MongoDB", 500)
 	});
 

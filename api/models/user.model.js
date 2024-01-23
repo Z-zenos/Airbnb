@@ -161,18 +161,6 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// userSchema.virtual('places', {
-//   ref: 'Place',
-//   foreignField: 'host',
-//   localField: '_id'
-// });
-
-// userSchema.virtual('places').get(async function() {
-//   const places = await Place.find({ host: new mongoose.Types.ObjectId(this._id) });
-//   console.log(places);
-//   return places;
-// });
-
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
 

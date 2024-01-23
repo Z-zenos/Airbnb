@@ -30,7 +30,6 @@ exports.deleteOne = Model => catchErrorAsync(async (req, res, next) => {
 });
 
 exports.updateOne = Model => catchErrorAsync(async (req, res, next) => {
-  console.log(req.body, req.params.id);
   const doc = await Model.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -87,7 +86,7 @@ exports.getAll = Model => catchErrorAsync(async (req, res, next) => {
   if (req.params.placeId) filter = { place: req.params.placeId };
 
   const parser = APIFeatures.parse(req.query);
-  
+
   const total = await new APIFeatures(Model.find(filter))
     .count(parser)
     .Query;

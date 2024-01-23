@@ -215,7 +215,6 @@ exports.detectUpdatePersonalInfo = catchErrorAsync(async (req, res, next) => {
       });
 
     } catch (err) {
-      console.log(err);
       user.emailConfirmToken = undefined;
       user.emailConfirmExpires = undefined;
       await user.save({ validateBeforeSave: false });
@@ -350,6 +349,5 @@ exports.resetPassword = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.reviewAccount = catchErrorAsync(async (req, res, next) => {
-  console.log("review account");
   next();
 });
