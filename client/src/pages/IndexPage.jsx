@@ -140,7 +140,7 @@ export default function IndexPage() {
 
   return (
     <div className="relative">
-      <div className="lg:px-20 md:px-10 grid grid-cols-10 items-center gap-6 sticky top-0 bg-white shadow-md z-10">
+      <div className="lg:px-20 md:px-10 grid grid-cols-10 items-center gap-6 fixed top-17 bg-white shadow-md z-10">
         <div className="mt-4 grid grid-cols-12 items-center lg:col-span-9 md:col-span-8">
           { isHideScrollBtn !== -1 && 
             <BsCaretLeft 
@@ -149,7 +149,19 @@ export default function IndexPage() {
             />
           }
 
-          <div className={`relative mx-4 ${isHideScrollBtn !== -1 ? 'before:absolute before:bottom-0 col-span-10 before:h-full before:left-[-10px] before:w-4 before:z-10 before:bg-gradient-to-b before:from-transparent before:to-[#fdfdfd]' : 'col-span-11'} ${isHideScrollBtn !== 1 ? 'after:absolute after:bottom-0 after:h-full after:w-4 after:z-10 after:right-[-10px] after:bg-gradient-to-b after:from-transparent after:to-[#fdfdfd]' : 'col-span-11'}`}>
+          <div 
+            className={`
+              relative mx-4 
+              ${isHideScrollBtn !== -1 
+                ? 'before:absolute before:bottom-0 col-span-10 before:h-full before:left-[-10px] before:w-4 before:z-10 before:bg-gradient-to-b before:from-transparent before:to-[#fdfdfd]' 
+                : 'col-span-11'
+              } 
+              ${isHideScrollBtn !== 1 
+                ? 'after:absolute after:bottom-0 after:h-full after:w-4 after:z-10 after:right-[-10px] after:bg-gradient-to-b after:from-transparent after:to-[#fdfdfd]' 
+              : 'col-span-11'
+              }
+            `}
+          >
             <div 
               className="flex justify-start gap-8 overflow-auto scroll-smooth" 
               ref={scrollRef}
@@ -188,7 +200,12 @@ export default function IndexPage() {
         </div>
       </div>
       
-      <div className={`h-[75vh] lg:mt-0  ${isShowMap ? 'grid grid-cols-10 gap-4' : ''}`}>
+      <div 
+        className={`
+          h-[85vh] pt-[12vh] lg:mt-0 
+          ${isShowMap ? 'grid grid-cols-10 gap-4' : ''}
+        `}
+      >
         <div className={`lg:px-20 md:px-10 grid  md:gap-5 ${isShowMap ? 'col-span-6 2xl:grid-cols-3 overflow-y-scroll md:grid-cols-2' : '2xl:grid-cols-6 md:grid-cols-3 lg:grid-cols-4'}`}>
           { (places.length > 0 && !isURLChanged) &&
             places.map((place, i, places) =>
