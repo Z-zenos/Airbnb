@@ -25,3 +25,13 @@
 - Place map and details
 - Booking and checkout with `Stripe`
 - Wishlists
+
+## Demo
+![airbnb_homepage](https://github.com/Z-zenos/Airbnb/assets/81077630/35eb2320-570c-41c9-9a78-1c912db592d7)
+![airbnb_pagedetails](https://github.com/Z-zenos/Airbnb/assets/81077630/ca2f4028-0dc7-4f64-a6a9-6c85a5f86609)
+![airbnb_booking](https://github.com/Z-zenos/Airbnb/assets/81077630/2f21a008-cc51-45fe-877c-a352e8ced975)
+
+![airbnb_profile](https://github.com/Z-zenos/Airbnb/assets/81077630/1691aa90-2240-4777-9872-542ff5ca5340)
+
+[Watch demo](https://youtu.be/R_FbLp5-NeI)
+
