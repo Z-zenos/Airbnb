@@ -122,9 +122,9 @@ export default function AuthPage() {
   if(redirect) return <Navigate to='/' />
 
   return (
-    <div className="bg-[url('src/assets/images/background-1.webp')] grow flex items-center justify-around">
+    <div className="bg-[url('src/assets/images/background-1.webp')] h-full flex items-center justify-around">
       
-      <div className="auth-box bg-white w-[600px] rounded-md py-2 shadow-[0_0_0_1000px_rgba(0,0,0,0.5)] -mt-16">
+      <div className="auth-box bg-white w-[600px] rounded-md py-2 shadow-[0_0_0_1000px_rgba(0,0,0,0.5)]">
         <div className="px-6 pb-4 pt-2 text-center border-b-[1px] border-gray-300">
           <h3 className="font-bold text-md">Login or signup</h3>
         </div>
@@ -142,7 +142,7 @@ export default function AuthPage() {
               {/* FOR LOGIN */}
               <Input label="Email" name="email" type="email" className="rounded-t-[8px]" value={email} {...register("email", { required: true, onChange: handleFormDataChange })} errors={errors} />
 
-              <Input label="Password" name="password" type="password" className="border-t-transparent" value={password} {...register("password", { required: true, onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Password" name="password" type="password" className="border-t-transparent border-b-primary border-b-4" value={password} {...register("password", { required: true, onChange: handleFormDataChange })} errors={errors}  />
 
               {/* FOR REGISTER */}
               <Input label="Confirm password" name="passwordConfirm" type="password" className="border-t-transparent" value={passwordConfirm} {...register("passwordConfirm", { required: true, onChange: handleFormDataChange })} errors={errors}  />
@@ -162,7 +162,7 @@ export default function AuthPage() {
 
               </div>
 
-              <Input label="Phone number" beforeText={countries.length && countries?.find(c => c.name === country).dialling_code} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} {...register("phone", { required: true, onChange: handleFormDataChange })} errors={errors}  />
+              <Input label="Phone number" beforeText={countries.length ? countries?.find(c => c.name === country).dialling_code : ""} name="phone" type="tel" className="rounded-b-[8px] border-t-transparent" value={phone} {...register("phone", { required: true, onChange: handleFormDataChange })} errors={errors}  />
               
               <button 
                 className="absolute top-[96px] -right-44 w-1/3 rounded-md text-center p-2 cursor-pointer bg-primary text-white font-bold border border-primary after:w-[40px] after:h-1 after:bg-primary after:top-1/2 after:absolute after:block after:-left-[30px] after:-translate-y-1/2 after:rounded-full hover:bg-white hover:text-primary"
