@@ -33,9 +33,5 @@
 
 ![airbnb_profile](https://github.com/Z-zenos/Airbnb/assets/81077630/1691aa90-2240-4777-9872-542ff5ca5340)
 
-
-
-
-https://github.com/Z-zenos/Airbnb/assets/81077630/85ad0a42-8350-45c6-a626-6f9ca497a4ec
-
+[Watch demo](https://youtu.be/R_FbLp5-NeI)
 
