@@ -245,8 +245,6 @@ export default function SearchModal () {
                   : '' 
                 }
               </p>
-
-              
             </div>
           </div>
         )) }

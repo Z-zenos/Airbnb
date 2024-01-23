@@ -11,7 +11,7 @@ const sizeCounter = {
 export default function Counter({
   title, subtitle, value, onChange, 
   plussedNumber = 1, max = 50, min = 1,
-  size = sizeCounter.medium
+  size = 'medium'
 }) {
   const onAdd = useCallback(() => {
     if(value === max) return;

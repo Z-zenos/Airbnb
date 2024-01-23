@@ -201,7 +201,7 @@ export default function FilterModal ({ setFilterCriteriaNumber }) {
               className={`
                 border border-gray-300 cursor-pointer py-4 
                 transition-all font-medium
-                ${pt.type === 'room' ? 'rounded-tl-xl rounded-bl-xl' : ''}
+                ${pt.type === 'entire home' ? 'rounded-tl-xl rounded-bl-xl' : ''}
                 ${pt.type === 'any type' ? 'rounded-tr-xl rounded-br-xl': ''}
                 ${i === 1 ? 'border-x-0' : ''}
                 ${pt.type === placeType ? 'text-white shadow-[rgb(0,_0,_0)_0px_2px_8px_0px_inset] bg-[rgb(34,34,34)] bg-[linear-gradient(rgba(255,255,255,0.16),rgba(255,255,255,0))] border-[rgb(34,34,34)]' : ''}
