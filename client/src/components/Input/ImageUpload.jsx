@@ -1,13 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IoIosImages } from "react-icons/io";
 import { BsTrash3 } from "react-icons/bs";
-import { AiOutlineCloudUpload } from "react-icons/ai";
 import axios from "axios";
+import {ToastContext} from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
+import Spinner from "../Spinner/Spinner";
 
 export default function ImageUpload({
   value, onChange, placeId
 }) {
   const [images, setImages] = useState([]);
+  const { openToast } = useContext(ToastContext);
 
   useEffect(() => {
     (async () => {
@@ -54,6 +57,19 @@ export default function ImageUpload({
     }
   }
 
+  useEffect(() => {
+    try {
+      handleUploadImages();
+      openToast(
+        <Toast title="Success" content="Upload images successfully!" type="success" />
+      );
+    } catch (error) {
+      openToast(
+        <Toast title="Failure" content={error?.message} type="error" />
+      );
+    }
+  }, [images.length]);
+
   function handleDrop (ev) {
     // prevent the browser from opening the image
     ev.preventDefault();
@@ -75,32 +91,40 @@ export default function ImageUpload({
 
   async function handleRemoveImage (ev, url) {
     ev.preventDefault();
-
     if(!value.length) return;
 
     const res = await axios.delete(`/images/${placeId}/${url}`);
-
     const place = res.data.data.place;
-
     onChange([place.image_cover, ...place.images]);
   }
 
-  const preview = value.length > 0 && value.map((url, i) => (
-    <div className={`relative rounded-lg border-dashed border-neutral-600 border-[1px] ${!i ? 'h-[40vh] w-full col-span-2' : 'h-[20vh] w-full'}`} key={url + i}>
-      <img alt="not found" className="w-full h-full rounded-lg object-cover" src={`http://localhost:3000/images/places/${url}`} />
+  const preview = value.length > 0 
+    ? value.map((url, i) => (
+      <div 
+        className={`
+          relative rounded-lg border-dashed border-neutral-600 border-[1px] 
+          ${!i 
+            ? 'h-[40vh] w-full col-span-2' 
+            : 'h-[20vh] w-full'
+          }
+        `} 
+        key={url + i}
+      >
+        <img 
+          alt="not found" 
+          className="w-full h-full rounded-lg object-cover" 
+          src={`http://localhost:3000/images/places/${url}`} 
+        />
 
-      <button onClick={async (ev) => await handleRemoveImage(ev, url)}>
-        <BsTrash3 className="absolute right-4 top-4 p-2 bg-white shadow-sm rounded-full w-8 h-8" />
-      </button>
-    </div>
-  ));
+        <button onClick={async (ev) => await handleRemoveImage(ev, url)}>
+          <BsTrash3 className="absolute right-4 top-4 p-2 bg-white shadow-sm rounded-full w-8 h-8" />
+        </button>
+      </div>
+    ))
+    : <Spinner />
 
   return (
     <div className="mt-4 overflow-y-scroll max-h-[50vh]">
-      <button className="px-4 py-2 cursor-pointer bg-[#1652f0] text-white rounded-md font-medium shadow-md shadow-gray-500 border-none active:shadow-none" hidden={!images.length} onClick={handleUploadImages}>
-        Upload
-        <AiOutlineCloudUpload className="inline w-6 h-6 ml-2" />  
-      </button>
       <form 
         className=""
         onDrop={handleDrop}

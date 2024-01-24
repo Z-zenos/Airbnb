@@ -14,7 +14,6 @@ const placeSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'A place must have a name'],
-      unique: true,
       trim: true,
       maxlength: [50, 'A place name must have less or equal than 255 characters'],
       minlength: [10, 'A place name must have more or equal than 10 characters']
@@ -23,6 +22,7 @@ const placeSchema = new mongoose.Schema(
     property_type: {
       type: mongoose.Schema.ObjectId,
       ref: PropertyType,
+      default: () => ({})
     },
 
     place_type: {
@@ -130,9 +130,9 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have images'],
       validate: {
         validator: function (val) {
-          return val.length >= 5;
+          return val.length >= 4 && val.length <= 9;
         },
-        message: "Place's images must more than 5 images"
+        message: "Only upload 5-10 images for each place"
       }
     },
 

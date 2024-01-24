@@ -1,6 +1,7 @@
 const catchErrorAsync = require("../utils/catchErrorAsync");
 const APIFeatures = require("../utils/apiFeatures");
 const AppError = require("../utils/appError");
+const mongoose = require("mongoose");
 
 exports.checkOne = Model => catchErrorAsync(async (req, res, next) => {
   const doc = await Model.findById(req.params.id);

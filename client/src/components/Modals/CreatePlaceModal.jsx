@@ -33,6 +33,7 @@ export default function CreatePlaceModal() {
   const [amenityList, setAmenityList] = useState([]);
   const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [placeId, setPlaceId] = useState("");
 
   let {
     setValue,
@@ -45,20 +46,22 @@ export default function CreatePlaceModal() {
     mode: 'all',
     defaultValues: async () => {
       try {
-        const res = await axios.get('/places/my-places');
+        const res = await axios.get('/places/become-a-host');
 
         const placeList = res.data.data.places;
         const creatingPlaceList = placeList.filter(place => place.status === 'creating');
 
         if(!placeList.length || !creatingPlaceList.length) {
-          const createResp = await axios.post('/places', {}, {
+          const createResp = await axios.post('/places/become-a-host', {}, {
             headers: {
               "Content-Type": "application/json"
             },
           });
+          setPlaceId(createResp.data.data.place._id);
           return createResp.data.data.place;
         }
         else {
+          setPlaceId(creatingPlaceList[0]._id);
           return creatingPlaceList[0];
         }
       } catch(err) {
@@ -80,12 +83,28 @@ export default function CreatePlaceModal() {
   const images = watch('images');
 
   const setCustomValue = (id, value) => {
-    setValue(id, value, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true
-    });
-    setErrors(isErrorsOfStep(step) ? [] : errors);
+    (async () => {
+      setValue(id, value, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true
+      });
+      if(id !== 'images') {
+        await axios.patch(
+          `/places/become-a-host/${placeId}`, 
+          {
+            [id]: value
+          }, 
+          {
+            headers: {
+              "Content-Type": "application/json"
+            },
+          }
+        );
+      }
+  
+      setErrors(isErrorsOfStep(step) ? [] : errors);
+    })();
   }
 
   function isErrorsOfStep(step) {
@@ -150,7 +169,7 @@ export default function CreatePlaceModal() {
     delete placeData.host;
 
     try {
-      const resp = await axios.patch(`/places/${getValues()._id}`, placeData, {
+      await axios.patch(`/places/${getValues()._id}`, placeData, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -197,8 +216,15 @@ export default function CreatePlaceModal() {
   useEffect(() => {
     if(step === STEPS['AMENITIES']) {
       (async () => {
-        const resp = await axios.get('/amenities');
-        setAmenityList(resp.data.data.amenitys);
+        try {
+          setIsLoading(true);
+          const resp = await axios.get('/amenities');
+          setAmenityList(resp.data.data.amenitys);
+        } 
+        catch (error) { /* empty */ }
+        finally { 
+          setIsLoading(false);
+        }
       })();
     }
   }, [step]);
@@ -263,36 +289,41 @@ export default function CreatePlaceModal() {
           title="Share some basics about your place"
           subtitle="You'll add more details later, like bed types."
         />
-        <Counter
-          onChange={(value) => setCustomValue('guests', value)}
-          value={guests}
-          title="Guests" 
-          subtitle="How many guests do you allow?"
-          max={16}
-        />
-        <hr />
-        <Counter 
-          onChange={(value) => setCustomValue('bedrooms', value)}
-          value={bedrooms}
-          title="Bedrooms" 
-          subtitle="How many bedrooms do you have?"
-        />
-        <hr />
-        <Counter 
-          onChange={(value) => setCustomValue('beds', value)}
-          value={beds}
-          title="Beds" 
-          subtitle="How many beds do you have?"
-        />
-        <hr />
-        <Counter 
-          onChange={(value) => setCustomValue('bathrooms', value)}
-          value={bathrooms}
-          title="Bathrooms" 
-          subtitle="How many bathrooms do you have?"
-          plussedNumber={0.5}
-          min={0.5}
-        />
+        { isLoading 
+        ? <Spinner /> 
+        : <>
+            <Counter
+              onChange={(value) => setCustomValue('guests', value)}
+              value={guests}
+              title="Guests" 
+              subtitle="How many guests do you allow?"
+              max={16}
+            />
+            <hr />
+            <Counter 
+              onChange={(value) => setCustomValue('bedrooms', value)}
+              value={bedrooms}
+              title="Bedrooms" 
+              subtitle="How many bedrooms do you have?"
+            />
+            <hr />
+            <Counter 
+              onChange={(value) => setCustomValue('beds', value)}
+              value={beds}
+              title="Beds" 
+              subtitle="How many beds do you have?"
+            />
+            <hr />
+            <Counter 
+              onChange={(value) => setCustomValue('bathrooms', value)}
+              value={bathrooms}
+              title="Bathrooms" 
+              subtitle="How many bathrooms do you have?"
+              plussedNumber={0.5}
+              min={0.5}
+            />
+          </>
+        }
       </div>
     );
   }
@@ -313,7 +344,13 @@ export default function CreatePlaceModal() {
             ?.map(a => (
               <div key={a.id} className="col-span-1">
                 <CategoryInput
-                  onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
+                  onClick={(a) => setCustomValue(
+                    'amenities', 
+                    amenities.includes(a) 
+                      ? amenities.filter(am => am !== a) 
+                      : [...amenities ,a]
+                    )
+                  }
                   selected={amenities.includes(a.id)}
                   id={a.id}
                   label={capitalizeFirstLetter(a.name)}
@@ -419,7 +456,7 @@ export default function CreatePlaceModal() {
       secondaryAction={step === STEPS['PROPERTY_TYPES'] ? undefined : onBack}
       body={bodyContent}
       optionBtn={optionBtn}
-      disabled={isErrorsOfStep(step)}
+      // disabled={isErrorsOfStep(step)}
     />
   );
 }

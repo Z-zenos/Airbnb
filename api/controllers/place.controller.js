@@ -10,42 +10,53 @@ exports.getAllPlaces = factory.getAll(Place);
 exports.getPlace = factory.getOne(Place);
 exports.checkPlace = factory.checkOne(Place);
 
-exports.createPlace = catchErrorAsync(async(req, res, next) => {
-  const newPlace = await Place.collection.insertOne(
-    {
-      property_type: "",
-      location: {
-        address: ""
-      },
-      guests: 1,
-      bedrooms:1,
-      bathrooms: 1,
-      beds: 1,
-      image_cover: "",
-      images: [],
-      amenities: [],
-      description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
-      name: "",
-      price: 1,
-      host: new mongoose.Types.ObjectId(req.user.id),
-      status: "creating"
-    }
-  );
+exports.createPlace = catchErrorAsync(async (req, res, next) => {
+  const checkCreatingPlace = await Place.find({ status: 'creating' });
+  if (checkCreatingPlace.length) {
+    return res.status(200).json({
+      status: 'success',
+      data: {
+        place: checkCreatingPlace[0]
+      }
+    });
+  }
+  else {
+    const newPlace = await Place.collection.insertOne(
+      {
+        property_type: "",
+        location: {
+          address: ""
+        },
+        guests: 1,
+        bedrooms: 1,
+        bathrooms: 1,
+        beds: 1,
+        image_cover: "",
+        images: [],
+        amenities: [],
+        description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
+        name: "",
+        price: 1,
+        host: new mongoose.Types.ObjectId(req.user.id),
+        status: "creating"
+      }
+    );
 
-  const insertedPlace = await Place.findById(newPlace.insertedId);
+    const insertedPlace = await Place.findById(newPlace.insertedId);
 
-  res.status(201).json({
-    status: 'success',
-    data: {
-      place: insertedPlace
-    }
-  });
+    res.status(201).json({
+      status: 'success',
+      data: {
+        place: insertedPlace
+      }
+    });
+  }
 });
 
 exports.updatePlace = factory.updateOne(Place);
 // exports.deletePlace = factory.deleteOne(Place);
 
-exports.getAllPropertyTypes = catchErrorAsync(async(req, res, next) => {
+exports.getAllPropertyTypes = catchErrorAsync(async (req, res, next) => {
   const propertyTypeList = await PropertyType.find({}, { name: 1, iconImage: 1 });
 
   if (!propertyTypeList) {
@@ -61,7 +72,7 @@ exports.getAllPropertyTypes = catchErrorAsync(async(req, res, next) => {
   });
 });
 
-exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
+exports.getPlacesCreatedByUser = catchErrorAsync(async (req, res, next) => {
   let places = Array.from(await Place.find({ host: req.user.id }));
 
   places = places.map(place => place.property_type ? place : { ...place._doc, property_type: "" });
@@ -75,7 +86,7 @@ exports.getPlacesCreatedByUser = catchErrorAsync(async(req, res, next) => {
   });
 });
 
-exports.getAveragePriceByPlaceType = catchErrorAsync(async(req, res, next) => {
+exports.getAveragePriceByPlaceType = catchErrorAsync(async (req, res, next) => {
   const averages = await Place.aggregate([
     {
       $match: {
@@ -96,7 +107,7 @@ exports.getAveragePriceByPlaceType = catchErrorAsync(async(req, res, next) => {
         avg: { $round: '$average' },
         _id: 0,
         totalPrices: 1,
-        totalPlaces : 1,
+        totalPlaces: 1,
       }
     }
   ]);
@@ -118,31 +129,31 @@ exports.searchByQuery = (req, res, next) => {
   const { query } = req;
   let queryObj = {};
 
-  if(query.children) queryObj['rules.children'] = +query.children;
-  if(query.pets) queryObj['rules.pets'] = +query.pets;
-  if(query.adults) queryObj.guests = { 'gte': +query.adults + (+query.children || 0) };
-  if(query.checkin ) {
+  if (query.children) queryObj['rules.children'] = +query.children;
+  if (query.pets) queryObj['rules.pets'] = +query.pets;
+  if (query.adults) queryObj.guests = { 'gte': +query.adults + (+query.children || 0) };
+  if (query.checkin) {
     const date = new Date(+query.checkin);
     queryObj['checkinout.checkin_date'] = { 'gte': new Date(date.setDate(date.getDate() + 1)) };
   }
-    
-  if(query.checkout) {
+
+  if (query.checkout) {
     const date = new Date(+query.checkout);
     queryObj['checkinout.checkout_date'] = { 'lte': new Date(date.setDate(date.getDate() + 1)) };
   }
 
-  if(query.region && query.region !== 'Any') queryObj['location.region'] = query.region;
-  if(query.address) {
+  if (query.region && query.region !== 'Any') queryObj['location.region'] = query.region;
+  if (query.address) {
     queryObj['$text'] = {
       '$search': query.address
     };
   }
   const searchCriteria = ['children', 'pets', 'adults', 'checkin', 'checkout', 'region', 'address'];
   searchCriteria.forEach(sc => {
-    if(query[sc]) delete query[sc];
+    if (query[sc]) delete query[sc];
   });
 
-  req.query = {...queryObj, ...query };
+  req.query = { ...queryObj, ...query };
   next();
 };
 

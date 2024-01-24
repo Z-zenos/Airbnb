@@ -4,13 +4,14 @@ const authController = require('./../controllers/auth.controller');
 
 const router = express.Router();
 
+router.get('/', placeController.getAllPlaces);
+
 router
-  .route('/')
-  .get(placeController.getAllPlaces)
-  .post(
-    authController.protect,
-    placeController.createPlace
-  );
+  .route('/become-a-host/:id?')
+  .all(authController.protect)
+  .get(placeController.getPlacesCreatedByUser)
+  .post(placeController.createPlace)
+  .patch(placeController.updatePlace);
 
 router
   .route('/property-types')
@@ -29,23 +30,16 @@ router
   .get(placeController.searchByQuery, placeController.countPlace);
 
 router
-  .route('/my-places')
-  .get(
-    authController.protect, 
-    placeController.getPlacesCreatedByUser
-  );
-
-router
   .route('/:id')
   .get(placeController.getPlace)
   .patch(
     authController.protect,
     placeController.updatePlace
   )
-  // .delete(
-  //   authController.protect,
-  //   placeController.deletePlace
-  // );
+// .delete(
+//   authController.protect,
+//   placeController.deletePlace
+// );
 
 
 module.exports = router;
