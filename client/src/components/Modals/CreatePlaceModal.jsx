@@ -111,10 +111,12 @@ export default function CreatePlaceModal() {
     return !!errors.filter(e => e.step === step).length;
   }
 
+  console.log(errors, property_type?.name);
+
   useEffect(() => {
     if(isErrorsOfStep(step)) return;
 
-    if(step === STEPS['PROPERTY_TYPES'] && !property_type) {
+    if(step === STEPS['PROPERTY_TYPES'] && !property_type?.name) {
       setErrors([...errors, {
         step: step,
         message: "Please choose one place type."
@@ -244,7 +246,7 @@ export default function CreatePlaceModal() {
               <div key={pt.id} className="col-span-1">
                 <CategoryInput
                   onClick={property_typeId => setCustomValue('property_type', property_typeId)}
-                  selected={property_type === pt.id}
+                  selected={property_type?.name === pt.name.toLowerCase()}
                   id={pt.id}
                   label={pt.name}
                   iconSrc={pt.src}
