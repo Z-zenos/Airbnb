@@ -246,7 +246,7 @@ export default function CreatePlaceModal() {
 
         <Map 
           locations={[{
-            coordinate: location?.coordinates.length ? location.coordinates : [0,0],
+            coordinate: location?.coordinates?.length ? location.coordinates : [0,0],
           }]} 
           className="h-[35vh] rounded-xl" 
           zoom={12}
@@ -308,17 +308,20 @@ export default function CreatePlaceModal() {
         <div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
         >
-          { amenityList?.length > 0 && amenityList?.map(a => (
-            <div key={a.id} className="col-span-1">
-              <CategoryInput
-                onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
-                selected={amenities.includes(a.id)}
-                id={a.id}
-                label={capitalizeFirstLetter(a.name)}
-                iconSrc={`http://localhost:3000/images/amenities/${a.iconImage}`}
-              />
-            </div>
-          )) }
+          { amenityList?.length > 0 && amenityList
+            ?.filter(a => a.iconImage && a.iconImage !== "essentials.png")
+            ?.map(a => (
+              <div key={a.id} className="col-span-1">
+                <CategoryInput
+                  onClick={(a) => setCustomValue('amenities', amenities.includes(a) ? amenities.filter(am => am !== a) : [...amenities ,a])}
+                  selected={amenities.includes(a.id)}
+                  id={a.id}
+                  label={capitalizeFirstLetter(a.name)}
+                  iconSrc={`http://localhost:3000/images/amenities/${a.iconImage}`}
+                />
+              </div>
+            )) 
+          }
         </div>
       </div>
     ) 

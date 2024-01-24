@@ -50,49 +50,52 @@ export default function Map({
       {  locations.map((location, i) => (
         <Marker key={i} position={location?.coordinate} title={location?.address}  icon={customIcon} >
           { isDisplayExtraInfoPlace && 
-            <Popup className=''>
-              <Link 
-                target="_blank" 
-                to={`/places/${location?.id}`} 
-                className=' cursor-pointer'
-              >
-                <img 
-                  className='w-full h-[200px] max-h-[200px] rounded-tl-xl rounded-tr-xl ' 
-                  src={`http://localhost:3000/images/places/${location?.image_cover}`} 
-                />
-                <div className='px-4 py-3'>
-                  <p 
-                    style={{ 
-                      fontWeight: '600', 
-                      fontSize: '18px', 
-                      color: '#000', 
-                      margin: '6px 0', 
-                      display: 'flex', 
-                      justifyContent: 'space-between' 
-                    }}
-                  >
-                    {location?.name.replace(/(.{24})..+/, "$1…")} 
-                    <span className='font-light flex items-center gap-1 '>
-                      <AiFillStar className='text-yellow-500' /> 
-                      {location?.rating}
-                    </span>
-                  </p>
-                  <p 
-                    style={{ 
-                      margin: '4px 0', 
-                      color: 'black', 
-                      opacity: '70%' 
-                    }}
-                  >
-                    {location?.address}
-                  </p>
-                </div>
-              </Link>
-            </Popup>
+            <>
+              <Popup className=''>
+                <Link 
+                  target="_blank" 
+                  to={`/places/${location?.id}`} 
+                  className=' cursor-pointer'
+                >
+                  <img 
+                    className='w-full h-[200px] max-h-[200px] rounded-tl-xl rounded-tr-xl ' 
+                    src={`http://localhost:3000/images/places/${location?.image_cover}`} 
+                  />
+                  <div className='px-4 py-3'>
+                    <p 
+                      style={{ 
+                        fontWeight: '600', 
+                        fontSize: '18px', 
+                        color: '#000', 
+                        margin: '6px 0', 
+                        display: 'flex', 
+                        justifyContent: 'space-between' 
+                      }}
+                    >
+                      {location?.name.replace(/(.{24})..+/, "$1…")} 
+                      <span className='font-light flex items-center gap-1 '>
+                        <AiFillStar className='text-yellow-500' /> 
+                        {location?.rating}
+                      </span>
+                    </p>
+                    <p 
+                      style={{ 
+                        margin: '4px 0', 
+                        color: 'black', 
+                        opacity: '70%' 
+                      }}
+                    >
+                      {location?.address}
+                    </p>
+                  </div>
+                </Link>
+              </Popup>
+              <Tooltip direction="bottom" offset={[0, 0]} opacity={1} permanent>
+                <span style={{ fontWeight: '700' }}>$ {location?.price}</span>
+              </Tooltip>
+            </>
+
           }
-          <Tooltip direction="bottom" offset={[0, 0]} opacity={1} permanent>
-            <span style={{ fontWeight: '700' }}>$ {location?.price}</span>
-          </Tooltip>
         </Marker>
       ))}
     </MapContainer>

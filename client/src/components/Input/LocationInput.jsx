@@ -2,19 +2,22 @@ import Select, { components } from 'react-select';
 import useCountries from '../../hooks/useCountries';
 import { GoLocation } from "react-icons/go";
 import Input from './Input';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function LocationInput({
   value, onChange
 }) {
   const { getAll } = useCountries();
+  const [isLoading, setIsLoading] = useState(false);
 
   const asyncGetCurrentPosition = options => new Promise((resolve, reject) => {
     navigator.geolocation.getCurrentPosition(resolve, reject, options);
   });
 
   const handleLocationClick = async () => {
+    setIsLoading(true);
     let {coords: {latitude, longitude}} = await asyncGetCurrentPosition();
+    setIsLoading(false);
     return [latitude, longitude];
   }
 
@@ -45,17 +48,35 @@ export default function LocationInput({
   };
 
   const addressInputRef = useRef(null);
-
+  
   return (
     <>
-      <Input type="text" label="Address" value={value?.address} onChange={() => onChange({ ...value, address: addressInputRef.current.value })} ref={addressInputRef} className="rounded-lg "/>
+      <Input 
+        type="text" 
+        label="Address" 
+        value={value?.address} 
+        onChange={() => onChange({ 
+          ...value, 
+          address: addressInputRef.current.value 
+        })} 
+        ref={addressInputRef} 
+        className="rounded-lg "
+      />
       <Select
+        isLoading={isLoading}
         components={{ MenuList: selectMenuButton }}
-        placeholder="Anywhere"
+        value={value?.value ? value : ""}
+        placeholder={"Select anywhere"}
         isClearable
         options={getAll()}
-        value={value}
-        onChange={value => onChange({...value, address: addressInputRef.current.value})}
+        onChange={value => {
+          setIsLoading(true);
+          onChange({
+            ...value, 
+            address: addressInputRef.current.value
+          });
+          setTimeout(() => setIsLoading(false), 500);
+        }}
         formatOptionLabel={option => (
           <div className="flex flex-row items-center gap-3">
             <div>{option.flag}</div>
@@ -67,12 +88,12 @@ export default function LocationInput({
             </div>
           </div>
         )}
-        className='relative'
+        className='relative cursor-pointer'
 
         classNames={{
-          control: () => 'p-3 border-2',
-          input: () => 'text-md',
-          option: () => 'text-md'
+          control: () => 'p-3 border-2 cursor-pointer',
+          input: () => 'text-md cursor-pointer',
+          option: () => 'text-md cursor-pointer',
         }}
 
         theme={(theme) => ({
