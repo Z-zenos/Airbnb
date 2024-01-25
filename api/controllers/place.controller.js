@@ -60,7 +60,7 @@ exports.getAllPropertyTypes = catchErrorAsync(async (req, res, next) => {
   const propertyTypeList = await PropertyType.find({}, { name: 1, iconImage: 1 });
 
   if (!propertyTypeList) {
-    return next(new AppError(`Place type list is empty`, 404));
+    return next(new AppError(`Property type list is empty`, 404));
   }
 
   res.status(200).json({

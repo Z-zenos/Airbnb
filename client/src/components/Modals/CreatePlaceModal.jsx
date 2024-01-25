@@ -1,5 +1,5 @@
 
-import { useContext, useEffect, useMemo, useRef, useState } from "react";
+import { useContext, useMemo, useRef, useState } from "react";
 import{useForm} from "react-hook-form";
 import Modal from "./Modal";
 import Heading from "../Heading/Heading";
@@ -14,6 +14,8 @@ import { Editor } from "@tinymce/tinymce-react";
 import { ModalContext } from "../../contexts/modal.context";
 import Input from "../Input/Input";
 import Spinner from "../Spinner/Spinner";
+import { ToastContext } from "../../contexts/toast.context";
+import Toast from "../Toast/Toast";
 
 const STEPS = {
   PROPERTY_TYPES: 0,
@@ -31,25 +33,40 @@ export default function CreatePlaceModal() {
   const editorRef = useRef(null);
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
-  const [errors, setErrors] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [placeId, setPlaceId] = useState("");
+  const { openToast } = useContext(ToastContext);
 
   let {
     setValue,
     watch,
     formState: {
-      isDirty
+      isDirty,
     },
     getValues,
   } = useForm({
     mode: 'all',
     defaultValues: async () => {
       try {
-        const res = await axios.get('/places/become-a-host');
+        setIsLoading(true);
 
-        const placeList = res.data.data.places;
+        const property_typeResp = await axios.get('/places/property-types');
+
+        setPropertyTypeList(() => property_typeResp.data.data.propertyTypeList.map(pt => ({
+          id: pt.id,
+          name: capitalizeFirstLetter(pt.name),
+          src: `http://localhost:3000/images/property_types/${pt.iconImage}` 
+        })));
+
+        const amenityResp = await axios.get('/amenities');
+        setAmenityList(amenityResp.data.data.amenitys);
+
+        const placesRes = await axios.get('/places/become-a-host');
+
+        const placeList = placesRes.data.data.places;
         const creatingPlaceList = placeList.filter(place => place.status === 'creating');
+
+        let newPlace;
 
         if(!placeList.length || !creatingPlaceList.length) {
           const createResp = await axios.post('/places/become-a-host', {}, {
@@ -57,15 +74,21 @@ export default function CreatePlaceModal() {
               "Content-Type": "application/json"
             },
           });
-          setPlaceId(createResp.data.data.place._id);
-          return createResp.data.data.place;
+          newPlace = createResp.data.data.place;
         }
         else {
-          setPlaceId(creatingPlaceList[0]._id);
-          return creatingPlaceList[0];
+          newPlace =  creatingPlaceList[0];
         }
-      } catch(err) {
-        console.error(err);
+
+        setPlaceId(newPlace._id);
+        newPlace.amenities = newPlace.amenities.map(am => am._id);
+        console.log(newPlace);
+        return newPlace;
+      } catch(error) {
+        console.error(error);
+      }
+      finally {
+        setIsLoading(false);
       }
     }
   });
@@ -89,6 +112,7 @@ export default function CreatePlaceModal() {
         shouldTouch: true,
         shouldValidate: true
       });
+
       if(id !== 'images') {
         await axios.patch(
           `/places/become-a-host/${placeId}`, 
@@ -103,60 +127,11 @@ export default function CreatePlaceModal() {
         );
       }
   
-      setErrors(isErrorsOfStep(step) ? [] : errors);
     })();
   }
 
-  function isErrorsOfStep(step) {
-    return !!errors.filter(e => e.step === step).length;
-  }
-
-  console.log(errors, property_type?.name);
-
-  useEffect(() => {
-    if(isErrorsOfStep(step)) return;
-
-    if(step === STEPS['PROPERTY_TYPES'] && !property_type?.name) {
-      setErrors([...errors, {
-        step: step,
-        message: "Please choose one place type."
-      }]);
-    }
-    else if(step === STEPS['LOCATION'] && !location?.country) {
-      setErrors([...errors, {
-        step: step,
-        message: "Please choose location for your place."
-      }]);
-    }
-    else if(step === STEPS['AMENITIES'] && !amenities.length) {
-      setErrors([...errors, {
-        step: step,
-        message: "Please choose at least one amenity for your place."
-      }]);
-    }
-    else if(step === STEPS['IMAGES'] && !images.length) {
-      setErrors(() => [...errors, {
-        step: step,
-        message: "Please choose at least one image for your place."
-      }]);
-    }
-    else if(step === STEPS['DESCRIPTION'] && !name) {
-      setErrors([...errors, {
-        step: step,
-        message: "Please enter name and description for place."
-      }]);
-    }
-    else if(step === STEPS['PRICE'] && !price) {
-      setErrors([...errors, {
-        step: step,
-        message: "Please enter price for place."
-      }]);
-    }
-  }, [step, name, location?.country, price]);
-
   function onNext() {
-    if(!isErrorsOfStep(step))
-      setStep(prevStep => prevStep + 1);
+    setStep(prevStep => prevStep + 1);
   }
 
   function onBack() {
@@ -176,8 +151,9 @@ export default function CreatePlaceModal() {
           "Content-Type": "application/json"
         },
       });
+      openToast(<Toast title="Success" type="success" content="Create new place successfully" />);
     } catch(err) {
-      console.log(err);
+      openToast(<Toast title="Failure" type="error" content="May be missed some needed information for your place" />);
     }
   }
 
@@ -193,42 +169,6 @@ export default function CreatePlaceModal() {
       return undefined;
 
     return 'Back';
-  }, [step]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const res = await axios.get('/places/property-types');
-
-        setPropertyTypeList(() => res.data.data.propertyTypeList.map(pt => ({
-          id: pt.id,
-          name: capitalizeFirstLetter(pt.name),
-          src: `http://localhost:3000/images/property_types/${pt.iconImage}` 
-        })));
-
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    })();
-  }, []); 
-
-  useEffect(() => {
-    if(step === STEPS['AMENITIES']) {
-      (async () => {
-        try {
-          setIsLoading(true);
-          const resp = await axios.get('/amenities');
-          setAmenityList(resp.data.data.amenitys);
-        } 
-        catch (error) { /* empty */ }
-        finally { 
-          setIsLoading(false);
-        }
-      })();
-    }
   }, [step]);
 
   let bodyContent = (

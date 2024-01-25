@@ -251,7 +251,7 @@ placeSchema.pre(/^find/, function (next) {
     select: '-__v -_id -created -modified'
   }).populate({
     path: 'amenities',
-    select: '-__v -created -modified -_id'
+    select: '-__v -created -modified'
   }).populate({
     path: 'views',
     select: '-__v'

@@ -65,7 +65,7 @@ export default function LocationInput({
       <Select
         isLoading={isLoading}
         components={{ MenuList: selectMenuButton }}
-        value={value?.value ? value : ""}
+        value={value?.country ? value : ""}
         placeholder={"Select anywhere"}
         isClearable
         options={getAll()}
