@@ -34,7 +34,6 @@ export default function CreatePlaceModal() {
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [placeId, setPlaceId] = useState("");
   const { openToast } = useContext(ToastContext);
 
   let {
@@ -80,9 +79,7 @@ export default function CreatePlaceModal() {
           newPlace =  creatingPlaceList[0];
         }
 
-        setPlaceId(newPlace._id);
         newPlace.amenities = newPlace.amenities.map(am => am._id);
-        console.log(newPlace);
         return newPlace;
       } catch(error) {
         console.error(error);
@@ -115,7 +112,7 @@ export default function CreatePlaceModal() {
 
       if(id !== 'images') {
         await axios.patch(
-          `/places/become-a-host/${placeId}`, 
+          `/places/become-a-host/${getValues()._id}`, 
           {
             [id]: value
           }, 

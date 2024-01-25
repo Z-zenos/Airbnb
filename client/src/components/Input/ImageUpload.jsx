@@ -11,13 +11,14 @@ export default function ImageUpload({
 }) {
   const [images, setImages] = useState([]);
   const { openToast } = useContext(ToastContext);
+  const imageInputRef = useRef(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       const res = await axios.get(`/images/${placeId}`);
 
       const { image_cover, images } = res.data.data;
-
       const urls = [image_cover, ...images].filter(Boolean);
 
       if(urls.length) onChange(urls);
@@ -30,12 +31,15 @@ export default function ImageUpload({
 
   async function handleUploadImages() {
     try {
-      if(!images.length) return;
-
+      setIsLoading(true);
+      if(!images.length) {
+        openToast(<Toast title="Failure" content="You need upload minimum 1 photo for one place" type="warn" />);
+        return;
+      }
       // send the file and description to the server
       const formData = new FormData();
       images.forEach((image, i) => {
-        if(!i) formData.append("image_cover", image);
+        if(!i && !value.length) formData.append("image_cover", image);
         else formData.append("images", image);
       });
 
@@ -51,13 +55,17 @@ export default function ImageUpload({
 
       const place = res.data.data.place;
 
-      onChange([...value, place.image_cover, ...place.images]);
+      onChange([place.image_cover, ...place.images]);
+      setImages([]);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
+    if(!images.length) return;
     try {
       handleUploadImages();
       openToast(
@@ -78,13 +86,24 @@ export default function ImageUpload({
     // Info about all images that dragged
     const { files } = ev.dataTransfer;
 
-    if(files.length > 0) {
+    imageInputRef.current.style.borderStyle = 'dashed';
+    imageInputRef.current.style.borderColor = 'gray';
+    if(files.length) {
       handleImages(files);
     }
   }
 
-  function handleDragOver (ev) {
+  function handleDrag (ev, state) {
     ev.preventDefault();
+    const style = imageInputRef.current.style;
+    if(state === 'in') {
+      style.borderStyle = 'solid';
+      style.borderColor = '#ff385c';
+    }
+    else if(state === 'out') {
+      style.borderStyle = 'dashed';
+      style.borderColor = 'gray';
+    }
   }
 
   const fileInputRef = useRef(null);
@@ -128,33 +147,45 @@ export default function ImageUpload({
       <form 
         className=""
         onDrop={handleDrop}
-        onDragOver={handleDragOver}
+        onDragOver={ev => handleDrag(ev, 'in')}
+        onDragLeave={ev => handleDrag(ev, 'out')}
       >
         { value.length > 0 && <div className="grid grid-cols-2 gap-4">{preview}</div> }
         
-        <div className="h-[40vh] mt-4 rounded-lg border-dashed border-neutral-600 border-[1px] flex flex-col items-center justify-center">
-          <div className="text-center">
-            <IoIosImages className="mx-auto w-20 h-20 text-primary" />
+        { value.length < 10 
+          ? <div 
+              className="h-[40vh] mt-4 rounded-lg border-dashed border-neutral-600 border-[1px] flex flex-col items-center justify-center transition-all"
+              ref={imageInputRef}
+            >
+              { isLoading
+                ? <Spinner />
+                : <>
+                    <div className="text-center">
+                      <IoIosImages className="mx-auto w-20 h-20 text-primary" />
 
-            <p className="text-2xl font-medium my-3">Drag and drop your photos here</p>
-            <p className="font-light">Choose at least 5 photos</p>
-          </div>
+                      <p className="text-2xl font-medium my-3">Drag and drop your photos here</p>
+                      <p className="font-light">Choose at least 5 photos</p>
+                    </div>
 
-          <p 
-            className="underline font-medium text-sm mt-10 cursor-pointer"
-            onClick={() => fileInputRef.current.click()}
-          >
-            Upload from your device
-            <input 
-              ref={fileInputRef} 
-              type="file" 
-              accept="image/*" 
-              hidden 
-              multiple={true}
-              onChange={ev => handleImages(ev.target.files)}
-            />
-          </p>
-        </div>
+                    <p 
+                      className="underline font-medium text-sm mt-10 cursor-pointer"
+                      onClick={() => fileInputRef.current.click()}
+                    >
+                      Upload from your device
+                      <input 
+                        ref={fileInputRef} 
+                        type="file" 
+                        accept="image/*" 
+                        hidden 
+                        multiple={true}
+                        onChange={ev => handleImages(ev.target.files)}
+                      />
+                    </p>
+                  </>
+              }
+            </div>
+          : <p className="font-medium mt-4 text-lg text-center">You uploaded maximum 10 photos for this place.</p>
+        }
       </form>
     </div>
   );

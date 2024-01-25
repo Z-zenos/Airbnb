@@ -130,9 +130,9 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have images'],
       validate: {
         validator: function (val) {
-          return val.length >= 4 && val.length <= 9;
+          return val.length <= 9;
         },
-        message: "Only upload 5-10 images for each place"
+        message: "Only upload maximum 10 images for each place!"
       }
     },
 

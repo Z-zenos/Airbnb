@@ -4,11 +4,12 @@ const sharp = require('sharp');
 
 const AppError = require("../utils/appError");
 const catchErrorAsync = require("../utils/catchErrorAsync");
+const Place = require('../models/place.model');
 
 const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req, file, cb) => {
-  if(file.mimetype.startsWith('image')) {
+  if (file.mimetype.startsWith('image')) {
     cb(null, true);
   } else {
     cb(new AppError("Not an image! Please upload only images.", 400));
@@ -23,7 +24,7 @@ const upload = multer({
 
 exports.uploadPlaceImages = upload.fields([
   { name: 'image_cover', maxCount: 1 },
-  { name: 'images', maxCount: 5 }
+  { name: 'images', maxCount: 9 }
 ]);
 
 exports.uploadUserAvatar = upload.fields([
@@ -31,7 +32,7 @@ exports.uploadUserAvatar = upload.fields([
 ]);
 
 exports.fileLimitsChecker = catchErrorAsync(async (req, res, next) => {
-  if (!Object.keys(req.files).length) 
+  if (!Object.keys(req.files).length)
     return next(new AppError("Image missing", 400));
 
   Object.keys(req.files).forEach(imageField => {
@@ -46,25 +47,33 @@ exports.fileLimitsChecker = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
-  const image_cover = req.files?.image_cover[0];
+  const placeId = req.params.id;
+  const place = await Place.findById(placeId);
+  if (!place.images.length && (!image_cover || !images)) return next();
+
+  if (place.images.length + 1 > 10) {
+    return next(new AppError("You reached maximum 10 photos for this place!", 404));
+  }
+
+  const image_cover = req.files?.image_cover?.[0];
   const images = req.files?.images;
 
-  if(!image_cover || !images) return next();
-
   // 1) Cover image
-  req.body.image_cover = `place-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(image_cover.buffer)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`resources/images/places/${req.body.image_cover}`);
+  if (image_cover) {
+    req.body.image_cover = `place-${placeId}-${Date.now()}-cover.jpeg`;
+    await sharp(image_cover.buffer)
+      .resize(2000, 1333)
+      .toFormat('jpeg')
+      .jpeg({ quality: 90 })
+      .toFile(`resources/images/places/${req.body.image_cover}`);
+  }
 
   // 2) Images
   req.body.images = [];
 
   await Promise.all(
     images.map(async (file, i) => {
-      const filename = `place-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
+      const filename = `place-${placeId}-${Date.now()}-${i + place.images.length + 1}.jpeg`;
 
       await sharp(file.buffer)
         .resize(2000, 1333)
@@ -72,7 +81,7 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
         .jpeg({ quality: 90 })
         .toFile(`resources/images/places/${filename}`);
 
-      req.body.images.push(filename);
+      req.body.images.push(...place.images, filename);
     })
   );
 
@@ -82,7 +91,7 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 exports.resizeUserAvatar = catchErrorAsync(async (req, res, next) => {
   const [avatar] = req.files?.avatar;
 
-  if(!avatar) return next();
+  if (!avatar) return next();
 
   // 1) Cover avatar
   req.body.avatar = `user-${req.params.id}-${Date.now()}-avatar.jpeg`;
@@ -96,16 +105,16 @@ exports.resizeUserAvatar = catchErrorAsync(async (req, res, next) => {
 });
 
 exports.deleteUserAvatar = catchErrorAsync(async (req, res, next) => {
-  const user = req.user;  
+  const user = req.user;
 
   const imagePath = `${__dirname}/../resources/images/users/avatars/${user.avatar}`;
 
   let exists = await fs.access(imagePath).then(() => true).catch(() => false);
-  if(exists) await fs.unlink(imagePath);
+  if (exists) await fs.unlink(imagePath);
   user.avatar = undefined;
 
   next();
-  
+
 });
 
 exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
@@ -122,14 +131,14 @@ exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
 
 exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   const { imageName } = req.params;
-  const place = req.place;  
+  const place = req.place;
 
-  if(imageName === place.image_cover) {
-    place.image_cover = req.body.image_cover = undefined; 
+  if (imageName === place.image_cover) {
+    place.image_cover = req.body.image_cover = undefined;
   }
   else {
-    for(let i = 0; i < place.images.length; i++) {
-      if(place.images[i] === imageName) {
+    for (let i = 0; i < place.images.length; i++) {
+      if (place.images[i] === imageName) {
         req.body.images = place.images.filter(i => i !== imageName);
         break;
       }
@@ -140,5 +149,5 @@ exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   await fs.unlink(imagePath);
 
   next();
-  
+
 });

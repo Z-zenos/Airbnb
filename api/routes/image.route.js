@@ -19,14 +19,14 @@ router
 router
   .route('/:id/:imageName')
   .delete(
-    imageController.deleteImage, 
+    imageController.deleteImage,
     placeController.updatePlace
   );
 
 router
   .route('/:id/upload') // id -> placeId
   .patch(
-    imageController.uploadPlaceImages, 
+    imageController.uploadPlaceImages,
     imageController.resizePlaceImages,
     placeController.updatePlace
   );
