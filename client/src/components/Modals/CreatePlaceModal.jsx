@@ -176,7 +176,11 @@ export default function CreatePlaceModal() {
       />
 
       <div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[40vh] px-4 overflow-y-auto"
+        className={`
+          grid grid-cols-1 gap-3 
+          max-h-[40vh] px-4 overflow-y-auto 
+          ${isLoading ? 'grid-cols-1' : 'md:grid-cols-2 lg:grid-cols-3'}
+        `}
       >
         { (propertyTypeList.length > 0 && !isLoading)
           ? propertyTypeList.map(pt => (

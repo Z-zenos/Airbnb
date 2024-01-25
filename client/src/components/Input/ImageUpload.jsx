@@ -57,17 +57,6 @@ export default function ImageUpload({
 
       onChange([place.image_cover, ...place.images]);
       setImages([]);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if(!images.length) return;
-    try {
-      handleUploadImages();
       openToast(
         <Toast title="Success" content="Upload images successfully!" type="success" />
       );
@@ -75,7 +64,15 @@ export default function ImageUpload({
       openToast(
         <Toast title="Failure" content={error?.message} type="error" />
       );
+      onChange([]);
+    } finally {
+      setIsLoading(false);
     }
+  }
+
+  useEffect(() => {
+    if(!images.length) return;
+    handleUploadImages();
   }, [images.length]);
 
   function handleDrop (ev) {

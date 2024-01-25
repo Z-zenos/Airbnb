@@ -49,14 +49,14 @@ exports.fileLimitsChecker = catchErrorAsync(async (req, res, next) => {
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
   const placeId = req.params.id;
   const place = await Place.findById(placeId);
-  if (!place.images.length && (!image_cover || !images)) return next();
+  const image_cover = req.files?.image_cover?.[0];
+  const images = req.files?.images;
+
+  if (!place.images.length && !image_cover) return next();
 
   if (place.images.length + 1 > 10) {
     return next(new AppError("You reached maximum 10 photos for this place!", 404));
   }
-
-  const image_cover = req.files?.image_cover?.[0];
-  const images = req.files?.images;
 
   // 1) Cover image
   if (image_cover) {
@@ -70,20 +70,21 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
 
   // 2) Images
   req.body.images = [];
+  if (images?.length) {
+    await Promise.all(
+      images.map(async (file, i) => {
+        const filename = `place-${placeId}-${Date.now()}-${i + place.images.length + 1}.jpeg`;
 
-  await Promise.all(
-    images.map(async (file, i) => {
-      const filename = `place-${placeId}-${Date.now()}-${i + place.images.length + 1}.jpeg`;
+        await sharp(file.buffer)
+          .resize(2000, 1333)
+          .toFormat('jpeg')
+          .jpeg({ quality: 90 })
+          .toFile(`resources/images/places/${filename}`);
 
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`resources/images/places/${filename}`);
-
-      req.body.images.push(...place.images, filename);
-    })
-  );
+        req.body.images.push(...place.images, filename);
+      })
+    );
+  }
 
   next();
 });
@@ -134,7 +135,7 @@ exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   const place = req.place;
 
   if (imageName === place.image_cover) {
-    place.image_cover = req.body.image_cover = undefined;
+    req.body.image_cover = "";
   }
   else {
     for (let i = 0; i < place.images.length; i++) {
