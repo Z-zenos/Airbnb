@@ -152,7 +152,6 @@ export default function CreatePlaceModal() {
           STEPS[step].fields.forEach(field => {
             body[field] = getValues(field);
           });
-          console.log(body);
           
           await axios.patch(`/places/become-a-host/${getValues("_id")}`, body, {
               headers: {
