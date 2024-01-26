@@ -279,7 +279,13 @@ export default function PlacePage() {
                       </div>
 
                       <Link to={`/users/profile/${place?.host?.id}`} className="w-12 h-12  border-primary rounded-full border-[1px] p-[2px]">
-                        <img src={place?.host?.avatar} className="rounded-full w-full h-full" />
+                        <img 
+                          src={place?.host?.avatar.includes('user-') 
+                            ? `http://localhost:3000/images/users/avatars/${place?.host?.avatar}` 
+                            : place?.host?.avatar
+                          } 
+                          className="rounded-full w-full h-full" 
+                        />
                       </Link>
                     </div>
                     <div className="h-[1px] bg-gray-300 mt-1"></div>
@@ -551,7 +557,13 @@ export default function PlacePage() {
                   <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-start gap-4">
                       <Link to={`/users/profile/${place?.host?.id}`} className="rounded w-14 h-14">
-                        <img src={place?.host?.avatar} className="rounded-full w-full h-full" />
+                        <img 
+                          src={place?.host?.avatar.includes('user-') 
+                            ? `http://localhost:3000/images/users/avatars/${place?.host?.avatar}` 
+                            : place?.host?.avatar
+                          } 
+                          className="rounded-full w-full h-full" 
+                        />
                       </Link>
 
                       <div>
