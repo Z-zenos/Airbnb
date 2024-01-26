@@ -10,7 +10,6 @@ import { SlLogout } from "react-icons/sl";
 import { CiLogin } from "react-icons/ci";
 import Toast from "./Toast/Toast";
 import axios from 'axios';
-import Spinner from './Spinner/Spinner';
 
 const MONTHS = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
@@ -99,11 +98,9 @@ export default function Header() {
           </svg>
         </div>
 
-        {  !HIDE_USER_MENU_URLS.some(humu => location.pathname.startsWith(`/${humu}`)) && (
-          !user?.name 
-          ? <Spinner /> 
-          : <div 
-            className='ab__auth-widget border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer'
+        {  !HIDE_USER_MENU_URLS.some(humu => location.pathname.startsWith(`/${humu}`)) && 
+            <div 
+              className='ab__auth-widget border border-gray-300 rounded-full px-2 py-1 hover:shadow-md hover:shadow-gray-300 cursor-pointer'
             >
               { user?.email ? (
                 <div 
@@ -134,7 +131,7 @@ export default function Header() {
                 <Link to={'/login'} className='text-sm px-3'>Login / Register</Link>
               )}
             </div>
-        )}
+        }
 
         { userBox && <div className='bg-white absolute right-0 top-[60px] shadow shadow-gray-400 rounded-xl py-4 w-[200px] text-sm z-[60]'>
           <ul>
