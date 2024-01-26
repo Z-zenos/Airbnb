@@ -120,20 +120,9 @@ const placeSchema = new mongoose.Schema(
       required: [true, 'A place must have description']
     },
 
-    image_cover: {
-      type: String,
-      required: [true, 'A place must have a cover image']
-    },
-
     images: {
       type: [String],
       required: [true, 'A place must have images'],
-      validate: {
-        validator: function (val) {
-          return val.length <= 9;
-        },
-        message: "Only upload maximum 10 images for each place!"
-      }
     },
 
     created: {

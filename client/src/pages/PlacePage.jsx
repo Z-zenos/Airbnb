@@ -212,31 +212,31 @@ export default function PlacePage() {
                     style={{ gridColumn: '1' }}
                     alt="gallery"
                     className="block w-full h-[230px] rounded-lg object-cover object-center"
-                    src={`http://localhost:3000/images/places/${place?.images[0]}`} 
+                    src={`http://localhost:3000/images/places/${place?.images[1]}`} 
                   />
                   <img
                     style={{ gridColumn: '2' }}
                     alt="gallery"
                     className="block w-full h-[230px] rounded-lg object-cover object-center"
-                    src={`http://localhost:3000/images/places/${place?.images[3]}`} 
+                    src={`http://localhost:3000/images/places/${place?.images[2]}`} 
                   />
                   <img
                     style={{ gridColumn: '1', gridRow: '2' }}
                     alt="gallery"
                     className="block w-full h-[230px] rounded-lg object-cover object-center"
-                    src={`http://localhost:3000/images/places/${place?.images[1]}`} 
+                    src={`http://localhost:3000/images/places/${place?.images[3]}`} 
                   />
                   <img
                     style={{ gridColumn: '2' , gridRow: '2' }}
                     alt="gallery"
                     className="block w-full h-[230px] rounded-lg object-cover object-center"
-                    src={`http://localhost:3000/images/places/${place?.images[2]}`} 
+                    src={`http://localhost:3000/images/places/${place?.images[4]}`} 
                   />
                   <img
                     style={{ gridColumn: '3 / span 2' , gridRow: '1 / span 2' }}
                     alt="gallery"
                     className="block w-full h-full max-h-[470px] rounded-lg object-cover object-center"
-                    src={`http://localhost:3000/images/places/${place?.image_cover}`} 
+                    src={`http://localhost:3000/images/places/${place?.images[0]}`} 
                   />
                   
                 </div>
@@ -249,7 +249,7 @@ export default function PlacePage() {
             >
               <CgMenuGridO />
             </Button>
-            { (isImageModalOpen && place.images) && <ImageModal images={place.images ? [place.image_cover, ...place.images] : []} /> }
+            { (isImageModalOpen && place.images) && <ImageModal images={place.images ? [...place.images] : []} /> }
 
           </div>
 
@@ -521,7 +521,7 @@ export default function PlacePage() {
                     address: place.location.address,
                     price: place.price,
                     id: place.id,
-                    image_cover: place.image_cover,
+                    image_cover: place.images[0],
                     coordinate: place.location.coordinates,
                     name: place.name,
                     rating: place.average_ratings,

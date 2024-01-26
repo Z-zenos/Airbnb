@@ -31,7 +31,6 @@ exports.createPlace = catchErrorAsync(async (req, res, next) => {
         bedrooms: 1,
         bathrooms: 1,
         beds: 1,
-        image_cover: "",
         images: [],
         amenities: [],
         description: "<p>Feel refreshed when you stay in this rustic gem.</p>",
@@ -171,7 +170,7 @@ exports.countPlace = catchErrorAsync(async (req, res, next) => {
 exports.getPlacesOfUser = catchErrorAsync(async (req, res, next) => {
   const places = await Place
     .find({ host: new mongoose.Types.ObjectId(req.params.id) })
-    .select('name image_cover location.address average_ratings');
+    .select('name images location.address average_ratings status');
 
   res.status(200).json({
     status: 'success',

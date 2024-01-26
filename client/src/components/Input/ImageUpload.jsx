@@ -18,8 +18,8 @@ export default function ImageUpload({
     (async () => {
       const res = await axios.get(`/images/${placeId}`);
 
-      const { image_cover, images } = res.data.data;
-      const urls = [image_cover, ...images].filter(Boolean);
+      const { images } = res.data.data;
+      const urls = [...images].filter(Boolean);
 
       if(urls.length) onChange(urls);
     })();
@@ -32,16 +32,13 @@ export default function ImageUpload({
   async function handleUploadImages() {
     try {
       setIsLoading(true);
-      if(!images.length) {
-        openToast(<Toast title="Failure" content="You need upload minimum 1 photo for one place" type="warn" />);
+      if(!value.length && !images.length) {
+        openToast(<Toast title="Rules 📜" content="You should upload minimum 5 photo for one place" type="info" />);
         return;
       }
       // send the file and description to the server
       const formData = new FormData();
-      images.forEach((image, i) => {
-        if(!i && !value.length) formData.append("image_cover", image);
-        else formData.append("images", image);
-      });
+      images.forEach(image => formData.append("images", image));
 
       const res = await axios.patch(
         `/images/${placeId}/upload`,
@@ -55,7 +52,7 @@ export default function ImageUpload({
 
       const place = res.data.data.place;
 
-      onChange([place.image_cover, ...place.images]);
+      onChange([...place.images]);
       setImages([]);
       openToast(
         <Toast title="Success" content="Upload images successfully!" type="success" />
@@ -71,8 +68,7 @@ export default function ImageUpload({
   }
 
   useEffect(() => {
-    if(!images.length) return;
-    handleUploadImages();
+    handleUploadImages()
   }, [images.length]);
 
   function handleDrop (ev) {
@@ -111,7 +107,7 @@ export default function ImageUpload({
 
     const res = await axios.delete(`/images/${placeId}/${url}`);
     const place = res.data.data.place;
-    onChange([place.image_cover, ...place.images]);
+    onChange([...place.images]);
   }
 
   const preview = value.length > 0 
@@ -181,7 +177,7 @@ export default function ImageUpload({
                   </>
               }
             </div>
-          : <p className="font-medium mt-4 text-lg text-center">You uploaded maximum 10 photos for this place.</p>
+          : <p className="font-medium mt-4 text-lg text-center text-primary">You uploaded maximum 10 photos for this place.</p>
         }
       </form>
     </div>

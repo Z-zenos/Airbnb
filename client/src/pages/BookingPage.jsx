@@ -185,7 +185,7 @@ export default function BookingPage() {
           <div className="lg:col-span-2 sm:col-span-2 relative">
             <div className="sticky mt-20 p-8 sm:flex sm:justify-between sm:items-center sm:relative md:block border border-gray-300 rounded-xl">
               <div className="flex gap-4 pb-5 border-b border-b-gray-300">
-                <img src={`http://localhost:3000/images/places/${place?.image_cover}`} className="w-[150px] h-[120px] rounded-xl" />
+                <img src={`http://localhost:3000/images/places/${place?.images[0]}`} className="w-[150px] h-[120px] rounded-xl" />
                 <div className="flex flex-col justify-between">
                   <div>
                     <p className="font-light mb-1 opacity-70 text-[13px]">Room in {place?.location?.address}</p>

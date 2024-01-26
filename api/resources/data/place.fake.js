@@ -12,7 +12,7 @@ const dirs = fs.readdirSync(`${__dirname}/../images/places`);
 const views = JSON.parse(JSON.stringify(require("./views.json")));
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: './.env' }); 
+  dotenv.config({ path: './.env' });
 }
 
 function getRandomElement(array) {
@@ -20,7 +20,7 @@ function getRandomElement(array) {
 }
 
 async function getIdList(Model) {
-  return (await Model.find({}, {_id: 1})).map(item => item.id);
+  return (await Model.find({}, { _id: 1 })).map(item => item.id);
 }
 
 const DB = process.env.DATABASE.replace('<PASSWORD>', process.env.DATABASE_PASSWORD);
@@ -33,10 +33,10 @@ const create = async () => {
     const amenityIdList = await getIdList(Amenity);
     const userIdList = await getIdList(User);
     const viewIdList = await getIdList(View);
-  
+
     const places = [];
-  
-    for(let i = 0; i < 5000; i++) {
+
+    for (let i = 0; i < 5000; i++) {
       const propertyType = getRandomElement(propertyTypeList);
       const pets = faker.number.int(3);
 
@@ -51,7 +51,7 @@ const create = async () => {
         guests: faker.number.int({ min: 1, max: 16 }),
         bedrooms: faker.number.int({ min: 1, max: 50 }),
         beds: faker.number.int({ min: 1, max: 50 }),
-        bathrooms: faker.number.int({ min:1, max: 50 }),
+        bathrooms: faker.number.int({ min: 1, max: 50 }),
         amenities: faker.helpers.arrayElements(amenityIdList, { min: 5, max: 50 }),
 
         price: faker.commerce.price({ dec: 0 }),
@@ -60,7 +60,6 @@ const create = async () => {
 
         description: faker.commerce.productDescription(),
 
-        image_cover: faker.helpers.arrayElement(dirs),
         images: faker.helpers.arrayElements(dirs, { min: 5, max: 10 }),
 
         location: {
@@ -83,25 +82,25 @@ const create = async () => {
         status: 'published',
       });
     }
-  
+
     fs.writeFileSync('places.json', JSON.stringify(places, undefined, 2));
     console.log("Fake place successfully");
 
-  } catch(err) {
+  } catch (err) {
     console.error(err);
   }
 
   process.exit();
-  
+
 };
 
-const addFields= async () => {
+const addFields = async () => {
   try {
     const placeIdList = await Place.find({}, { _id: 1 });
 
     placeIdList.forEach(async (placeId) => {
       const randVal = {
-        'rules.children' : faker.number.int(10),
+        'rules.children': faker.number.int(10),
         'rules.pets': faker.number.int(3),
         'rules.pets_allowed': this['rules.pets'] > 0
       };

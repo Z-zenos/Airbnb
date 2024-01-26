@@ -5,11 +5,13 @@ import { useContext } from "react";
 import { ModalContext } from "../contexts/modal.context";
 import SearchModal from "../components/Modals/SearchModal";
 import IntlModal from "../components/Modals/IntlModal";
+import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
 
 export default function MainLayout() {
   const { 
     isSearchModalOpen,
-    isIntlModalOpen
+    isIntlModalOpen,
+    isCreatePlaceModalOpen
   } = useContext(ModalContext);
 
   return (
@@ -21,6 +23,7 @@ export default function MainLayout() {
       <Footer />
       { isSearchModalOpen && <SearchModal /> }
       { isIntlModalOpen && <IntlModal /> }
+      { isCreatePlaceModalOpen && <CreatePlaceModal /> }
     </div>
   );
 }

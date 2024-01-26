@@ -6,7 +6,6 @@ import { SlMap } from "react-icons/sl";
 import {BsCaretLeft, BsCaretRight} from "react-icons/bs";
 import useHorizontalScroll from "../hooks/useHorizontalScroll";
 import PlaceCard from "../components/PlaceCard/PlaceCard";
-import CreatePlaceModal from "../components/Modals/CreatePlaceModal";
 import { ModalContext } from "../contexts/modal.context";
 import FilterModal from "../components/Modals/FilterModal";
 import { useNavigate, createSearchParams, useLocation, useSearchParams } from "react-router-dom";
@@ -20,7 +19,6 @@ import { IntlContext } from "../contexts/intl.context";
 export default function IndexPage() {
   const { 
     setIsFilterModalOpen, 
-    isCreatePlaceModalOpen,
     isFilterModalOpen,
   } = useContext(ModalContext);
   const scrollRef = useHorizontalScroll();
@@ -226,7 +224,7 @@ export default function IndexPage() {
                 address: place.location.address,
                 price: place.price,
                 id: place.id,
-                image_cover: place.image_cover,
+                image_cover: place.images[0],
                 coordinate: place.location.coordinates,
                 name: place.name,
                 rating: place.average_ratings,
@@ -237,7 +235,6 @@ export default function IndexPage() {
         )}
       </div>
 
-      { isCreatePlaceModalOpen && <CreatePlaceModal /> }
       { isFilterModalOpen && <FilterModal setFilterCriteriaNumber={setFilterCriteriaNumber} /> }
 
       <Button outline={false} className="fixed top-[85%] z-40 left-1/2 -translate-x-1/2 hover:text-primary hover:bg-white shadow-[rgba(0,_0,_0,_0.19)_0px_10px_20px,_rgba(0,_0,_0,_0.23)_0px_6px_6px] hover:scale-105" label="Show map" onClick={() => setIsShowMap(!isShowMap)}>

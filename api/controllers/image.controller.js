@@ -23,8 +23,7 @@ const upload = multer({
 });
 
 exports.uploadPlaceImages = upload.fields([
-  { name: 'image_cover', maxCount: 1 },
-  { name: 'images', maxCount: 9 }
+  { name: 'images', maxCount: 10 }
 ]);
 
 exports.uploadUserAvatar = upload.fields([
@@ -49,31 +48,21 @@ exports.fileLimitsChecker = catchErrorAsync(async (req, res, next) => {
 exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
   const placeId = req.params.id;
   const place = await Place.findById(placeId);
-  const image_cover = req.files?.image_cover?.[0];
-  const images = req.files?.images;
+  const images = req.files?.images || [];
 
-  if (!place.images.length && !image_cover) return next();
-
-  if (place.images.length + 1 > 10) {
-    return next(new AppError("You reached maximum 10 photos for this place!", 404));
+  if (place.images.length > 10) {
+    return next(new AppError("Reached maximum 10 photos for this place!", 404));
   }
 
-  // 1) Cover image
-  if (image_cover) {
-    req.body.image_cover = `place-${placeId}-${Date.now()}-cover.jpeg`;
-    await sharp(image_cover.buffer)
-      .resize(2000, 1333)
-      .toFormat('jpeg')
-      .jpeg({ quality: 90 })
-      .toFile(`resources/images/places/${req.body.image_cover}`);
+  if (place.images.length + images.length > 10) {
+    return next(new AppError("You can only upload maximum 10 photos for each place!", 404));
   }
 
-  // 2) Images
-  req.body.images = [];
+  req.body.images = [...place.images];
   if (images?.length) {
     await Promise.all(
       images.map(async (file, i) => {
-        const filename = `place-${placeId}-${Date.now()}-${i + place.images.length + 1}.jpeg`;
+        const filename = `place-${placeId}-${Date.now()}-${i + place.images.length}.jpeg`;
 
         await sharp(file.buffer)
           .resize(2000, 1333)
@@ -81,11 +70,10 @@ exports.resizePlaceImages = catchErrorAsync(async (req, res, next) => {
           .jpeg({ quality: 90 })
           .toFile(`resources/images/places/${filename}`);
 
-        req.body.images.push(...place.images, filename);
+        req.body.images.push(filename);
       })
     );
   }
-
   next();
 });
 
@@ -94,7 +82,6 @@ exports.resizeUserAvatar = catchErrorAsync(async (req, res, next) => {
 
   if (!avatar) return next();
 
-  // 1) Cover avatar
   req.body.avatar = `user-${req.params.id}-${Date.now()}-avatar.jpeg`;
   await sharp(avatar.buffer)
     .resize(2000, 1333)
@@ -124,7 +111,6 @@ exports.getAllImagesOfPlace = catchErrorAsync(async (req, res, next) => {
   res.status(200).json({
     status: 'success',
     data: {
-      image_cover: place.image_cover,
       images: place.images
     }
   });
@@ -134,15 +120,10 @@ exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   const { imageName } = req.params;
   const place = req.place;
 
-  if (imageName === place.image_cover) {
-    req.body.image_cover = "";
-  }
-  else {
-    for (let i = 0; i < place.images.length; i++) {
-      if (place.images[i] === imageName) {
-        req.body.images = place.images.filter(i => i !== imageName);
-        break;
-      }
+  for (let i = 0; i < place.images.length; i++) {
+    if (place.images[i] === imageName) {
+      req.body.images = place.images.filter(i => i !== imageName);
+      break;
     }
   }
 
@@ -152,3 +133,11 @@ exports.deleteImage = catchErrorAsync(async (req, res, next) => {
   next();
 
 });
+
+/**
+ * How to remove completely 1 fields away from place model:
+  Open mongo compass shell
+ * use airbnb
+ * db.places.update({}, {$unset: {image_cover: 1}} , {multi: true})
+ * 
+ */

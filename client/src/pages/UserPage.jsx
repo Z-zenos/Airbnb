@@ -18,6 +18,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from 'axios';
 import { Link, useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/user.context";
+import { ModalContext } from "../contexts/modal.context";
 
 export default function UserPage() {
   const scrollRef = useHorizontalScroll();
@@ -25,6 +26,7 @@ export default function UserPage() {
   const location = useLocation();
   const [places, setPlaces] = useState([]);
   const { user: loggedUser } = useContext(UserContext);
+  const { setIsCreatePlaceModalOpen } = useContext(ModalContext);
 
   useEffect(() => {
     (async () => {
@@ -84,20 +86,38 @@ export default function UserPage() {
     </div>
   );
 
-  const placeCardList = places.length > 0 && places.map(place => (
-    <Link key={place.name} to={`/places/${place.id}`} className="cursor-pointer">
-      <div >
-        <img className="rounded-md w-full h-[220px]" src={`http://localhost:3000/images/places/${place.image_cover}`} />
-        <div className="mt-3">
-          <div className="w-full flex justify-between items-center">
-            <span className="font-medium text-[15px]">{place.name}</span>
-            <span className="flex items-center gap-1">{place.average_ratings} <AiFillStar className="inline " /></span>
+  const placeCardList = places.length > 0 && places.map(place => 
+    place.status === 'creating' 
+    ? <div 
+        key={place.name}
+        className="cursor-pointer"  
+      >
+        <img className="rounded-md w-full h-[200px]" src={`https://www.mountaineers.org/activities/routes-and-places/default-route-place/activities-and-routes-places-default-image/@@images/image.jpeg`} />
+        <div className="mt-1">
+          <div className="w-full flex justify-between gap-5 items-center">
+            <span className="font-light">This is new place you are creating.</span>
+            <Button 
+              className="mt-4 hover:bg-gray-100 hover:text-primary"
+              onClick={() => setIsCreatePlaceModalOpen(true)} 
+            >
+              Complete
+            </Button>
           </div>
-          <p className="opacity-70">{place.location.address}</p>
         </div>
       </div>
-    </Link>
-  ));
+    : <Link key={place.name} to={`/places/${place.id}`} className="cursor-pointer">
+        <div >
+          <img className="rounded-md w-full h-[220px]" src={`http://localhost:3000/images/places/${place.images[0]}`} />
+          <div className="mt-3">
+            <div className="w-full flex justify-between items-center">
+              <span className="font-medium text-[15px]">{place.name}</span>
+              <span className="flex items-center gap-1">{place.average_ratings} <AiFillStar className="inline " /></span>
+            </div>
+            <p className="opacity-70">{place.location.address}</p>
+          </div>
+        </div>
+      </Link>
+  );
 
   return (
     <div className="2xl:w-[70%] xl:w-[80%] lg:w-[80%] md:w-[100%] sm:block mx-auto md:px-10 mb-10 md:grid md:grid-cols-3 gap-[200px] p-10">

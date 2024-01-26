@@ -49,7 +49,6 @@ export default function PlaceCard({ place, className, hasShowOnMapIcon, showOnMa
                   address: place.location.address,
                   price: place.price,
                   id: place.id,
-                  image_cover: place.image_cover,
                   coordinate: place.location.coordinates,
                   name: place.name,
                   rating: place.average_ratings,
@@ -72,7 +71,7 @@ export default function PlaceCard({ place, className, hasShowOnMapIcon, showOnMa
             )}
           </div>
           <Carousel
-            slides={[place.image_cover, ...place.images.slice(0, 4)]}
+            slides={[...place.images.slice(0, 5)]}
             imageClassName="h-[260px] object-cover aspect-video rounded-lg"
           />
 
