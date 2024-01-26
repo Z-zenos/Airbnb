@@ -16,21 +16,51 @@ import Input from "../Input/Input";
 import Spinner from "../Spinner/Spinner";
 import { ToastContext } from "../../contexts/toast.context";
 import Toast from "../Toast/Toast";
+import { useNavigate } from "react-router-dom";
 
-const STEPS = {
-  PROPERTY_TYPES: 0,
-  LOCATION: 1,
-  INFO: 2,
-  AMENITIES: 3,
-  IMAGES: 4,
-  DESCRIPTION: 5,
-  PRICE: 6,
-};
+const STEPS = [
+  {
+    id: 0,
+    name: 'property_type',
+    fields: ['property_type']
+  },
+  {
+    id: 1,
+    name: 'location',
+    fields: ['location']
+  },
+  {
+    id: 2,
+    name: 'info',
+    fields: ['guests', 'beds', 'bathrooms', 'bedrooms']
+  },
+  {
+    id: 3,
+    name: 'amenities',
+    fields: ['amenities']
+  },
+  {
+    id: 4,
+    name: 'images',
+    fields: []
+  },
+  {
+    id: 5,
+    name: 'description',
+    fields: ['name', 'description'],
+  },
+  {
+    id: 6,
+    name: 'price',
+    fields: ['price']
+  },
+];
 
 export default function CreatePlaceModal() {
   const { isCreatePlaceModalOpen, setIsCreatePlaceModalOpen } = useContext(ModalContext);
-  const [step, setStep] = useState(STEPS['PROPERTY_TYPES']);
+  const [step, setStep] = useState(0);
   const editorRef = useRef(null);
+  const navigate = useNavigate();
   const [propertyTypeList, setPropertyTypeList] = useState([]);
   const [amenityList, setAmenityList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -80,6 +110,7 @@ export default function CreatePlaceModal() {
         }
 
         newPlace.amenities = newPlace.amenities.map(am => am._id);
+        newPlace.property_type = newPlace.property_type.id;
         return newPlace;
       } catch(error) {
         console.error(error);
@@ -103,32 +134,40 @@ export default function CreatePlaceModal() {
   const images = watch('images');
 
   const setCustomValue = (id, value) => {
-    (async () => {
-      setValue(id, value, {
-        shouldDirty: true,
-        shouldTouch: true,
-        shouldValidate: true
-      });
-
-      if(id !== 'images') {
-        await axios.patch(
-          `/places/become-a-host/${getValues()._id}`, 
-          {
-            [id]: value
-          }, 
-          {
-            headers: {
-              "Content-Type": "application/json"
-            },
-          }
-        );
-      }
-  
-    })();
+    setValue(id, value, {
+      shouldDirty: true,
+      shouldTouch: true,
+      shouldValidate: true
+    });
   }
 
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+
   function onNext() {
-    setStep(prevStep => prevStep + 1);
+    (async () => {
+      try {
+        setIsLoadingUpdate(true);
+        if(STEPS[step].name !== 'images') {
+          let body = {};
+          STEPS[step].fields.forEach(field => {
+            body[field] = getValues(field);
+          });
+          console.log(body);
+          
+          await axios.patch(`/places/become-a-host/${getValues("_id")}`, body, {
+              headers: {
+                "Content-Type": "application/json"
+              },
+            }
+          );
+        }
+        setStep(prevStep => prevStep + 1);
+      } catch (error) {
+        openToast(<Toast title="Failure" content={error?.message || "Something went wrong!"} type="error" />)
+      } finally {
+        setIsLoadingUpdate(false);
+      }
+    })();
   }
 
   function onBack() {
@@ -136,14 +175,15 @@ export default function CreatePlaceModal() {
   }
 
   async function handleSubmit() {
-    if(step !== STEPS['PRICE']) return;
+    if(STEPS[step].name !== 'price') return;
 
-    const placeData = { ...getValues() };
+    const placeData = { ...getValues(), status: 'published' };
     delete placeData._id;
     delete placeData.host;
 
     try {
-      await axios.patch(`/places/${getValues()._id}`, placeData, {
+      setIsLoadingUpdate(true);
+      await axios.patch(`/places/${getValues('_id')}`, placeData, {
         headers: {
           "Content-Type": "application/json"
         },
@@ -151,18 +191,22 @@ export default function CreatePlaceModal() {
       openToast(<Toast title="Success" type="success" content="Create new place successfully" />);
     } catch(err) {
       openToast(<Toast title="Failure" type="error" content="May be missed some needed information for your place" />);
+    } finally {
+      setIsLoadingUpdate(false);
+      setIsCreatePlaceModalOpen(false);
+      navigate(0);
     }
   }
 
   const actionLabel = useMemo(() => {
-    if(step === STEPS['PRICE'])
+    if(STEPS[step].name === 'price')
       return 'Publish';
 
     return 'Next';
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if(step === STEPS['PROPERTY_TYPES'])
+    if(STEPS[step].name === 'property_type')
       return undefined;
 
     return 'Back';
@@ -187,7 +231,7 @@ export default function CreatePlaceModal() {
               <div key={pt.id} className="col-span-1">
                 <CategoryInput
                   onClick={property_typeId => setCustomValue('property_type', property_typeId)}
-                  selected={property_type?.name === pt.name.toLowerCase()}
+                  selected={property_type === pt.id}
                   id={pt.id}
                   label={pt.name}
                   iconSrc={pt.src}
@@ -200,7 +244,7 @@ export default function CreatePlaceModal() {
     </div>
   );
 
-  if(step === STEPS['LOCATION']) {
+  if(STEPS[step].name === 'location') {
     bodyContent = (
       <div className="flex flex-col gap-4">
         <Heading 
@@ -225,7 +269,7 @@ export default function CreatePlaceModal() {
     );
   }
 
-  if(step === STEPS['INFO']) {
+  if(STEPS[step].name === 'info') {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -271,7 +315,7 @@ export default function CreatePlaceModal() {
     );
   }
 
-  if(step === STEPS['AMENITIES']) {
+  if(STEPS[step].name === 'amenities') {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -307,7 +351,7 @@ export default function CreatePlaceModal() {
     ) 
   }
 
-  if(step === STEPS['IMAGES']) {
+  if(STEPS[step].name === 'images') {
     bodyContent = (
       <div>
         <Heading
@@ -324,7 +368,7 @@ export default function CreatePlaceModal() {
     );
   }
 
-  if(step === STEPS['DESCRIPTION']) {
+  if(STEPS[step].name === 'description') {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading 
@@ -332,7 +376,14 @@ export default function CreatePlaceModal() {
           subtitle="Short and sweet works best!"
         />
 
-        <Input label="Name" name="name" type="text" className="rounded-t-[8px]" value={name} onChange={(ev) => setCustomValue('name', ev.target.value)} />
+        <Input 
+          label="Name" 
+          name="name" 
+          type="text" 
+          className="rounded-t-[8px]" 
+          value={name} 
+          onChange={(ev) => setCustomValue('name', ev.target.value)} 
+        />
 
         <hr />
 
@@ -364,7 +415,7 @@ export default function CreatePlaceModal() {
     );
   }
 
-  if(step === STEPS['PRICE']) {
+  if(STEPS[step].name === 'price') {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading 
@@ -372,7 +423,7 @@ export default function CreatePlaceModal() {
           subtitle="How much do you charge per night?"
         />
 
-        <Input label="Price ($)" name="price" type="number" className="rounded-t-[8px]" value={price} onChange={(ev) => setCustomValue('price', +ev.target.value)} />
+        <Input label="Price ($)" name="price" type="number" className="rounded-t-[8px]" value={price || ""} onChange={(ev) => setCustomValue('price', +ev.target.value)} />
       </div>
     );
   }
@@ -392,13 +443,14 @@ export default function CreatePlaceModal() {
     <Modal 
       isOpen={isCreatePlaceModalOpen} 
       onClose={() => setIsCreatePlaceModalOpen(false)} 
-      onSubmit={step === STEPS['PRICE'] ? handleSubmit : onNext}
+      onSubmit={STEPS[step].name === 'price' ? handleSubmit : onNext}
       title="Airbnb your home!"
       actionLabel={actionLabel}
       secondaryActionLabel={secondaryActionLabel}
-      secondaryAction={step === STEPS['PROPERTY_TYPES'] ? undefined : onBack}
+      secondaryAction={STEPS[step].name === 'property_type' ? undefined : onBack}
       body={bodyContent}
       optionBtn={optionBtn}
+      isLoading={isLoadingUpdate}
       // disabled={isErrorsOfStep(step)}
     />
   );

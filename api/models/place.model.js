@@ -110,7 +110,8 @@ const placeSchema = new mongoose.Schema(
     },
 
     price_discount: {
-      type: Number
+      type: Number,
+      default: 0,
     },
 
     description: {
@@ -237,7 +238,7 @@ placeSchema.pre('save', function (next) {
 placeSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'property_type',
-    select: '-__v -_id -created -modified'
+    select: '-__v -created -modified'
   }).populate({
     path: 'amenities',
     select: '-__v -created -modified'

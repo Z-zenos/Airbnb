@@ -56,9 +56,10 @@ export default function BookingPage() {
 
   function calculateFees(airbnbServiceFee = 1) {
     const total = place?.price * datediff;
+    const discount = place?.price_discount ? place?.price_discount : 0;
     return airbnbServiceFee + (datediff 
-      ? Math.trunc(total - total * place?.price_discount)
-      : Math.trunc(place?.price - place?.price * place?.price_discount)); 
+      ? Math.trunc(total - total * discount)
+      : Math.trunc(place?.price - place?.price * discount)); 
   }
 
   return (
@@ -211,12 +212,13 @@ export default function BookingPage() {
                     </span>
                     <span>${place?.price * datediff}</span>
                   </li>
-                  <li className="flex justify-between items-center">
-                    <span className="underline">
-                      Discounts
-                    </span>
-                    <span className=" text-green-600">-{place?.price_discount * 100}%</span>
-                  </li>
+                  { place?.price_discount > 0 && (<li className="flex justify-between items-center">
+                      <span className="underline">
+                        Discounts
+                      </span>
+                      <span className=" text-green-600">-{place?.price_discount * 100}%</span>
+                    </li>
+                  )}
                   <li className="flex justify-between items-center">
                     <span className="underline">
                       Airbnb service fee

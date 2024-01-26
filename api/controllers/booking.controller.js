@@ -64,7 +64,7 @@ exports.getCheckoutSession = catchErrorAsync(async (req, res, next) => {
           description: place.description,
           images: [place.images[0]],
         },
-        unit_amount: Math.trunc(place.price * datediff * (1 - place.price_discount) + airbnbServiceFee) * 100,
+        unit_amount: Math.trunc(place.price * datediff * (1 - (place.price_discount ? place.price_discount : 0)) + airbnbServiceFee) * 100,
       },
       quantity: 1,
     }],
